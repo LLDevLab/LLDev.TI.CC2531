@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLDev.TI.CC2531.RxTx", "LLDev.TI.CC2531.RxTx\LLDev.TI.CC2531.RxTx.csproj", "{20FD2109-8BCE-4300-9862-44DEDB896BB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LLDev.TI.CC2531.RxTx", "LLDev.TI.CC2531.RxTx\LLDev.TI.CC2531.RxTx.csproj", "{20FD2109-8BCE-4300-9862-44DEDB896BB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLDev.TI.CC2531.RxTx.Tests", "LLDev.TI.CC2531.RxTx.Tests\LLDev.TI.CC2531.RxTx.Tests.csproj", "{7F916576-C00F-4FDD-938D-7000A042C29C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{20FD2109-8BCE-4300-9862-44DEDB896BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20FD2109-8BCE-4300-9862-44DEDB896BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20FD2109-8BCE-4300-9862-44DEDB896BB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F916576-C00F-4FDD-938D-7000A042C29C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F916576-C00F-4FDD-938D-7000A042C29C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F916576-C00F-4FDD-938D-7000A042C29C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F916576-C00F-4FDD-938D-7000A042C29C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
