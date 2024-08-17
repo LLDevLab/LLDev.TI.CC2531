@@ -36,19 +36,14 @@ public sealed class SerialPortDataHandler : ISerialPortDataHandler
         if (bytesToRead == 0)
             return [];
 
-        var result = new List<byte>();
-        var subResult = new byte[bytesToRead];
+        var result = new byte[bytesToRead];
 
         var readBytes = 0;
 
         while (readBytes < bytesToRead)
-        {
-            var currentReadBytes = _serialPortHandler.Read(subResult, readBytes, bytesToRead - readBytes);
-            result.AddRange(subResult[..currentReadBytes]);
-            readBytes += currentReadBytes;
-        }
+            readBytes += _serialPortHandler.Read(result, readBytes, bytesToRead - readBytes);
 
-        return [.. result];
+        return result;
     }
 
     public void Open()
