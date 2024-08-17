@@ -5,13 +5,11 @@ public class ExceptionBase : ApplicationException
     {
     }
 
-    protected ExceptionBase(string message) :
-        base(message)
+    protected ExceptionBase(string message) : base(message)
     {
     }
 
-    protected ExceptionBase(string message, Exception inner) :
-        base(message, inner)
+    protected ExceptionBase(string message, Exception inner) : base(message, inner)
     {
     }
 }
