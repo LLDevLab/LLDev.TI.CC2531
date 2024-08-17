@@ -49,9 +49,9 @@ public sealed class SerialPortHandler : ISerialPortHandler
 
     public void DiscardInBuffer() => _serialPort.DiscardInBuffer();
     public void DiscardOutBuffer() => _serialPort.DiscardOutBuffer();
-    public void Dispose() => _serialPort.Dispose();
     public void Open() => _serialPort.Open();
     public int Read(byte[] buffer, int offset, int count) => _serialPort.Read(buffer, offset, count);
     public void Write(byte[] buffer, int offset, int count) => _serialPort.Write(buffer, offset, count);
     public void Close() => _serialPort.Close();
+    public void Dispose() => _serialPort.Dispose();
 }
