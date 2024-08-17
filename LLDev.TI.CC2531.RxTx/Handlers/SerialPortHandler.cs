@@ -27,7 +27,6 @@ public sealed class SerialPortHandler : ISerialPortHandler
     }
 
     public bool IsOpen => _serialPort.IsOpen;
-
     public int BytesToRead => _serialPort.BytesToRead;
 
     private readonly SerialPort _serialPort;
