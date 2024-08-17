@@ -36,7 +36,7 @@ public sealed class SerialPortHandler : ISerialPortHandler
     {
         var config = options.Value;
 
-        if (string.IsNullOrEmpty(config.PortName))
+        if (string.IsNullOrWhiteSpace(config.PortName))
             throw new SerialPortException("Cannot initialize SerialPort instance. Port name is null or empty");
 
         var readWriteTimeout = config.ReadWriteTimeoutMs;
