@@ -210,7 +210,7 @@ dotnet_naming_rule.class_constant_should_be_pascal_case.style = pascal_case
 
 dotnet_naming_rule.local_constant_should_be_cammel_case.severity = error
 dotnet_naming_rule.local_constant_should_be_cammel_case.symbols = local_constant
-dotnet_naming_rule.local_constant_should_be_cammel_case.style = cammel_case
+dotnet_naming_rule.local_constant_should_be_cammel_case.style = pascal_case
 
 dotnet_naming_rule.async_methods_should_be_async_methods.severity = error
 dotnet_naming_rule.async_methods_should_be_async_methods.symbols = async_methods
