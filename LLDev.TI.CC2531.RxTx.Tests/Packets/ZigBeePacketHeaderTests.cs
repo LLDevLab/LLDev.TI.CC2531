@@ -12,7 +12,7 @@ public class ZigBeePacketHeaderTests
 
         var arr = new byte[] { StartByte, 2, 3, 4, 5, 6 };
 
-        var header = new ZigBeePacketHeader(arr);
+        var header = new PacketHeader(arr);
 
         // Act.
         var result = header.StartByte;
@@ -29,7 +29,7 @@ public class ZigBeePacketHeaderTests
 
         var arr = new byte[] { 1, DataLength, 3, 4, 5, 6 };
 
-        var header = new ZigBeePacketHeader(arr);
+        var header = new PacketHeader(arr);
 
         // Act.
         var result = header.DataLength;
@@ -117,7 +117,7 @@ public class ZigBeePacketHeaderTests
         // Arrange.
         var arr = new byte[] { 1, 2, lsb, msb, 5, 6 };
 
-        var header = new ZigBeePacketHeader(arr);
+        var header = new PacketHeader(arr);
 
         // Act.
         var result = header.CmdType;
@@ -133,7 +133,7 @@ public class ZigBeePacketHeaderTests
         // Arrange.
         var arr = new byte[] { 1, 2, 3, 4, 5, 6 };
 
-        var header = new ZigBeePacketHeader(arr);
+        var header = new PacketHeader(arr);
 
         // Act.
         var result = header.ToByteArray();

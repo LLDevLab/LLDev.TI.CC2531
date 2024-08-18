@@ -2,7 +2,7 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets;
 
-public interface IZigBeePacketHeader
+public interface IPacketHeader
 {
     byte StartByte { get; }
     byte DataLength { get; }
@@ -11,7 +11,7 @@ public interface IZigBeePacketHeader
     public byte[] ToByteArray();
 }
 
-public sealed class ZigBeePacketHeader(byte[] data) : IZigBeePacketHeader
+public sealed class PacketHeader(byte[] data) : IPacketHeader
 {
     public byte StartByte => _data[0];
     public byte DataLength => _data[1];
