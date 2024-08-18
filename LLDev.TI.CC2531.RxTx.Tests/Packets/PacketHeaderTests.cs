@@ -2,7 +2,7 @@
 using LLDev.TI.CC2531.RxTx.Packets;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Packets;
-public class ZigBeePacketHeaderTests
+public class PacketHeaderTests
 {
     [Fact]
     public void GetStartByte()
