@@ -11,8 +11,8 @@ public sealed class AfDataResponse : IncomingPacket, IAfDataResponse
 {
     public ZToolPacketStatus Status { get; }
 
-    public AfDataResponse(IPacketHeader packetHeader, byte[] packet) :
-        base(packetHeader, packet, 0x01)
+    public AfDataResponse(IPacketHeader header, byte[] packet) :
+        base(header, packet, 0x01)
     {
         Status = (ZToolPacketStatus)Data[0];
     }

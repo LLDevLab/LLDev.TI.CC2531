@@ -24,8 +24,8 @@ public class IncomingPacket : Packet, IIncomingPacket
     private readonly byte _calcCheckSum;
     private readonly byte _minDataLength;
 
-    protected IncomingPacket(IPacketHeader packetHeader, byte[] packet, byte minDataLength) :
-        base(packetHeader)
+    protected IncomingPacket(IPacketHeader header, byte[] packet, byte minDataLength) :
+        base(header)
     {
         Data = packet[..^1];
         _checkSum = packet[^1];

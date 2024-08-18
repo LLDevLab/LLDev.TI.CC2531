@@ -58,8 +58,8 @@ public sealed class AfIncomingMessageCallback : IncomingPacket, IAfIncomingMessa
 
     public byte[] Message { get; set; }
 
-    public AfIncomingMessageCallback(IPacketHeader packetHeader, byte[] packet) :
-        base(packetHeader, packet, 0x11)
+    public AfIncomingMessageCallback(IPacketHeader header, byte[] packet) :
+        base(header, packet, 0x11)
     {
         GroupId = GetUShort(Data[1], Data[0]);
         ClusterId = (ZigBeeClusterId)GetUShort(Data[3], Data[2]);

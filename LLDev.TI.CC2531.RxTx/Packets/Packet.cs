@@ -11,13 +11,13 @@ public interface IPacket
     byte[] ToByteArray();
 }
 
-public abstract class Packet(IPacketHeader packetHeader) : IPacket
+public abstract class Packet(IPacketHeader header) : IPacket
 {
     protected const byte StartByte = 0xfe;
     public byte DataLength => PacketHeader.DataLength;
     public ZToolCmdType CmdType => PacketHeader.CmdType;
 
-    protected IPacketHeader PacketHeader { get; } = packetHeader;
+    protected IPacketHeader PacketHeader { get; } = header;
 
     protected abstract byte[] Data { get; }
 
