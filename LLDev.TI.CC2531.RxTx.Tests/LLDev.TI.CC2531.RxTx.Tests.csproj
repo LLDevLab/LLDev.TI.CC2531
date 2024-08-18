@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Packets\" />
+    <Folder Include="Packets\Incoming\" />
   </ItemGroup>
 
 </Project>
