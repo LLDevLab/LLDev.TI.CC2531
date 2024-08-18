@@ -1,17 +1,8 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public interface ISysResetIndCallback : IIncomingPacket
-{
-    ZToolDeviceResetReason Reason { get; }
-    byte TransportRev { get; }
-    byte ProductId { get; }
-    byte MajorRel { get; }
-    byte MinorRel { get; }
-    byte HwRev { get; }
-}
 
-public sealed class SysResetIndCallback : IncomingPacket, ISysResetIndCallback
+public sealed class SysResetIndCallback : IncomingPacket, IIncomingPacket
 {
     /// <summary>
     /// Reason for the reset.

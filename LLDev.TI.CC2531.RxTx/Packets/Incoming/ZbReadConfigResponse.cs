@@ -1,15 +1,8 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public interface IZbReadConfigResponse : IIncomingPacket
-{
-    ZToolPacketStatus Status { get; }
-    ZToolZbConfigurationId ConfigId { get; }
-    byte ConfigValueLen { get; }
-    byte[] ConfigValue { get; }
-}
 
-public sealed class ZbReadConfigResponse : IncomingPacket, IZbReadConfigResponse
+public sealed class ZbReadConfigResponse : IncomingPacket, IIncomingPacket
 {
     public ZToolPacketStatus Status { get; }
     public ZToolZbConfigurationId ConfigId { get; }

@@ -1,15 +1,6 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-public interface ISysVersionResponse : IIncomingPacket
-{
-    byte TransportRev { get; }
-    byte ProductId { get; }
-    byte MajorRel { get; }
-    byte MinorRel { get; }
-    byte MaintRel { get; }
-}
-
-public sealed class SysVersionResponse : IncomingPacket, ISysVersionResponse
+public sealed class SysVersionResponse : IncomingPacket, IIncomingPacket
 {
     public byte TransportRev { get; }
     public byte ProductId { get; }

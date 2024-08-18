@@ -2,12 +2,7 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-public interface IAfIncomingMessageCallback : IIncomingPacket
-{
-
-}
-
-public sealed class AfIncomingMessageCallback : IncomingPacket, IAfIncomingMessageCallback
+public sealed class AfIncomingMessageCallback : IncomingPacket, IIncomingPacket
 {
     /// <summary>
     /// Specifies the group ID of the device

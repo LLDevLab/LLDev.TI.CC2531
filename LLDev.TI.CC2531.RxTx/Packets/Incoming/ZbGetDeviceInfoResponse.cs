@@ -2,13 +2,7 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-public interface IZbGetDeviceInfoResponse : IIncomingPacket
-{
-    DeviceInfoType DeviceInfoType { get; }
-    ulong Value { get; }
-}
-
-public sealed class ZbGetDeviceInfoResponse : IncomingPacket, IZbGetDeviceInfoResponse
+public sealed class ZbGetDeviceInfoResponse : IncomingPacket, IIncomingPacket
 {
     public DeviceInfoType DeviceInfoType { get; }
     public ulong Value { get; }
