@@ -5,8 +5,6 @@ using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 namespace LLDev.TI.CC2531.RxTx.Tests.Packets.Incoming;
 public class IncomingPacketTests
 {
-    // TODO: Does all incoming packets tested?
-
     private const int StartByte = 0xfe;
 
     private readonly Mock<IPacketHeader> _packetHeaderMock = new();
@@ -139,7 +137,7 @@ public class IncomingPacketTests
     }
 
     [Fact]
-    public void DeviceInfoResponseIeeeAddress()
+    public void ZbGetDeviceInfoResponseIeeeAddress()
     {
         // Arrange.
         const int ExpectedDataLenght = 0x09;
@@ -163,7 +161,7 @@ public class IncomingPacketTests
     }
 
     [Fact]
-    public void DeviceInfoResponsePanId()
+    public void ZbGetDeviceInfoResponsePanId()
     {
         // Arrange.
         const int ExpectedDataLenght = 0x09;
@@ -187,7 +185,7 @@ public class IncomingPacketTests
     }
 
     [Fact]
-    public void DeviceInfoResponseChannel()
+    public void ZbGetDeviceInfoResponseChannel()
     {
         // Arrange.
         const int ExpectedDataLenght = 0x09;
