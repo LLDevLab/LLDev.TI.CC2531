@@ -358,7 +358,7 @@ public class IncomingPacketTests
         _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x82]);
 
         var data = new byte[] { 0x01, 0x02, 0x01, 0x03, 0x04, 0x1a, 0x00, 0x00, 0x05, 0x06, 0x07, 0x08, 0x09, 0x26, 0x00, 0x0a, 0x0b, 0x00, 0xe8 };
-        var incPacket = new ZdoNodeDescResponse(_packetHeaderMock.Object, data);
+        var incPacket = new ZdoNodeDescCallback(_packetHeaderMock.Object, data);
 
         // Assert.
         CheckGeneralData(incPacket, ExpectedDataLenght, ExpectedCmdType);
