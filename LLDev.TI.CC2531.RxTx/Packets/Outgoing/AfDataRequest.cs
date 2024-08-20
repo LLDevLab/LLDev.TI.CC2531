@@ -18,10 +18,10 @@ public sealed class AfDataRequest : OutgoingPacket
         byte[] requestData) : base(ZToolCmdType.AfDataReq, (byte)(10 + requestDataLen))
     {
         var dataList = new List<byte>();
-        dataList.AddRange(GetBytesFromUshort(nwkDstAddr));
+        dataList.AddRange(BitConverter.GetBytes(nwkDstAddr));
         dataList.Add(dstEndpoint);
         dataList.Add(srcEndpoint);
-        dataList.AddRange(GetBytesFromUshort((ushort)clusterId));
+        dataList.AddRange(BitConverter.GetBytes((ushort)clusterId));
         dataList.Add(transId);
         dataList.Add(options);
         dataList.Add(radius);
@@ -31,13 +31,5 @@ public sealed class AfDataRequest : OutgoingPacket
         Data = [.. dataList];
 
         TransactionId = transId;
-    }
-
-    private static byte[] GetBytesFromUshort(ushort value)
-    {
-        var bytes = new byte[2];
-        bytes[0] = (byte)(value >> 8);
-        bytes[1] = (byte)value;
-        return bytes;
     }
 }
