@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public sealed class ZdoNwkAddrResponse : IncomingPacket, IIncomingPacket
+public sealed class ZdoNwkAddrCallback : IncomingPacket, IIncomingPacket
 {
     /// <summary>
     /// This field indicates either SUCCESS or FAILURE.
@@ -35,7 +35,7 @@ public sealed class ZdoNwkAddrResponse : IncomingPacket, IIncomingPacket
 
     private readonly List<ushort> _assocDevList;
 
-    public ZdoNwkAddrResponse(IPacketHeader header, byte[] packet) :
+    public ZdoNwkAddrCallback(IPacketHeader header, byte[] packet) :
         base(header, packet, 0x0d)
     {
         _assocDevList = [];
