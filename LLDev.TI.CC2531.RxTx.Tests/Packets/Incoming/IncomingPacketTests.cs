@@ -419,7 +419,7 @@ public class IncomingPacketTests
         _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x80]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x02, 0x20, 0x30, 0x40, 0x50, 0xda };
-        var incPacket = new ZdoNwkAddrResponse(_packetHeaderMock.Object, data);
+        var incPacket = new ZdoNwkAddrCallback(_packetHeaderMock.Object, data);
 
         // Assert.
         CheckGeneralData(incPacket, ExpectedDataLenght, ExpectedCmdType);
