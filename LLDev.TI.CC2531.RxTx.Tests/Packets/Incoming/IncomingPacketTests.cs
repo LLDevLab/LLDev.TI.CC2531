@@ -21,6 +21,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x61, 0x02]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x67 };
         var response = new SysVersionResponse(_packetHeaderMock.Object, data);
@@ -47,6 +48,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x66, 0x04]);
 
         var data = new byte[] { 0x01, 0x03, 0x01, 0x04, 0x61 };
 
@@ -77,6 +79,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x66, 0x05]);
 
         var data = new byte[] { 0x01, 0x63 };
         var response = new ZbWriteConfigResponse(_packetHeaderMock.Object, data);
@@ -99,6 +102,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x40]);
 
         var data = new byte[] { 0x01, 0x25 };
         var response = new ZdoStartupFromAppResponse(_packetHeaderMock.Object, data);
@@ -121,6 +125,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x67, 0x0a]);
 
         var data = new byte[] { 0x01, 0x6d };
         var response = new UtilLedControlResponse(_packetHeaderMock.Object, data);
@@ -143,6 +148,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x66, 0x06]);
 
         var data = new byte[] { 0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x60 };
         var response = new ZbGetDeviceInfoResponse(_packetHeaderMock.Object, data);
@@ -166,6 +172,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x66, 0x06]);
 
         var data = new byte[] { 0x06, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6c };
         var response = new ZbGetDeviceInfoResponse(_packetHeaderMock.Object, data);
@@ -189,6 +196,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x66, 0x06]);
 
         var data = new byte[] { 0x05, 0xa1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xcd };
         var response = new ZbGetDeviceInfoResponse(_packetHeaderMock.Object, data);
@@ -212,6 +220,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x3e]);
 
         var data = new byte[] { 0x01, 0x5b };
         var response = new ZdoMsgCbRegisterResponse(_packetHeaderMock.Object, data);
@@ -234,6 +243,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x41, 0x80]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xc0 };
         var incPacket = new SysResetIndCallback(_packetHeaderMock.Object, data);
@@ -261,6 +271,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0xc1]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x88 };
         var incPacket = new ZdoEndDeviceAnnceIndCallback(_packetHeaderMock.Object, data);
@@ -290,6 +301,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0xff]);
 
         var data = new byte[] { 0x01, 0x02, 0x01, 0x03, 0x04, 0x00, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0xb3 };
         var incPacket = new ZdoMsgCbIncomingCallback(_packetHeaderMock.Object, data);
@@ -320,6 +332,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x02]);
 
         var data = new byte[] { 0x01, 0x67 };
         var incPacket = new ZdoNodeDescCallback(_packetHeaderMock.Object, data);
@@ -342,6 +355,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x82]);
 
         var data = new byte[] { 0x01, 0x02, 0x01, 0x03, 0x04, 0x1a, 0x00, 0x00, 0x05, 0x06, 0x07, 0x08, 0x09, 0x26, 0x00, 0x0a, 0x0b, 0x00, 0xe8 };
         var incPacket = new ZdoNodeDescResponse(_packetHeaderMock.Object, data);
@@ -379,6 +393,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x64, 0x01]);
 
         var data = new byte[] { 0x01, 0x65 };
         var incPacket = new AfDataResponse(_packetHeaderMock.Object, data);
@@ -401,6 +416,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x80]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x02, 0x20, 0x30, 0x40, 0x50, 0xda };
         var incPacket = new ZdoNwkAddrResponse(_packetHeaderMock.Object, data);
@@ -431,6 +447,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0xc0]);
 
         var data = new byte[] { 0x02, 0x86 };
         var incPacket = new ZdoStateChangedIndCallback(_packetHeaderMock.Object, data);
@@ -453,6 +470,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x26]);
 
         var data = new byte[] { 0xfc, 0xbe };
         var incPacket = new ZdoNwkDiscoveryResponse(_packetHeaderMock.Object, data);
@@ -475,6 +493,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x61, 0x01]);
 
         var data = new byte[] { 0x79, 0x01, 0x1a };
         var incPacket = new SysPingResponse(_packetHeaderMock.Object, data);
@@ -506,6 +525,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x05]);
 
         var data = new byte[] { 0x01, 0x60 };
         var incPacket = new ZdoActiveEpResponse(_packetHeaderMock.Object, data);
@@ -528,6 +548,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x85]);
 
         var data = new byte[] { 0x00, 0x01, 0x01, 0x00, 0x02, 0x02, 0x03, 0x04, 0xcf };
         var incPacket = new ZdoActiveEpCallback(_packetHeaderMock.Object, data);
@@ -557,6 +578,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x64, 0x00]);
 
         var data = new byte[] { 0x01, 0x64 };
         var incPacket = new AfRegisterResponse(_packetHeaderMock.Object, data);
@@ -579,6 +601,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x67, 0x00]);
 
         var data = new byte[] { 0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x01, 0x03, 0x02, 0x01, 0x02, 0x03, 0x04, 0x7b };
         var incPacket = new UtilGetDeviceInfoResponse(_packetHeaderMock.Object, data);
@@ -612,6 +635,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x45]);
 
         var data = new byte[] { 0x01, 0x20 };
         var incPacket = new ZdoExtRouteDiscoveryResponse(_packetHeaderMock.Object, data);
@@ -634,6 +658,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x61, 0x04]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x65 };
         var incPacket = new SysGetExtAddrResponse(_packetHeaderMock.Object, data);
@@ -656,6 +681,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x61, 0x13]);
 
         var data = new byte[] { 0x01, 0x02, 0x73 };
         var incPacket = new SysOsalNvLengthResponse(_packetHeaderMock.Object, data);
@@ -678,6 +704,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x61, 0x08]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x69 };
         var incPacket = new SysOsalNvReadResponse(_packetHeaderMock.Object, data);
@@ -703,6 +730,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x4a]);
 
         var groupId = new byte[] { 0x01, 0x02, 0x03 };
         var data = new byte[] { groupId[0], groupId[1], groupId[2], 0x2c };
@@ -729,6 +757,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x04]);
 
         var data = new byte[] { 0x01, 0x61 };
         var incPacket = new ZdoSimpleDescResponse(_packetHeaderMock.Object, data);
@@ -751,6 +780,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x84]);
 
         var data = new byte[] { 0x01, 0x02, 0x01, 0x03, 0x04, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x00, 0x01, 0x02, 0x03, 0x01, 0x04, 0x05, 0xd5 };
         var incPacket = new ZdoSimpleDescCallback(_packetHeaderMock.Object, data);
@@ -789,6 +819,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x50]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x35 };
 
@@ -818,6 +849,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x44, 0x81]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x00, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x02, 0x12, 0x13, 0xce };
         var incPacket = new AfIncomingMessageCallback(_packetHeaderMock.Object, data);
@@ -863,11 +895,8 @@ public class IncomingPacketTests
     {
         // Arrange.
         const int ExpectedDataLenght = 0x01;
-        const ZToolCmdType ExpectedCmdType = ZToolCmdType.ZdoStateChangedIndClbk;
 
-        _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
-        _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
-        _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0xc0]);
 
         var data = new byte[] { 0x02, 0x84 };
         var incPacket = new ZdoStateChangedIndCallback(_packetHeaderMock.Object, data);
@@ -882,9 +911,10 @@ public class IncomingPacketTests
     public void PacketFormatIncorrect()
     {
         // Arrange.
-        _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
-        _packetHeaderMock.SetupGet(m => m.DataLength).Returns(0x05);
-        _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ZToolCmdType.ZdoStateChangedIndClbk);
+        const int ExpectedDataLenght = 0x05;
+
+        _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0xc0]);
 
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xc0 };
         var incPacket = new SysResetIndCallback(_packetHeaderMock.Object, data);
@@ -907,6 +937,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x65, 0x01]);
 
         var dataArray = new byte[] { data, checkSum };
 
@@ -933,6 +964,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x81]);
 
         var data = new byte[]
         {
@@ -980,6 +1012,7 @@ public class IncomingPacketTests
         _packetHeaderMock.SetupGet(m => m.StartByte).Returns(StartByte);
         _packetHeaderMock.SetupGet(m => m.DataLength).Returns(ExpectedDataLenght);
         _packetHeaderMock.SetupGet(m => m.CmdType).Returns(ExpectedCmdType);
+        _packetHeaderMock.Setup(m => m.ToByteArray()).Returns([StartByte, ExpectedDataLenght, 0x45, 0x81]);
 
         var data = new byte[]
         {
