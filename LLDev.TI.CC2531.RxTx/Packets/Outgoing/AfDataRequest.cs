@@ -1,7 +1,8 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
+using System.Buffers.Binary;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class AfDataRequest : OutgoingPacket
+public sealed class AfDataRequest : OutgoingPacket, IOutgoingPacket
 {
     public byte TransactionId { get; }
 
@@ -18,10 +19,10 @@ public sealed class AfDataRequest : OutgoingPacket
         byte[] requestData) : base(ZToolCmdType.AfDataReq, (byte)(10 + requestDataLen))
     {
         var dataList = new List<byte>();
-        dataList.AddRange(BitConverter.GetBytes(nwkDstAddr));
+        dataList.AddRange(GetReversedEndianBytes(nwkDstAddr));
         dataList.Add(dstEndpoint);
         dataList.Add(srcEndpoint);
-        dataList.AddRange(BitConverter.GetBytes((ushort)clusterId));
+        dataList.AddRange(GetReversedEndianBytes((ushort)clusterId));
         dataList.Add(transId);
         dataList.Add(options);
         dataList.Add(radius);
@@ -32,4 +33,7 @@ public sealed class AfDataRequest : OutgoingPacket
 
         TransactionId = transId;
     }
+
+    private static byte[] GetReversedEndianBytes(ushort value) =>
+        BitConverter.GetBytes(BinaryPrimitives.ReverseEndianness(value));
 }
