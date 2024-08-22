@@ -2,7 +2,7 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
 public sealed class SysOsalNvLengthRequest(ushort id) : 
-    OutgoingPacket(ZToolCmdType.SysOsalNvLengthReq, 0x02), IOutgoingPacket
+    OutgoingPacket(ZToolCmdType.SysOsalNvLengthReq, 2), IOutgoingPacket
 {
     public ushort Id { get; } = id;
 

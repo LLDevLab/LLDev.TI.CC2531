@@ -16,7 +16,7 @@ public sealed class SysOsalNvReadRequest : OutgoingPacket, IOutgoingPacket
     protected override byte[] Data { get; }
 
     public SysOsalNvReadRequest(ushort id, byte offset) :
-        base(ZToolCmdType.SysOsalNvReadReq, 0x03)
+        base(ZToolCmdType.SysOsalNvReadReq, 3)
     {
         Id = id;
         Offset = offset;

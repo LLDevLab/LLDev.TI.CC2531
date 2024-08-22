@@ -55,7 +55,7 @@ public sealed class AfRegisterRequest : OutgoingPacket, IOutgoingPacket
         byte appNumInClusters,
         ushort[] appInClusterList,
         byte appNumOutClusters,
-        ushort[] appOutClusterList) : base(ZToolCmdType.AfRegisterReq, (byte)(0x09 + (appInClusterList.Length * 2) + (appOutClusterList.Length * 2)))
+        ushort[] appOutClusterList) : base(ZToolCmdType.AfRegisterReq, (byte)(9 + (appInClusterList.Length * 2) + (appOutClusterList.Length * 2)))
     {
         Endpoint = endpoint;
         AppProfId = appProfId;

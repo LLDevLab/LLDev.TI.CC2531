@@ -7,7 +7,7 @@ public sealed class SysResetRequest : OutgoingPacket, IOutgoingPacket
     protected override byte[] Data { get; }
 
     public SysResetRequest(ZToolSysResetType resetType) :
-        base(ZToolCmdType.SysResetReq, 0x01)
+        base(ZToolCmdType.SysResetReq, 1)
     {
         ResetType = resetType;
         Data = [(byte)ResetType];
