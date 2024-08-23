@@ -70,25 +70,18 @@ public sealed class AfRegisterRequest : OutgoingPacket, IOutgoingPacket
         Data = GetData();
     }
 
-    private byte[] GetData()
-    {
-        var dataList = new List<byte>
-        {
-            Endpoint,
-            GetLsb(AppProfId),
-            GetMsb(AppProfId),
-            GetLsb(AppDeviceId),
-            GetMsb(AppDeviceId),
-            AppDevVersion,
-            (byte)LatencyReq,
-            AppNumInClusters
-        };
-        dataList.AddRange(GetBytes(AppInClusterList));
-        dataList.Add(AppNumOutClusters);
-        dataList.AddRange(GetBytes(AppOutClusterList));
-
-        return [.. dataList];
-    }
+    private byte[] GetData() =>
+    [
+        Endpoint,
+        .. BitConverter.GetBytes(AppProfId),
+        .. BitConverter.GetBytes(AppDeviceId),
+        AppDevVersion,
+        (byte)LatencyReq,
+        AppNumInClusters,
+        .. GetBytes(AppInClusterList),
+        AppNumOutClusters,
+        .. GetBytes(AppOutClusterList)
+    ];
 
     private static IEnumerable<byte> GetBytes(ushort[] data) => data.SelectMany(BitConverter.GetBytes);
 }
