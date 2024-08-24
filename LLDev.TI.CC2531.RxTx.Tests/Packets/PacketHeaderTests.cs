@@ -1,9 +1,24 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
+using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Packets;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Packets;
 public class PacketHeaderTests
 {
+    [Fact]
+    public void PacketLengthIsTooLow_ThrowsPacketException()
+    {
+        // Arrange.
+        const int HeaderLen = 4;
+
+        var packet = new byte[] { 1, 2, 3 };
+
+        // Act. / Assert.
+        var exception = Assert.Throws<PacketException>(() => new PacketHeader(packet));
+
+        Assert.Equal($"Cannot create packet header, packet length is less that {HeaderLen} bytes", exception.Message);
+    }
+
     [Fact]
     public void GetStartByte()
     {
