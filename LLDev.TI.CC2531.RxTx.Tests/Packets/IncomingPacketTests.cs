@@ -2,7 +2,7 @@
 using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Packets.Incoming;
+namespace LLDev.TI.CC2531.RxTx.Tests.Packets;
 public class IncomingPacketTests
 {
     private const int StartByte = 0xfe;
