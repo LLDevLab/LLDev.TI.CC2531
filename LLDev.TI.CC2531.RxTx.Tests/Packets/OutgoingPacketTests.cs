@@ -35,6 +35,7 @@ public class OutgoingPacketTests
 
     [Theory]
     [MemberData(nameof(_theoryData))]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1045:Avoid using TheoryData type arguments that might not be serializable", Justification = "Do not need it here")]
     public void BuildPacket(OutgoingPacket request, byte[] manualResult)
     {
         // Act.
@@ -44,5 +45,23 @@ public class OutgoingPacketTests
 
         for (var i = 0; i < manualResult.Length; i++)
             Assert.Equal(manualResult[i], result[i]);
+    }
+
+    [Fact]
+    public void CompareClassHieranchyCount()
+    {
+        // Arrange.
+        const int ExpectedClassesCount = 24;
+
+        // Act.
+        var type = typeof(OutgoingPacket);
+
+        var actualCount = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(type.IsAssignableFrom)
+            .Count();
+
+        // Assert.
+        Assert.Equal(ExpectedClassesCount, actualCount);
     }
 }
