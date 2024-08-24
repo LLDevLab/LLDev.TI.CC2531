@@ -32,7 +32,7 @@ public sealed class PacketHeader : IPacketHeader
     public PacketHeader(byte[] data)
     {
         if (data.Length < HeaderLen)
-            throw new PacketException($"Cannot create packet header, packet length is less that {HeaderLen} bytes");
+            throw new PacketException($"Cannot create packet header. Packet length is less that {HeaderLen} bytes");
 
         _data = data[0..HeaderLen];
     }

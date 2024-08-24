@@ -16,7 +16,7 @@ public class PacketHeaderTests
         // Act. / Assert.
         var exception = Assert.Throws<PacketException>(() => new PacketHeader(packet));
 
-        Assert.Equal($"Cannot create packet header, packet length is less that {HeaderLen} bytes", exception.Message);
+        Assert.Equal($"Cannot create packet header. Packet length is less that {HeaderLen} bytes", exception.Message);
     }
 
     [Fact]
