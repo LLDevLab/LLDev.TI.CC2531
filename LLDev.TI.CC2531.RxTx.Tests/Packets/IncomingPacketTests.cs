@@ -1051,6 +1051,24 @@ public class IncomingPacketTests
             item => Assert.Equal(0x0403, item));
     }
 
+    [Fact]
+    public void CompareClassHieranchyCount()
+    {
+        // Arrange.
+        const int ExpectedClassesCount = 33;
+
+        // Act.
+        var type = typeof(IncomingPacket);
+
+        var actualCount = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(type.IsAssignableFrom)
+            .Count();
+
+        // Assert.
+        Assert.Equal(ExpectedClassesCount, actualCount);
+    }
+
     private static void CheckGeneralData(IncomingPacket response, byte expectedDataLen, ZToolCmdType expectedCmdType)
     {
         Assert.Equal(expectedDataLen, response.DataLength);
