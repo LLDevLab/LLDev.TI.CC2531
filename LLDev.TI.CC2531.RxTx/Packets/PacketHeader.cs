@@ -14,7 +14,7 @@ public interface IPacketHeader
 
 public sealed class PacketHeader : IPacketHeader
 {
-    private const int HeaderLen = 4;
+    public const int HeaderLen = 4;
 
     public byte StartByte => _data[0];
     public byte DataLength => _data[1];
