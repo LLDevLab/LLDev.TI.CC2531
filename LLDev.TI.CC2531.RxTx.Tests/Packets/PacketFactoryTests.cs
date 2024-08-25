@@ -32,10 +32,35 @@ public class PacketFactoryTests
     }
 
     [Fact]
-    public void CreateIncomingPacket_PacketTypeIsUnsupported_LoggingPacketException()
+    public void CreateIncomingPacket_PacketTypeIsUnsupported_LoggerDisabled()
     {
         // Arrange.
         var packet = new byte[] { 1, 2, 3, 4 };
+
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Error)).Returns(false);
+
+        var factory = new PacketFactory(_loggerMock.Object);
+
+        // Act.
+        var result = factory.CreateIncomingPacket(packet);
+
+        // Assert.
+        _loggerMock.Verify(x => x.Log(LogLevel.Error,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Never);
+
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void CreateIncomingPacket_PacketTypeIsUnsupported_LoggerEnabled_LoggingPacketException()
+    {
+        // Arrange.
+        var packet = new byte[] { 1, 2, 3, 4 };
+
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Error)).Returns(true);
 
         var factory = new PacketFactory(_loggerMock.Object);
 

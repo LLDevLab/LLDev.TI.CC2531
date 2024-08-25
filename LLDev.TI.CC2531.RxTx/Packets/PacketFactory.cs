@@ -60,7 +60,8 @@ public sealed class PacketFactory(ILogger<IPacketFactory> logger) : IPacketFacto
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Cannot create network packet instance. Packet: '{Packet}'", packet.ArrayToString());
+            if (_logger.IsEnabled(LogLevel.Error))
+                _logger.LogError(ex, "Cannot create network packet instance. Packet: '{Packet}'", packet.ArrayToString());
         }
 
         return result;
