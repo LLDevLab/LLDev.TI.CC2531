@@ -27,10 +27,19 @@ public sealed class SerialPortDataHandler : ISerialPortDataHandler
         _serialPortHandler.SerialDataReceived += OnSerialDataReceived;
     }
 
-    public void Write(byte[] data) => _serialPortHandler.Write(data, 0, data.Length);
+    public void Write(byte[] data)
+    {
+        if (!_serialPortHandler.IsOpen)
+            throw new SerialPortException("Serial port is closed.");
+
+        _serialPortHandler.Write(data, 0, data.Length);
+    }
 
     public byte[] Read(int bytesToRead)
     {
+        if (!_serialPortHandler.IsOpen)
+            throw new SerialPortException("Serial port is closed.");
+
         if (bytesToRead == 0)
             return [];
 
