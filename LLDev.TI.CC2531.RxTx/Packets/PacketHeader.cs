@@ -24,7 +24,7 @@ public sealed class PacketHeader(byte[] data) : IPacketHeader
         }
     }
 
-    private readonly byte[] _data = data[0..Constants.PacketHeaderLength];
+    private readonly byte[] _data = data[0..Constants.HeaderLength];
 
     public byte[] ToByteArray() => _data;
 }
