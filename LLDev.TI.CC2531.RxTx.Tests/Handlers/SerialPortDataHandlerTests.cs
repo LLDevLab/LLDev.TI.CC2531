@@ -124,12 +124,57 @@ public class SerialPortDataHandlerTests
     }
 
     [Fact]
+    public void Read_NoMoreDataToRead()
+    {
+        // Arrange.
+        const int FirstTimeRead = 2;
+
+        var data = new byte[] { 1, 2 };
+
+        var bytesToReadExecutionCount = 0;
+
+        _serialPortHandlerMock.SetupGet(m => m.IsOpen).Returns(true);
+        _serialPortHandlerMock.SetupGet(m => m.BytesToRead).Returns(() =>
+        {
+            var result = bytesToReadExecutionCount == 0 ? FirstTimeRead : 0;
+
+            bytesToReadExecutionCount++;
+
+            return result;
+        });
+
+        var handler = new SerialPortDataHandler(_serialPortHandlerMock.Object);
+
+        _serialPortHandlerMock.Setup(m => m.Read(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>())).Returns<byte[], int, int>((arr, offset, toRead) =>
+        {
+            for (var i = offset; i < data.Length; i++)
+                arr[i] = data[i];
+
+            return data.Length;
+        });
+
+        // Act.
+        var result = handler.Read(data.Length + 2);
+
+        // Assert.
+        _serialPortHandlerMock.VerifyAll();
+        _serialPortHandlerMock.Verify(m => m.Read(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(2));
+        _serialPortHandlerMock.Verify(m => m.Read(It.IsAny<byte[]>(), 0, data.Length), Times.Once);
+        _serialPortHandlerMock.Verify(m => m.Read(It.IsAny<byte[]>(), FirstTimeRead, data.Length - FirstTimeRead), Times.Once);
+
+        Assert.Collection(result,
+            item => Assert.Equal(data[0], item),
+            item => Assert.Equal(data[1], item),
+            item => Assert.Equal(data[2], item));
+    }
+
+    [Fact]
     public void Read()
     {
         // Arrange.
         const int FirstTimeRead = 2;
 
-        var data = new byte[3] { 1, 2, 3 };
+        var data = new byte[] { 1, 2, 3 };
 
         var executionCount = 0;
 

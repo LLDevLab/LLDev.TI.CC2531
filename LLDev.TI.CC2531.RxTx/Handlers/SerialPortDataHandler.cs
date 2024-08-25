@@ -23,7 +23,6 @@ public sealed class SerialPortDataHandler : ISerialPortDataHandler
     public SerialPortDataHandler(ISerialPortHandler serialPortHandler)
     {
         _serialPortHandler = serialPortHandler;
-
         _serialPortHandler.SerialDataReceived += OnSerialDataReceived;
     }
 
@@ -47,7 +46,7 @@ public sealed class SerialPortDataHandler : ISerialPortDataHandler
 
         var readBytes = 0;
 
-        while (readBytes < bytesToRead)
+        while (IsDataToRead && readBytes < bytesToRead)
             readBytes += _serialPortHandler.Read(result, readBytes, bytesToRead - readBytes);
 
         return result;
