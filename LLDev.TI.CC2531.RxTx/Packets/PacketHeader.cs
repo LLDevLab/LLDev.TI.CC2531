@@ -13,7 +13,7 @@ public interface IPacketHeader
 
 public sealed class PacketHeader(byte[] data) : IPacketHeader
 {
-    public const int HeaderLen = 4;
+    public const int HeaderLength = 4;
 
     public byte StartByte => _data[0];
     public byte DataLength => _data[1];
@@ -26,7 +26,7 @@ public sealed class PacketHeader(byte[] data) : IPacketHeader
         }
     }
 
-    private readonly byte[] _data = data[0..HeaderLen];
+    private readonly byte[] _data = data[0..HeaderLength];
 
     public byte[] ToByteArray() => _data;
 }
