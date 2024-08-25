@@ -8,16 +8,16 @@ namespace LLDev.TI.CC2531.RxTx.Packets;
 
 public interface IPacketFactory
 {
-    IncomingPacket? CreateIncomingPacket(byte[] packet);
+    IIncomingPacket? CreateIncomingPacket(byte[] packet);
 }
 
 public sealed class PacketFactory(ILogger<IPacketFactory> logger) : IPacketFactory
 {
     private readonly ILogger<IPacketFactory> _logger = logger;
 
-    public IncomingPacket? CreateIncomingPacket(byte[] packet)
+    public IIncomingPacket? CreateIncomingPacket(byte[] packet)
     {
-        IncomingPacket? result = null;
+        IIncomingPacket? result = null;
 
         try
         {
