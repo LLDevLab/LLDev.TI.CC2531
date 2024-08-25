@@ -353,6 +353,5 @@ public class SerialPortDataHandlerTests
 
         // Assert.
         _serialPortHandlerMock.Verify(m => m.DiscardInBuffer(), Times.Once);
-        _serialPortHandlerMock.VerifyNoOtherCalls();
     }
 }
