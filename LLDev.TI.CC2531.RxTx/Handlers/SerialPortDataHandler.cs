@@ -50,7 +50,7 @@ public sealed class SerialPortDataHandler : ISerialPortDataHandler
         while (IsDataToRead && readBytes < bytesToRead)
             readBytes += _serialPortHandler.Read(result, readBytes, bytesToRead - readBytes);
 
-        return result;
+        return result[..readBytes];
     }
 
     public void FlushIncomingData() => _serialPortHandler.DiscardInBuffer();

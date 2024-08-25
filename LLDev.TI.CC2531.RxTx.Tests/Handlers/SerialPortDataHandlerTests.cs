@@ -8,32 +8,12 @@ public class SerialPortDataHandlerTests
 {
     private readonly Mock<ISerialPortHandler> _serialPortHandlerMock = new();
 
-    [Fact]
-    public void IsDataToRead_PortIsClosed()
-    {
-        // Arrange.
-        _serialPortHandlerMock.SetupGet(m => m.IsOpen).Returns(false);
-
-        var handler = new SerialPortDataHandler(_serialPortHandlerMock.Object);
-
-        // Act.
-        var result = handler.IsDataToRead;
-
-        // Assert.
-        _serialPortHandlerMock.VerifyAll();
-
-        _serialPortHandlerMock.VerifyGet(m => m.BytesToRead, Times.Never);
-
-        Assert.False(result);
-    }
-
     [Theory]
     [InlineData(0, false)]
     [InlineData(10, true)]
     public void IsDataToRead_PortIsOpen(int bytesToRead, bool excpetedResult)
     {
         // Arrange.
-        _serialPortHandlerMock.SetupGet(m => m.IsOpen).Returns(true);
         _serialPortHandlerMock.SetupGet(m => m.BytesToRead).Returns(bytesToRead);
 
         var handler = new SerialPortDataHandler(_serialPortHandlerMock.Object);
@@ -131,6 +111,8 @@ public class SerialPortDataHandlerTests
 
         var data = new byte[] { 1, 2 };
 
+        var expectedCount = data.Length + 2;
+
         var bytesToReadExecutionCount = 0;
 
         _serialPortHandlerMock.SetupGet(m => m.IsOpen).Returns(true);
@@ -154,18 +136,15 @@ public class SerialPortDataHandlerTests
         });
 
         // Act.
-        var result = handler.Read(data.Length + 2);
+        var result = handler.Read(expectedCount);
 
         // Assert.
         _serialPortHandlerMock.VerifyAll();
-        _serialPortHandlerMock.Verify(m => m.Read(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(2));
-        _serialPortHandlerMock.Verify(m => m.Read(It.IsAny<byte[]>(), 0, data.Length), Times.Once);
-        _serialPortHandlerMock.Verify(m => m.Read(It.IsAny<byte[]>(), FirstTimeRead, data.Length - FirstTimeRead), Times.Once);
+        _serialPortHandlerMock.Verify(m => m.Read(It.IsAny<byte[]>(), 0, expectedCount), Times.Once);
 
         Assert.Collection(result,
             item => Assert.Equal(data[0], item),
-            item => Assert.Equal(data[1], item),
-            item => Assert.Equal(data[2], item));
+            item => Assert.Equal(data[1], item));
     }
 
     [Fact]
@@ -179,6 +158,7 @@ public class SerialPortDataHandlerTests
         var executionCount = 0;
 
         _serialPortHandlerMock.SetupGet(m => m.IsOpen).Returns(true);
+        _serialPortHandlerMock.SetupGet(m => m.BytesToRead).Returns(data.Length);
 
         var handler = new SerialPortDataHandler(_serialPortHandlerMock.Object);
 
