@@ -8,21 +8,19 @@ namespace LLDev.TI.CC2531.RxTx.Packets;
 
 public interface IPacketFactory
 {
-    IIncomingPacket? CreateIncomingPacket(byte[] packet);
+    IIncomingPacket? CreateIncomingPacket(IPacketHeader packetHeader, byte[] packet);
 }
 
 public sealed class PacketFactory(ILogger<IPacketFactory> logger) : IPacketFactory
 {
     private readonly ILogger<IPacketFactory> _logger = logger;
 
-    public IIncomingPacket? CreateIncomingPacket(byte[] packet)
+    public IIncomingPacket? CreateIncomingPacket(IPacketHeader packetHeader, byte[] packet)
     {
         IIncomingPacket? result = null;
 
         try
         {
-            var packetHeader = new PacketHeader(packet);
-
             result = packetHeader.CmdType switch
             {
                 ZToolCmdType.SysResetIndClbk => new SysResetIndCallback(packetHeader, packet),
