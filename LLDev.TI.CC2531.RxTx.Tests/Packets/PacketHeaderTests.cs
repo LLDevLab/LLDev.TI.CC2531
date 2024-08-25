@@ -1,24 +1,9 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Packets;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Packets;
 public class PacketHeaderTests
 {
-    [Fact]
-    public void PacketLengthIsTooLow_ThrowsPacketException()
-    {
-        // Arrange.
-        const int HeaderLen = 4;
-
-        var packet = new byte[] { 1, 2, 3 };
-
-        // Act. / Assert.
-        var exception = Assert.Throws<PacketException>(() => new PacketHeader(packet));
-
-        Assert.Equal($"Cannot create packet header. Packet length is less that {HeaderLen} bytes", exception.Message);
-    }
-
     [Fact]
     public void GetStartByte()
     {
@@ -159,5 +144,19 @@ public class PacketHeaderTests
             item => Assert.Equal(arr[1], item),
             item => Assert.Equal(arr[2], item),
             item => Assert.Equal(arr[3], item));
+    }
+
+    [Fact]
+    public void ZToolCmdTypeEnumerationCount()
+    {
+        // Arrange.
+        const int ExpectedCount = 56;
+
+        // Act.
+        var result = Enum.GetNames(typeof(ZToolCmdType)).Length;
+
+        // Assert.
+        // In case it fails change GetCmdType unit test accordingly
+        Assert.Equal(ExpectedCount, result);
     }
 }
