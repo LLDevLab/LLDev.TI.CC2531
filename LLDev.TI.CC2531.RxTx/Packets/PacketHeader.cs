@@ -13,8 +13,6 @@ public interface IPacketHeader
 
 public sealed class PacketHeader(byte[] data) : IPacketHeader
 {
-    public const int HeaderLength = 4;
-
     public byte StartByte => _data[0];
     public byte DataLength => _data[1];
     public ZToolCmdType CmdType
@@ -26,7 +24,7 @@ public sealed class PacketHeader(byte[] data) : IPacketHeader
         }
     }
 
-    private readonly byte[] _data = data[0..HeaderLength];
+    private readonly byte[] _data = data[0..Constants.PacketHeaderLength];
 
     public byte[] ToByteArray() => _data;
 }
