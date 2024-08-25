@@ -343,13 +343,13 @@ public class SerialPortDataHandlerTests
     }
 
     [Fact]
-    public void FlushIncomongData()
+    public void FlushIncomingData()
     {
         // Arrange.
         using var handler = new SerialPortDataHandler(_serialPortHandlerMock.Object);
 
         // Act.
-        handler.FlushIncomongData();
+        handler.FlushIncomingData();
 
         // Assert.
         _serialPortHandlerMock.Verify(m => m.DiscardInBuffer(), Times.Once);
