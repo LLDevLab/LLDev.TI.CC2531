@@ -37,6 +37,7 @@ public class IncomingPacket : Packet, IIncomingPacket
 
     protected static ulong GetBigEndianULong(byte[] data)
     {
+        // Since BitConverter.ToUInt64 requires no less that 4 byte array, cannot use it here
         ulong result = 0;
 
         for (var i = data.Length - 1; i >= 0; i--)
@@ -50,6 +51,7 @@ public class IncomingPacket : Packet, IIncomingPacket
 
     protected static ulong GetLittleEndianULong(byte[] data)
     {
+        // Since BitConverter.ToUInt64 requires no less that 4 byte array, cannot use it here
         ulong result = 0;
 
         for (var i = 0; i < data.Length; i++)
