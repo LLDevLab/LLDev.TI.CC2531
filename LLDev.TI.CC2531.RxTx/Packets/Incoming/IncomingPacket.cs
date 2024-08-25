@@ -33,7 +33,7 @@ public class IncomingPacket : Packet, IIncomingPacket
         _minDataLength = minDataLength;
     }
 
-    protected static ushort GetUShort(byte msb, byte lsb) => (ushort)((msb << 8) | lsb);
+    protected static ushort GetUShort(byte msb, byte lsb) => BitConverter.ToUInt16([lsb, msb]);
 
     protected static ulong GetBigEndianULong(byte[] data)
     {
