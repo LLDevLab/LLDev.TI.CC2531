@@ -9,6 +9,7 @@ public interface ISerialPortDataHandler : IDisposable
     bool IsDataToRead { get; }
     void Write(byte[] data);
     byte[] Read(int bytesToRead);
+    void FlushIncomongData();
     void Open();
     void Close();
 }
@@ -51,6 +52,8 @@ public sealed class SerialPortDataHandler : ISerialPortDataHandler
 
         return result;
     }
+
+    public void FlushIncomongData() => _serialPortHandler.DiscardInBuffer();
 
     public void Open()
     {

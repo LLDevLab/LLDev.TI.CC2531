@@ -341,4 +341,18 @@ public class SerialPortDataHandlerTests
         _serialPortHandlerMock.VerifyRemove(m => m.SerialDataReceived -= It.IsAny<SerialDataReceivedEventHandler>());
         _serialPortHandlerMock.Verify(m => m.Dispose(), Times.Once);
     }
+
+    [Fact]
+    public void FlushIncomongData()
+    {
+        // Arrange.
+        using var handler = new SerialPortDataHandler(_serialPortHandlerMock.Object);
+
+        // Act.
+        handler.FlushIncomongData();
+
+        // Assert.
+        _serialPortHandlerMock.Verify(m => m.DiscardInBuffer(), Times.Once);
+        _serialPortHandlerMock.VerifyNoOtherCalls();
+    }
 }
