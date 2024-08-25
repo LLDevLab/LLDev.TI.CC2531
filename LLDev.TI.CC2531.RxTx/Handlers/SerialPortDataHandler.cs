@@ -7,7 +7,6 @@ public interface ISerialPortDataHandler : IDisposable
 {
     event SerialPortDataReceivedEventHandler? DataReceived;
     bool IsDataToRead { get; }
-    bool IsOpen { get; }
     void Write(byte[] data);
     byte[] Read(int bytesToRead);
     void Open();
@@ -17,8 +16,7 @@ public interface ISerialPortDataHandler : IDisposable
 public sealed class SerialPortDataHandler : ISerialPortDataHandler
 {
     public event SerialPortDataReceivedEventHandler? DataReceived;
-    public bool IsOpen => _serialPortHandler.IsOpen;
-    public bool IsDataToRead => _serialPortHandler.IsOpen && _serialPortHandler.BytesToRead > 0;
+    public bool IsDataToRead => _serialPortHandler.BytesToRead > 0;
 
     private readonly ISerialPortHandler _serialPortHandler;
 

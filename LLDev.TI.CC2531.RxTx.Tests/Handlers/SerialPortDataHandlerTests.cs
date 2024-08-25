@@ -8,25 +8,6 @@ public class SerialPortDataHandlerTests
 {
     private readonly Mock<ISerialPortHandler> _serialPortHandlerMock = new();
 
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void IsOpen(bool value)
-    {
-        // Arrange.
-        _serialPortHandlerMock.SetupGet(m => m.IsOpen).Returns(value);
-
-        var handler = new SerialPortDataHandler(_serialPortHandlerMock.Object);
-
-        // Act.
-        var result = handler.IsOpen;
-
-        // Assert.
-        _serialPortHandlerMock.VerifyAll();
-
-        Assert.Equal(value, result);
-    }
-
     [Fact]
     public void IsDataToRead_PortIsClosed()
     {
