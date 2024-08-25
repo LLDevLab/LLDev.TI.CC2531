@@ -13,7 +13,7 @@ public interface IPacket
 
 public abstract class Packet(IPacketHeader header) : IPacket
 {
-    protected const byte StartByte = 0xfe;
+    protected static byte StartByte => Constants.StartByte;
     public byte DataLength => PacketHeader.DataLength;
     public ZToolCmdType CmdType => PacketHeader.CmdType;
 
