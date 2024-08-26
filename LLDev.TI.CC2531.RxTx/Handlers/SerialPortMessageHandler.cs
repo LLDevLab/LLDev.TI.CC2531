@@ -113,5 +113,9 @@ public sealed class SerialPortMessageHandler : ISerialPortMessageHandler
         return packet;
     }
 
-    public void Dispose() => _serialPortDataHandler.Dispose();
+    public void Dispose()
+    {
+        _serialPortDataHandler.DataReceived -= OnSerialPortDataReceived;
+        _serialPortDataHandler.Dispose();
+    }
 }
