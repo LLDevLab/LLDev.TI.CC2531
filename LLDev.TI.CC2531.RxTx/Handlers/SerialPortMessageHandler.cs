@@ -85,7 +85,7 @@ public sealed class SerialPortMessageHandler : ISerialPortMessageHandler
                     MessageReceivedAsync?.Invoke(packet);
                 }
             }
-            catch (PacketException ex)
+            catch (PacketHeaderException ex)
             {
                 if (_logger.IsEnabled(LogLevel.Error))
                     _logger.LogError(ex, "Cannot create incoming packet.");
