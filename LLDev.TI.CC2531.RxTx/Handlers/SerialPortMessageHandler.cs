@@ -38,11 +38,6 @@ public sealed class SerialPortMessageHandler : ISerialPortMessageHandler
 
         _callbackMethods = new();
 
-        Start();
-    }
-
-    private void Start()
-    {
         _serialPortDataHandler.Open();
         _serialPortDataHandler.DataReceived += OnSerialPortDataReceived;
     }
