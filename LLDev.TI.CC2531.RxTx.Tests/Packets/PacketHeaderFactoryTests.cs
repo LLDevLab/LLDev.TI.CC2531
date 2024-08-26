@@ -17,9 +17,9 @@ public class PacketHeaderFactoryTests
         var factory = new PacketHeaderFactory();
 
         // Act. / Assert.
-        var exception = Assert.Throws<PacketException>(() => factory.CreatePacketHeader(data));
+        var exception = Assert.Throws<PacketHeaderException>(() => factory.CreatePacketHeader(data));
 
-        Assert.Equal($"Connot create header. Data length is not equal {HeaderDataLength}.", exception.Message);
+        Assert.Equal($"Data length is not equal {HeaderDataLength}.", exception.Message);
     }
 
     [Fact]
@@ -31,9 +31,9 @@ public class PacketHeaderFactoryTests
         var factory = new PacketHeaderFactory();
 
         // Act. / Assert.
-        var exception = Assert.Throws<PacketException>(() => factory.CreatePacketHeader(data));
+        var exception = Assert.Throws<PacketHeaderException>(() => factory.CreatePacketHeader(data));
 
-        Assert.Equal($"Cannot create header. Invalid packet start byte '{data[0]}'.", exception.Message);
+        Assert.Equal($"Invalid packet start byte '{data[0]}'.", exception.Message);
     }
 
     #region CreatePacketHeader

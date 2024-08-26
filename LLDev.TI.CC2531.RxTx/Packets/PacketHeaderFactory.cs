@@ -12,7 +12,7 @@ public sealed class PacketHeaderFactory : IPacketHeaderFactory
     public IPacketHeader CreatePacketHeader(byte[] data)
     {
         return data.Length != Constants.HeaderLength
-            ? throw new PacketException($"Connot create header. Data length is not equal {Constants.HeaderLength}.")
-            : data[0] != Constants.StartByte ? throw new PacketException($"Cannot create header. Invalid packet start byte '{data[0]}'.") : new PacketHeader(data);
+            ? throw new PacketHeaderException($"Data length is not equal {Constants.HeaderLength}.")
+            : data[0] != Constants.StartByte ? throw new PacketHeaderException($"Invalid packet start byte '{data[0]}'.") : new PacketHeader(data);
     }
 }
