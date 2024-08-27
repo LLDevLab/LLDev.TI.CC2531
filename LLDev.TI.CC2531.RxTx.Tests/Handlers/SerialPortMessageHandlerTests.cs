@@ -1,4 +1,5 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
+using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Handlers;
 using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
@@ -8,6 +9,7 @@ namespace LLDev.TI.CC2531.RxTx.Tests.Handlers;
 public class SerialPortMessageHandlerTests
 {
     private readonly Mock<ISerialPortDataHandler> _serialPortDataHandlerMock = new();
+    private readonly Mock<IPacketHeaderFactory> _packetHeaderFactoryMock = new();
     private readonly Mock<IPacketFactory> _packetFactoryMock = new();
     private readonly Mock<ILogger<SerialPortMessageHandler>> _loggerMock = new();
 
@@ -67,6 +69,54 @@ public class SerialPortMessageHandlerTests
         // Assert.
         outgoingPacketMock.VerifyAll();
         _serialPortDataHandlerMock.VerifyAll();
+    }
+
+    [Fact]
+    public void SerialPortDataReceived_CreatePacketHeaderThrowsPacketHeaderException()
+    {
+        // Arrange.
+        var dataToReadCount = 0;
+
+        var headerArray = new byte[] { 1, 2, 3 };
+
+        var exception = new PacketHeaderException();
+
+        _serialPortDataHandlerMock.SetupGet(m => m.IsDataToRead).Returns(() =>
+        {
+            var result = dataToReadCount == 0;
+            dataToReadCount++;
+
+            return result;
+        });
+
+        _serialPortDataHandlerMock.Setup(m => m.Read(Constants.HeaderLength)).Returns(headerArray);
+
+        _packetHeaderFactoryMock.Setup(m => m.CreatePacketHeader(headerArray)).Throws(exception);
+
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Error)).Returns(true);
+
+        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+            null!,
+            _packetHeaderFactoryMock.Object,
+            _loggerMock.Object);
+
+        // Act.
+        _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
+
+        // Assert.
+        _serialPortDataHandlerMock.VerifyAll();
+        _packetHeaderFactoryMock.VerifyAll();
+        _loggerMock.VerifyAll();
+
+        _serialPortDataHandlerMock.VerifyGet(m => m.IsDataToRead, Times.Exactly(2));
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Error,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            exception,
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
+
+        _serialPortDataHandlerMock.Verify(m => m.FlushIncomingData(), Times.Once);
     }
 
     [Fact]
