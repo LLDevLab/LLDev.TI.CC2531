@@ -3,7 +3,7 @@ using LLDev.TI.CC2531.RxTx.Extensions;
 
 namespace LLDev.TI.CC2531.RxTx.Packets;
 
-public interface IPacket
+internal interface IPacket
 {
     byte DataLength { get; }
     ZToolCmdType CmdType { get; }
@@ -11,7 +11,7 @@ public interface IPacket
     byte[] ToByteArray();
 }
 
-public abstract class Packet(IPacketHeader header) : IPacket
+internal abstract class Packet(IPacketHeader header) : IPacket
 {
     protected static byte StartByte => Constants.StartByte;
     public byte DataLength => PacketHeader.DataLength;

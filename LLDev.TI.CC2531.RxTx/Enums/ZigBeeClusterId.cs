@@ -1,5 +1,5 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Enums;
-public enum ZigBeeClusterId : ushort
+internal enum ZigBeeClusterId : ushort
 {
     PermitJoin = 0x0036,
     TemperatureMeasurement = 0x0402,

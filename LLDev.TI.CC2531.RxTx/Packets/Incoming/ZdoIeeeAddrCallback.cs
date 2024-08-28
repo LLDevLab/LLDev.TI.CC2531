@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public sealed class ZdoIeeeAddrCallback : IncomingPacket, IIncomingPacket
+internal sealed class ZdoIeeeAddrCallback : IncomingPacket, IIncomingPacket
 {
     private const int BytesInUshort = 2;
 

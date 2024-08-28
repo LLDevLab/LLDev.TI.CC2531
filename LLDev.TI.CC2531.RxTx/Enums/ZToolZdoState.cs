@@ -3,7 +3,7 @@
 /// <summary>
 /// State for ZdoStateChangedInd packet
 /// </summary>
-public enum ZToolZdoState : byte
+internal enum ZToolZdoState : byte
 {
     /// <summary>
     /// Initialized - not started automatically

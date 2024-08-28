@@ -5,7 +5,7 @@ using System.IO.Ports;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
-public interface ISerialPortHandler : IDisposable
+internal interface ISerialPortHandler : IDisposable
 {
     event SerialDataReceivedEventHandler SerialDataReceived;
     bool IsOpen { get; }
@@ -18,7 +18,7 @@ public interface ISerialPortHandler : IDisposable
     void DiscardOutBuffer();
 }
 
-public sealed class SerialPortHandler : ISerialPortHandler
+internal sealed class SerialPortHandler : ISerialPortHandler
 {
     public event SerialDataReceivedEventHandler SerialDataReceived
     {

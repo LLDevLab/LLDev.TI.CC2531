@@ -1,5 +1,5 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Enums;
-public enum ZToolPacketStatus : byte
+internal enum ZToolPacketStatus : byte
 {
     Success = 0x00,
     Fail = 0x01,

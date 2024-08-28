@@ -5,7 +5,7 @@ namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 /// <summary>
 /// This callback message is in response to the ZDO Node Descriptor Request.
 /// </summary>
-public sealed class ZdoNodeDescCallback : IncomingPacket, IIncomingPacket
+internal sealed class ZdoNodeDescCallback : IncomingPacket, IIncomingPacket
 {
     /// <summary>
     /// The message’s source network address.

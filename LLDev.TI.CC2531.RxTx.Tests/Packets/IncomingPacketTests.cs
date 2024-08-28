@@ -926,7 +926,7 @@ public class IncomingPacketTests
     [Theory]
     [InlineData(0x01, 0x64, ZToolPacketStatus.Fail)]
     [InlineData(0x00, 0x65, ZToolPacketStatus.Success)]
-    public void ZdoIeeeAddrResponse(byte data, byte checkSum, ZToolPacketStatus expectedResult)
+    internal void ZdoIeeeAddrResponse(byte data, byte checkSum, ZToolPacketStatus expectedResult)
     {
         // Arrange.
         const int ExpectedDataLenght = 0x01;

@@ -2,7 +2,7 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-public sealed class AfRegisterResponse : IncomingPacket, IIncomingPacket
+internal sealed class AfRegisterResponse : IncomingPacket, IIncomingPacket
 {
     public ZToolPacketStatus Status { get; }
 

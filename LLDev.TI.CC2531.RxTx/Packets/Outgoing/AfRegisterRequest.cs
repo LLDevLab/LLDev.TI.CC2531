@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class AfRegisterRequest : OutgoingPacket, IOutgoingPacket
+internal sealed class AfRegisterRequest : OutgoingPacket, IOutgoingPacket
 {
     /// <summary>
     /// Specifies the endpoint of the device

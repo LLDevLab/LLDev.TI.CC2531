@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class SysOsalNvReadRequest : OutgoingPacket, IOutgoingPacket
+internal sealed class SysOsalNvReadRequest : OutgoingPacket, IOutgoingPacket
 {
     /// <summary>
     /// The Id of the NV item.

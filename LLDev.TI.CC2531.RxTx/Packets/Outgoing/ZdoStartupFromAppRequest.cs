@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class ZdoStartupFromAppRequest(ushort startDelay) : OutgoingPacket(ZToolCmdType.ZdoStartupFromAppReq, 2), IOutgoingPacket
+internal sealed class ZdoStartupFromAppRequest(ushort startDelay) : OutgoingPacket(ZToolCmdType.ZdoStartupFromAppReq, 2), IOutgoingPacket
 {
     public ushort StartDelay { get; } = startDelay;
 

@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public sealed class UtilLedControlResponse : IncomingPacket, IIncomingPacket
+internal sealed class UtilLedControlResponse : IncomingPacket, IIncomingPacket
 {
     public ZToolPacketStatus Status { get; }
     public UtilLedControlResponse(IPacketHeader header, byte[] packet) :

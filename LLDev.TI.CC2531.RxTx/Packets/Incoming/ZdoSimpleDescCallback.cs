@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public sealed class ZdoSimpleDescCallback : IncomingPacket, IIncomingPacket
+internal sealed class ZdoSimpleDescCallback : IncomingPacket, IIncomingPacket
 {
     /// <summary>
     /// Specifies the message’s source network address.

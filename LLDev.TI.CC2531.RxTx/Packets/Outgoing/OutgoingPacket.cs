@@ -3,11 +3,11 @@ using System.Buffers.Binary;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
 
-public interface IOutgoingPacket : IPacket
+internal interface IOutgoingPacket : IPacket
 {
 }
 
-public abstract class OutgoingPacket(ZToolCmdType requestType, byte dataLen) :
+internal abstract class OutgoingPacket(ZToolCmdType requestType, byte dataLen) :
     Packet(new PacketHeader([StartByte, dataLen, .. BitConverter.GetBytes(BinaryPrimitives.ReverseEndianness((ushort)requestType))])), IOutgoingPacket
 {
 }

@@ -4,7 +4,7 @@
 /// End device capability flags
 /// </summary>
 [Flags]
-public enum ZToolEndDevCaps : byte
+internal enum ZToolEndDevCaps : byte
 {
     /// <summary>
     /// Alternative PAN coordinator

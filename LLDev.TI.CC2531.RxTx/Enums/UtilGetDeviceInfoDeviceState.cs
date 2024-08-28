@@ -1,5 +1,5 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Enums;
-public enum UtilGetDeviceInfoDeviceState : byte
+internal enum UtilGetDeviceInfoDeviceState : byte
 {
     /// <summary>
     /// Initialized - not started automatically

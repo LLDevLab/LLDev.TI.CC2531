@@ -3,7 +3,7 @@
 /// Bit mask for channels to scan.
 /// </summary>
 [Flags]
-public enum ZToolDiscoveryScanChannelTypes : uint
+internal enum ZToolDiscoveryScanChannelTypes : uint
 {
     None = 0x00,
     Channel_11 = 0x00000800,

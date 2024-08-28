@@ -9,13 +9,13 @@ using System.Collections.Concurrent;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
-public interface ISerialPortMessageHandler : IDisposable
+internal interface ISerialPortMessageHandler : IDisposable
 {
     event MessageReceivedHandler MessageReceivedAsync;
     void Send(IOutgoingPacket packet, Action<IIncomingPacket?> callback, ZToolCmdType resultType);
 }
 
-public sealed class SerialPortMessageHandler : ISerialPortMessageHandler
+internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
 {
     public event MessageReceivedHandler? MessageReceivedAsync;
 

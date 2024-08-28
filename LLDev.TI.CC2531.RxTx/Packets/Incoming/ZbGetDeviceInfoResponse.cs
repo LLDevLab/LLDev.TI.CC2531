@@ -2,7 +2,7 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-public sealed class ZbGetDeviceInfoResponse : IncomingPacket, IIncomingPacket
+internal sealed class ZbGetDeviceInfoResponse : IncomingPacket, IIncomingPacket
 {
     public DeviceInfoType DeviceInfoType { get; }
     public ulong Value { get; }

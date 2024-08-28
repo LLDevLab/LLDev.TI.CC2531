@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public sealed class ZdoEndDeviceAnnceIndCallback : IncomingPacket, IIncomingPacket
+internal sealed class ZdoEndDeviceAnnceIndCallback : IncomingPacket, IIncomingPacket
 {
     public ushort SrcAddr { get; }
     public ushort NwkAddr { get; }

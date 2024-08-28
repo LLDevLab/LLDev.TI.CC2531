@@ -2,7 +2,7 @@
 using System.Buffers.Binary;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class AfDataRequest : OutgoingPacket, IOutgoingPacket
+internal sealed class AfDataRequest : OutgoingPacket, IOutgoingPacket
 {
     public byte TransactionId { get; }
 

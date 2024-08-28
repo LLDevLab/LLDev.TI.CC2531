@@ -1,6 +1,6 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-public sealed class SysGetExtAddrResponse : IncomingPacket, IIncomingPacket
+internal sealed class SysGetExtAddrResponse : IncomingPacket, IIncomingPacket
 {
     /// <summary>
     /// The device’s extended address.

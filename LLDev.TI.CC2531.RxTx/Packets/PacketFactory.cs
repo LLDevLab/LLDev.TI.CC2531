@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Packets;
 
-public interface IPacketFactory
+internal interface IPacketFactory
 {
     IIncomingPacket? CreateIncomingPacket(IPacketHeader packetHeader, byte[] packet);
 }
 
-public sealed class PacketFactory(ILogger<IPacketFactory> logger) : IPacketFactory
+internal sealed class PacketFactory(ILogger<IPacketFactory> logger) : IPacketFactory
 {
     private readonly ILogger<IPacketFactory> _logger = logger;
 

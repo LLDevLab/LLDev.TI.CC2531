@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class ZdoExtFindGroupRequest : OutgoingPacket, IOutgoingPacket
+internal sealed class ZdoExtFindGroupRequest : OutgoingPacket, IOutgoingPacket
 {
     /// <summary>
     /// Endpoint to look for

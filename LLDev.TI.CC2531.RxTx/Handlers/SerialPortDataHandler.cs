@@ -3,7 +3,7 @@ using System.IO.Ports;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
-public interface ISerialPortDataHandler : IDisposable
+internal interface ISerialPortDataHandler : IDisposable
 {
     event SerialPortDataReceivedEventHandler? DataReceived;
     bool IsDataToRead { get; }
@@ -14,7 +14,7 @@ public interface ISerialPortDataHandler : IDisposable
     void Close();
 }
 
-public sealed class SerialPortDataHandler : ISerialPortDataHandler
+internal sealed class SerialPortDataHandler : ISerialPortDataHandler
 {
     public event SerialPortDataReceivedEventHandler? DataReceived;
     public bool IsDataToRead => _serialPortHandler.BytesToRead > 0;

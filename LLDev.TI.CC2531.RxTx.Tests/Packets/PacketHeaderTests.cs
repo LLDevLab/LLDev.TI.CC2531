@@ -112,7 +112,7 @@ public class PacketHeaderTests
     [InlineData(0x66, 0x06, ZToolCmdType.ZbGetDeviceInfoRsp)]
     [InlineData(0x67, 0x00, ZToolCmdType.UtilGetDeviceInfoRsp)]
     [InlineData(0x67, 0x0a, ZToolCmdType.UtilLedControlRsp)]
-    public void GetCmdType(byte lsb, byte msb, ZToolCmdType expectedCmdType)
+    internal void GetCmdType(byte lsb, byte msb, ZToolCmdType expectedCmdType)
     {
         // Arrange.
         var arr = new byte[] { 1, 2, lsb, msb, 5, 6 };

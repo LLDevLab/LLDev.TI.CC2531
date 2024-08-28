@@ -1,5 +1,5 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Enums;
-public enum ZToolCmdType : ushort
+internal enum ZToolCmdType : ushort
 {
     Unknown = 0x0000,
 

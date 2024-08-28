@@ -1,7 +1,7 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Enums;
 
 [Flags]
-public enum ZToolStackCapabilities : ushort
+internal enum ZToolStackCapabilities : ushort
 {
     MtCapSys = 0x0001,
     MtCapMac = 0x0002,

@@ -2,12 +2,12 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets;
 
-public interface IPacketHeaderFactory
+internal interface IPacketHeaderFactory
 {
     IPacketHeader CreatePacketHeader(byte[] data);
 }
 
-public sealed class PacketHeaderFactory : IPacketHeaderFactory
+internal sealed class PacketHeaderFactory : IPacketHeaderFactory
 {
     public IPacketHeader CreatePacketHeader(byte[] data)
     {

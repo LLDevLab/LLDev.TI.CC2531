@@ -92,7 +92,7 @@ public class PacketHeaderFactoryTests
     [InlineData(0x25, 0x04, ZToolCmdType.ZdoSimpleDescReq)]
     [InlineData(0x25, 0x50, ZToolCmdType.ZdoExtNwkInfoReq)]
     [InlineData(0x25, 0x01, ZToolCmdType.ZdoIeeeAddrReq)]
-    public void CreatePacketHeader(byte msb, byte lsb, ZToolCmdType expectedType)
+    internal void CreatePacketHeader(byte msb, byte lsb, ZToolCmdType expectedType)
     {
         // Arrange.
         const byte StartByte = 0xfe;

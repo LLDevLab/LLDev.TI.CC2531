@@ -2,7 +2,7 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-public sealed class SysResetIndCallback : IncomingPacket, IIncomingPacket
+internal sealed class SysResetIndCallback : IncomingPacket, IIncomingPacket
 {
     /// <summary>
     /// Reason for the reset.

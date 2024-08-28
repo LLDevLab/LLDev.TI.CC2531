@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class ZbWriteConfigRequest : OutgoingPacket, IOutgoingPacket
+internal sealed class ZbWriteConfigRequest : OutgoingPacket, IOutgoingPacket
 {
     public ZToolZbConfigurationId ConfigId { get; }
     public byte ConfigDataLen { get; }

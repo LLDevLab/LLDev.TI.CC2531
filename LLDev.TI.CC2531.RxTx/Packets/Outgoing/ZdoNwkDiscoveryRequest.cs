@@ -2,7 +2,7 @@
 using System.Buffers.Binary;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class ZdoNwkDiscoveryRequest : OutgoingPacket, IOutgoingPacket
+internal sealed class ZdoNwkDiscoveryRequest : OutgoingPacket, IOutgoingPacket
 {
     public ZToolDiscoveryScanChannelTypes ChannelTypes { get; }
     public byte ScanDuration { get; }

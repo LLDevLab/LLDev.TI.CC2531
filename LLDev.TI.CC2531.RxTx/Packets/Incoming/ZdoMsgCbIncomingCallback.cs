@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public sealed class ZdoMsgCbIncomingCallback : IncomingPacket, IIncomingPacket
+internal sealed class ZdoMsgCbIncomingCallback : IncomingPacket, IIncomingPacket
 {
     public ushort SrcAddr { get; }
     public bool IsBroadcast { get; }

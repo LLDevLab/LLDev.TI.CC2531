@@ -2,7 +2,7 @@
 using System.Buffers.Binary;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class ZdoActiveEpRequest(ushort destAddr, ushort nwkAddrOfInterest) : OutgoingPacket(ZToolCmdType.ZdoActiveEpReq, 4), IOutgoingPacket
+internal sealed class ZdoActiveEpRequest(ushort destAddr, ushort nwkAddrOfInterest) : OutgoingPacket(ZToolCmdType.ZdoActiveEpReq, 4), IOutgoingPacket
 {
     public ushort DestAddr { get; } = destAddr;
     public ushort NwkAddrOfInterest { get; } = nwkAddrOfInterest;

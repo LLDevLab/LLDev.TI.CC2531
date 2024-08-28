@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class ZdoSimpleDescRequest(ushort destAddr, ushort nwkAddrOfInterest, byte endpoint) :
+internal sealed class ZdoSimpleDescRequest(ushort destAddr, ushort nwkAddrOfInterest, byte endpoint) :
     OutgoingPacket(ZToolCmdType.ZdoSimpleDescReq, 5), IOutgoingPacket
 {
     /// <summary>

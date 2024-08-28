@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class UtilLedControlRequest : OutgoingPacket, IOutgoingPacket
+internal sealed class UtilLedControlRequest : OutgoingPacket, IOutgoingPacket
 {
     public byte LedId { get; }
     public bool LedOn { get; }

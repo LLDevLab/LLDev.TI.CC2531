@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-public sealed class ZdoExtRouteDiscoveryRequest(ushort destAddr, byte options, byte radius) : OutgoingPacket(ZToolCmdType.ZdoExtRouteDicsReq, 5), IOutgoingPacket
+internal sealed class ZdoExtRouteDiscoveryRequest(ushort destAddr, byte options, byte radius) : OutgoingPacket(ZToolCmdType.ZdoExtRouteDicsReq, 5), IOutgoingPacket
 {
     public ushort DestAddr { get; } = destAddr;
     public byte Options { get; } = options;

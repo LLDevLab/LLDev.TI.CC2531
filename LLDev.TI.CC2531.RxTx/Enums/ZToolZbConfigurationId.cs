@@ -1,5 +1,5 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Enums;
-public enum ZToolZbConfigurationId : byte
+internal enum ZToolZbConfigurationId : byte
 {
     NvStartupOption = 0x03,
     NvPollRate = 0x24,

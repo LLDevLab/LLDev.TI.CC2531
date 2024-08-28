@@ -1,7 +1,7 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-public sealed class ZdoNodeDescResponse : IncomingPacket, IIncomingPacket
+internal sealed class ZdoNodeDescResponse : IncomingPacket, IIncomingPacket
 {
     public ZToolPacketStatus Status { get; }
     public ZdoNodeDescResponse(IPacketHeader header, byte[] data) :

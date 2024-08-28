@@ -2,5 +2,5 @@
 
 namespace LLDev.TI.CC2531.RxTx;
 
-public delegate void SerialPortDataReceivedEventHandler();
-public delegate void MessageReceivedHandler(IIncomingPacket packet);
+internal delegate void SerialPortDataReceivedEventHandler();
+internal delegate void MessageReceivedHandler(IIncomingPacket packet);

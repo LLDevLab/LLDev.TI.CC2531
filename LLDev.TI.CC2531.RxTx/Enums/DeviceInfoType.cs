@@ -1,5 +1,5 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Enums;
-public enum DeviceInfoType : byte
+internal enum DeviceInfoType : byte
 {
     State = 0x00,
     IeeeAddr = 0x01,
