@@ -47,8 +47,6 @@ public class SerialPortMessageHandlerTests
             _messageCallbackMethodsCacheServiceMock.Object,
             null!);
 
-        handler.Send(outgoingPacketMock.Object, null!, ResultType);
-
         // Act. / Assert.
         var result = Assert.Throws<InvalidOperationException>(() => handler.Send(outgoingPacketMock.Object, null!, ResultType));
 
