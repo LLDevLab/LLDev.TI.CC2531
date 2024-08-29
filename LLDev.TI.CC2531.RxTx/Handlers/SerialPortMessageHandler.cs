@@ -4,8 +4,8 @@ using LLDev.TI.CC2531.RxTx.Extensions;
 using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
+using LLDev.TI.CC2531.RxTx.Services;
 using Microsoft.Extensions.Logging;
-using System.Collections.Concurrent;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
@@ -22,21 +22,20 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
     private readonly ISerialPortDataHandler _serialPortDataHandler;
     private readonly IPacketFactory _packetFactory;
     private readonly IPacketHeaderFactory _packetHeaderFactory;
+    private readonly IMessageCallbackMethodsCacheService _callbackMethodsCacheService;
     private readonly ILogger<SerialPortMessageHandler> _logger;
-
-    private readonly ConcurrentDictionary<ZToolCmdType, Action<IIncomingPacket?>> _callbackMethods;
 
     public SerialPortMessageHandler(ISerialPortDataHandler serialPortDataHandler,
         IPacketFactory packetFactory,
         IPacketHeaderFactory packetHeaderFactory,
+        IMessageCallbackMethodsCacheService callbackMethodsCacheService,
         ILogger<SerialPortMessageHandler> logger)
     {
         _serialPortDataHandler = serialPortDataHandler;
         _packetFactory = packetFactory;
         _packetHeaderFactory = packetHeaderFactory;
+        _callbackMethodsCacheService = callbackMethodsCacheService;
         _logger = logger;
-
-        _callbackMethods = new();
 
         _serialPortDataHandler.Open();
         _serialPortDataHandler.DataReceived += OnSerialPortDataReceived;
@@ -44,10 +43,10 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
 
     public void Send(IOutgoingPacket packet, Action<IIncomingPacket?> callback, ZToolCmdType resultType)
     {
-        if (_callbackMethods.ContainsKey(resultType))
+        if (_callbackMethodsCacheService.ContainsKey(resultType))
             throw new InvalidOperationException($"Request for result type {resultType} already sending.");
 
-        _callbackMethods.TryAdd(resultType, callback);
+        _callbackMethodsCacheService.Add(resultType, callback);
         _serialPortDataHandler.Write(packet.ToByteArray());
     }
 
@@ -68,9 +67,9 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
                 if (packet is null)
                     continue;
 
-                if (_callbackMethods.ContainsKey(packetHeader.CmdType))
+                if (_callbackMethodsCacheService.ContainsKey(packetHeader.CmdType))
                 {
-                    _callbackMethods.TryRemove(packetHeader.CmdType, out var callback);
+                    var callback = _callbackMethodsCacheService.GetAndRemove(packetHeader.CmdType);
 
                     if (callback is not null)
                         callback(packet);
