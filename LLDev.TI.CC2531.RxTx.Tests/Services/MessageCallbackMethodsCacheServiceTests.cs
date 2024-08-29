@@ -1,5 +1,4 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Services;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Services;
@@ -13,8 +12,11 @@ public class MessageCallbackMethodsCacheServiceTests
 
         var service = new MessageCallbackMethodsCacheService();
 
-        // Act. / Assert.
-        Assert.Throws<MessageException>(() => service.GetAndRemove(CmdType));
+        // Act.
+        var action = service.GetAndRemove(CmdType);
+
+        // Assert.
+        Assert.Null(action);
     }
 
     [Fact]
@@ -48,6 +50,7 @@ public class MessageCallbackMethodsCacheServiceTests
         Assert.False(result3);
 
         // Act 4.
+        Assert.NotNull(action);
         action(null);
 
         Assert.Equal(1, actionExecutionCount);
