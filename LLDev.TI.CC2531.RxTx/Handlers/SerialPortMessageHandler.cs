@@ -1,10 +1,8 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Exceptions;
+﻿using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Extensions;
 using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-using LLDev.TI.CC2531.RxTx.Services;
 using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
@@ -12,7 +10,7 @@ namespace LLDev.TI.CC2531.RxTx.Handlers;
 internal interface ISerialPortMessageHandler : IDisposable
 {
     event MessageReceivedHandler MessageReceivedAsync;
-    void Send(IOutgoingPacket packet, Action<IIncomingPacket?> callback, ZToolCmdType resultType);
+    void Send(IOutgoingPacket packet);
 }
 
 internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
@@ -22,31 +20,26 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
     private readonly ISerialPortDataHandler _serialPortDataHandler;
     private readonly IPacketFactory _packetFactory;
     private readonly IPacketHeaderFactory _packetHeaderFactory;
-    private readonly IMessageCallbackMethodsCacheService _callbackMethodsCacheService;
     private readonly ILogger<SerialPortMessageHandler> _logger;
 
     public SerialPortMessageHandler(ISerialPortDataHandler serialPortDataHandler,
         IPacketFactory packetFactory,
         IPacketHeaderFactory packetHeaderFactory,
-        IMessageCallbackMethodsCacheService callbackMethodsCacheService,
         ILogger<SerialPortMessageHandler> logger)
     {
         _serialPortDataHandler = serialPortDataHandler;
         _packetFactory = packetFactory;
         _packetHeaderFactory = packetHeaderFactory;
-        _callbackMethodsCacheService = callbackMethodsCacheService;
         _logger = logger;
 
         _serialPortDataHandler.Open();
         _serialPortDataHandler.DataReceived += OnSerialPortDataReceived;
     }
 
-    public void Send(IOutgoingPacket packet, Action<IIncomingPacket?> callback, ZToolCmdType resultType)
+    public void Send(IOutgoingPacket packet)
     {
-        if (_callbackMethodsCacheService.ContainsKey(resultType))
-            throw new InvalidOperationException($"Request for result type {resultType} already sending.");
+        ArgumentNullException.ThrowIfNull(packet);
 
-        _callbackMethodsCacheService.Add(resultType, callback);
         _serialPortDataHandler.Write(packet.ToByteArray());
     }
 
@@ -67,17 +60,7 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
                 if (packet is null)
                     continue;
 
-                if (_callbackMethodsCacheService.ContainsKey(packetHeader.CmdType))
-                {
-                    var callback = _callbackMethodsCacheService.GetAndRemove(packetHeader.CmdType);
-
-                    if (callback is not null)
-                        callback(packet);
-                }
-                else
-                {
-                    MessageReceivedAsync?.Invoke(packet);
-                }
+                MessageReceivedAsync?.Invoke(packet);
             }
             catch (PacketHeaderException ex)
             {
