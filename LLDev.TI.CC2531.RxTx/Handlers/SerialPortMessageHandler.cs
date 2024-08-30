@@ -3,6 +3,7 @@ using LLDev.TI.CC2531.RxTx.Extensions;
 using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
+using LLDev.TI.CC2531.RxTx.Services;
 using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
@@ -20,17 +21,26 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
     private readonly ISerialPortDataHandler _serialPortDataHandler;
     private readonly IPacketFactory _packetFactory;
     private readonly IPacketHeaderFactory _packetHeaderFactory;
+    private readonly ICriticalSectionService _criticalSectionService;
     private readonly ILogger<SerialPortMessageHandler> _logger;
+
+    private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly CancellationToken _cancellationToken;
 
     public SerialPortMessageHandler(ISerialPortDataHandler serialPortDataHandler,
         IPacketFactory packetFactory,
         IPacketHeaderFactory packetHeaderFactory,
+        ICriticalSectionService criticalSectionService,
         ILogger<SerialPortMessageHandler> logger)
     {
         _serialPortDataHandler = serialPortDataHandler;
         _packetFactory = packetFactory;
         _packetHeaderFactory = packetHeaderFactory;
+        _criticalSectionService = criticalSectionService;
         _logger = logger;
+
+        _cancellationTokenSource = new();
+        _cancellationToken = _cancellationTokenSource.Token;
 
         _serialPortDataHandler.Open();
         _serialPortDataHandler.DataReceived += OnSerialPortDataReceived;
@@ -45,30 +55,40 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
 
     private void OnSerialPortDataReceived()
     {
-        while (_serialPortDataHandler.IsDataToRead)
+        if (!_criticalSectionService.IsAllowedToEnter())
+            return;
+
+        try
         {
-            try
+            while (_serialPortDataHandler.IsDataToRead && !_cancellationToken.IsCancellationRequested)
             {
-                var headerData = _serialPortDataHandler.Read(Constants.HeaderLength);
-                var packetHeader = _packetHeaderFactory.CreatePacketHeader(headerData);
-                // packet data should be read until the end
-                var packetData = _serialPortDataHandler.Read(packetHeader.DataLength);
-                var checkSum = _serialPortDataHandler.Read(1);
+                try
+                {
+                    var headerData = _serialPortDataHandler.Read(Constants.HeaderLength);
+                    var packetHeader = _packetHeaderFactory.CreatePacketHeader(headerData);
+                    // packet data should be read until the end
+                    var packetData = _serialPortDataHandler.Read(packetHeader.DataLength);
+                    var checkSum = _serialPortDataHandler.Read(1);
 
-                var packet = CreateIncomintPacket(packetHeader, [.. packetData, .. checkSum]);
+                    var packet = CreateIncomintPacket(packetHeader, [.. packetData, .. checkSum]);
 
-                if (packet is null)
-                    continue;
+                    if (packet is null)
+                        continue;
 
-                MessageReceivedAsync?.Invoke(packet);
+                    MessageReceivedAsync?.Invoke(packet);
+                }
+                catch (PacketHeaderException ex)
+                {
+                    if (_logger.IsEnabled(LogLevel.Error))
+                        _logger.LogError(ex, "Cannot create incoming packet.");
+
+                    _serialPortDataHandler.FlushIncomingData();
+                }
             }
-            catch (PacketHeaderException ex)
-            {
-                if (_logger.IsEnabled(LogLevel.Error))
-                    _logger.LogError(ex, "Cannot create incoming packet.");
-
-                _serialPortDataHandler.FlushIncomingData();
-            }
+        }
+        finally
+        {
+            _criticalSectionService.Leave();
         }
     }
 
@@ -97,7 +117,9 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
 
     public void Dispose()
     {
+        _cancellationTokenSource.Cancel();
         _serialPortDataHandler.DataReceived -= OnSerialPortDataReceived;
+        _cancellationTokenSource.Dispose();
         _serialPortDataHandler.Dispose();
     }
 }
