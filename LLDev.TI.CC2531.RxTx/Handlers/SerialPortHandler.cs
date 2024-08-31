@@ -5,7 +5,8 @@ using System.IO.Ports;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
-internal interface ISerialPortHandler : IDisposable
+// ISerialPortHandler will be added through DI and should not inherit IDisposable interface
+internal interface ISerialPortHandler
 {
     event SerialDataReceivedEventHandler SerialDataReceived;
     bool IsOpen { get; }
@@ -18,7 +19,7 @@ internal interface ISerialPortHandler : IDisposable
     void DiscardOutBuffer();
 }
 
-internal sealed class SerialPortHandler : ISerialPortHandler
+internal sealed class SerialPortHandler : ISerialPortHandler, IDisposable
 {
     public event SerialDataReceivedEventHandler SerialDataReceived
     {

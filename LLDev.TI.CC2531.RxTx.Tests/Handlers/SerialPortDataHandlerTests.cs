@@ -319,7 +319,6 @@ public class SerialPortDataHandlerTests
 
         // Assert.
         _serialPortHandlerMock.VerifyRemove(m => m.SerialDataReceived -= It.IsAny<SerialDataReceivedEventHandler>());
-        _serialPortHandlerMock.Verify(m => m.Dispose(), Times.Once);
     }
 
     [Fact]
