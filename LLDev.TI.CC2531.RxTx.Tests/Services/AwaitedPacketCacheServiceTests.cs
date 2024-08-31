@@ -4,6 +4,8 @@ using LLDev.TI.CC2531.RxTx.Services;
 namespace LLDev.TI.CC2531.RxTx.Tests.Services;
 public class AwaitedPacketCacheServiceTests
 {
+    private const int DelayMs = 1000;
+
     [Fact]
     public void Add_TypeAlreadyAwaited_ThrowsInvalidOperationException()
     {
@@ -49,7 +51,7 @@ public class AwaitedPacketCacheServiceTests
         });
 
         // Act. / Assert
-        await Task.Delay(500);
+        await Task.Delay(DelayMs);
 
         manualResetEvent.Set();
 
@@ -158,7 +160,7 @@ public class AwaitedPacketCacheServiceTests
         });
 
         // Act. / Assert
-        await Task.Delay(500);
+        await Task.Delay(DelayMs);
 
         manualResetEvent.Set();
 
