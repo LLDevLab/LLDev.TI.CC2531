@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
-internal interface ISerialPortMessageHandler : IDisposable
+internal interface ISerialPortMessageHandler
 {
     event MessageReceivedHandler MessageReceivedAsync;
     void Send(IOutgoingPacket packet);
 }
 
-internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
+internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler, IDisposable
 {
     public event MessageReceivedHandler? MessageReceivedAsync;
 
@@ -117,9 +117,9 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler
 
     public void Dispose()
     {
+        // Should not dispose _serialPortDataHandler, it is added through DI
         _cancellationTokenSource.Cancel();
         _serialPortDataHandler.DataReceived -= OnSerialPortDataReceived;
         _cancellationTokenSource.Dispose();
-        _serialPortDataHandler.Dispose();
     }
 }
