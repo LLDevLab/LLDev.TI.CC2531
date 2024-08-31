@@ -1,5 +1,5 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Tests.Services;
-public class SerialPortMessageServiceTests
+public class SerialPortPacketServiceTests
 {
     [Fact]
     public void TestFail() => Assert.Fail("Implement me");

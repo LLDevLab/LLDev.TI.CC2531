@@ -8,15 +8,15 @@ using Microsoft.Extensions.Options;
 
 namespace LLDev.TI.CC2531.RxTx.Services;
 
-// ISerialPortMessageService will be added through DI and should not inherit IDisposable interface
-internal interface ISerialPortMessageService
+// ISerialPortPacketService will be added through DI and should not inherit IDisposable interface
+internal interface ISerialPortPacketService
 {
     event MessageReceivedHandler? MessageReceived;
     void Send(IOutgoingPacket packet);
     T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket;
 }
 
-internal sealed class SerialPortMessageService : ISerialPortMessageService, IDisposable
+internal sealed class SerialPortPacketService : ISerialPortPacketService, IDisposable
 {
     public event MessageReceivedHandler? MessageReceived;
     private event MessageReceivedHandler? AwaitedMessageReceived;
@@ -25,7 +25,7 @@ internal sealed class SerialPortMessageService : ISerialPortMessageService, IDis
     private readonly IAwaitedPacketCacheService _awaitedMessageCacheService;
     private readonly SerialPortMessageServiceConfig _config;
 
-    public SerialPortMessageService(ISerialPortMessageHandler messageHandler,
+    public SerialPortPacketService(ISerialPortMessageHandler messageHandler,
         IAwaitedPacketCacheService awaitedMessageCacheService,
         IOptions<SerialPortMessageServiceConfig> options)
     {
