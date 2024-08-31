@@ -2,7 +2,7 @@
 using LLDev.TI.CC2531.RxTx.Services;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Services;
-public class MessageCallbackMethodsCacheServiceTests
+public class AwaitedMessageCacheServiceTests
 {
     [Fact]
     public void GetAndRemove_KeyNotFound_ThrowsMessageException()
@@ -10,7 +10,7 @@ public class MessageCallbackMethodsCacheServiceTests
         // Arrange.
         const ZToolCmdType CmdType = ZToolCmdType.ZbGetDeviceInfoReq;
 
-        var service = new MessageCallbackMethodsCacheService();
+        var service = new AwaitedMessageCacheService();
 
         // Act.
         var action = service.GetAndRemove(CmdType);
@@ -27,7 +27,7 @@ public class MessageCallbackMethodsCacheServiceTests
 
         var actionExecutionCount = 0;
 
-        var service = new MessageCallbackMethodsCacheService();
+        var service = new AwaitedMessageCacheService();
 
         // Act 1.
         var result1 = service.ContainsKey(CmdType);

@@ -4,14 +4,14 @@ using System.Collections.Concurrent;
 
 namespace LLDev.TI.CC2531.RxTx.Services;
 
-internal interface IMessageCallbackMethodsCacheService
+internal interface IAwaitedMessageCacheService
 {
     void Add(ZToolCmdType key, Action<IIncomingPacket?> value);
     bool ContainsKey(ZToolCmdType key);
     Action<IIncomingPacket?>? GetAndRemove(ZToolCmdType key);
 }
 
-internal sealed class MessageCallbackMethodsCacheService : IMessageCallbackMethodsCacheService
+internal sealed class AwaitedMessageCacheService : IAwaitedMessageCacheService
 {
     private readonly ConcurrentDictionary<ZToolCmdType, Action<IIncomingPacket?>> _callbackMethods = new();
 
