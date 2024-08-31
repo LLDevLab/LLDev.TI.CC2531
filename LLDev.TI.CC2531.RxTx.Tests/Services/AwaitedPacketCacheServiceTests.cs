@@ -1,22 +1,23 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
+using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Services;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Services;
-public class AwaitedMessageCacheServiceTests
+public class AwaitedPacketCacheServiceTests
 {
     [Fact]
-    public void GetAndRemove_KeyNotFound_ThrowsMessageException()
+    public void GetAndRemove_KeyNotFound_ThrowsPacketException()
     {
         // Arrange.
         const ZToolCmdType CmdType = ZToolCmdType.ZbGetDeviceInfoReq;
 
-        var service = new AwaitedMessageCacheService();
+        var service = new AwaitedPacketCacheService();
 
-        // Act.
-        var action = service.GetAndRemove(CmdType);
+        // Act. / Assert.
+        var exception = Assert.Throws<PacketException>(() => service.GetAndRemove(CmdType));
 
         // Assert.
-        Assert.Null(action);
+        Assert.Equal($"Packet of type {CmdType} do not awaited", exception.Message);
     }
 
     [Fact]
@@ -27,7 +28,7 @@ public class AwaitedMessageCacheServiceTests
 
         var actionExecutionCount = 0;
 
-        var service = new AwaitedMessageCacheService();
+        var service = new AwaitedPacketCacheService();
 
         // Act 1.
         var result1 = service.ContainsKey(CmdType);
@@ -51,7 +52,7 @@ public class AwaitedMessageCacheServiceTests
 
         // Act 4.
         Assert.NotNull(action);
-        action(null);
+        action(null!);
 
         Assert.Equal(1, actionExecutionCount);
     }
