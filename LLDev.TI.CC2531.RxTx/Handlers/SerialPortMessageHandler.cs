@@ -117,7 +117,6 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler, IDis
 
     public void Dispose()
     {
-        // Should not dispose _serialPortDataHandler, it is added through DI
         _cancellationTokenSource.Cancel();
         _serialPortDataHandler.DataReceived -= OnSerialPortDataReceived;
         _cancellationTokenSource.Dispose();

@@ -31,9 +31,6 @@ public class SerialPortMessageHandlerTests
         _serialPortDataHandlerMock.Verify(m => m.Open());
         _serialPortDataHandlerMock.VerifyAdd(m => m.DataReceived += It.IsAny<SerialPortDataReceivedEventHandler>());
         _serialPortDataHandlerMock.VerifyRemove(m => m.DataReceived -= It.IsAny<SerialPortDataReceivedEventHandler>());
-
-        // _serialPortDataHandlerMock will be added through DI and should not be disposed here
-        _serialPortDataHandlerMock.Verify(m => m.Dispose(), Times.Never);
     }
 
     [Fact]
