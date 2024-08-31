@@ -23,14 +23,17 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
     private readonly IPacketHandler _messageHandler;
     private readonly IAwaitedPacketCacheService _awaitedMessageCacheService;
+    private readonly ICmdTypeValidationService _cmdTypeValidationService;
     private readonly SerialPortMessageServiceConfig _config;
 
     public PacketReceiverTransmitterService(IPacketHandler messageHandler,
         IAwaitedPacketCacheService awaitedMessageCacheService,
+        ICmdTypeValidationService cmdTypeValidationService,
         IOptions<SerialPortMessageServiceConfig> options)
     {
         _messageHandler = messageHandler;
         _awaitedMessageCacheService = awaitedMessageCacheService;
+        _cmdTypeValidationService = cmdTypeValidationService;
         _config = options.Value;
 
         _messageHandler.MessageReceivedAsync += OnMessageReceivedInternal;
@@ -40,6 +43,9 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
     public T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket
     {
+        if (!_cmdTypeValidationService.IsResponseOrCallback(responseType))
+            throw new ArgumentException($"Awaited response type is not response or callback");
+
         if (_awaitedMessageCacheService.Contains(responseType))
             throw new PacketException($"Already awaiting packet {responseType}");
 

@@ -22,6 +22,7 @@ public class PacketReceiverTransmitterServiceTests
         // Arrange. / Act.
         using (var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
             null!,
+            null!,
             _options))
         {
         }
@@ -37,7 +38,7 @@ public class PacketReceiverTransmitterServiceTests
         // Arrange.
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object, null!, _options);
+        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object, null!, null!, _options);
 
         // Act.
         service.Send(outgoingPacketMock.Object);
