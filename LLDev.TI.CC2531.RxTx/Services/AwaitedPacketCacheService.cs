@@ -1,33 +1,51 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Exceptions;
-using LLDev.TI.CC2531.RxTx.Packets.Incoming;
-using System.Collections.Concurrent;
 
 namespace LLDev.TI.CC2531.RxTx.Services;
 
 internal interface IAwaitedPacketCacheService
 {
-    void Add(ZToolCmdType key, Action<IIncomingPacket> value);
-    bool ContainsKey(ZToolCmdType key);
-    Action<IIncomingPacket> GetAndRemove(ZToolCmdType key);
+    void Add(ZToolCmdType packetType);
+    bool Contains(ZToolCmdType packetType);
+    void Remove(ZToolCmdType packetType);
 }
 
 internal sealed class AwaitedPacketCacheService : IAwaitedPacketCacheService
 {
-    private readonly ConcurrentDictionary<ZToolCmdType, Action<IIncomingPacket>> _callbackMethods = new();
+    private readonly HashSet<ZToolCmdType> _awaitedPacketTypes = [];
 
-    public void Add(ZToolCmdType key, Action<IIncomingPacket> value)
+    private readonly object _lock = new();
+
+    public void Add(ZToolCmdType packetType)
     {
-        ArgumentNullException.ThrowIfNull(value);
+        lock (_lock)
+        {
+            if (_awaitedPacketTypes.Contains(packetType))
+                throw new InvalidOperationException($"Packet of type {packetType} is already awaiting");
 
-        _callbackMethods.TryAdd(key, value);
+            _awaitedPacketTypes.Add(packetType);
+        }
     }
 
-    public bool ContainsKey(ZToolCmdType key) => _callbackMethods.ContainsKey(key);
-    public Action<IIncomingPacket> GetAndRemove(ZToolCmdType key)
+    public bool Contains(ZToolCmdType packetType)
     {
-        return !_callbackMethods.TryRemove(key, out var value)
-            ? throw new PacketException($"Packet of type {key} do not awaited")
-            : value;
+        bool result;
+
+        lock (_lock)
+        {
+            result = _awaitedPacketTypes.Contains(packetType);
+        }
+
+        return result;
+    }
+
+    public void Remove(ZToolCmdType packetType)
+    {
+        lock (_lock)
+        {
+            if (!_awaitedPacketTypes.Contains(packetType))
+                return;
+
+            _awaitedPacketTypes.Remove(packetType);
+        }
     }
 }
