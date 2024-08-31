@@ -8,14 +8,14 @@ using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
-// ISerialPortMessageHandler will be added through DI and should not inherit IDisposable interface
-internal interface ISerialPortMessageHandler
+// IPacketHandler will be added through DI and should not inherit IDisposable interface
+internal interface IPacketHandler
 {
     event MessageReceivedHandler MessageReceivedAsync;
     void Send(IOutgoingPacket packet);
 }
 
-internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler, IDisposable
+internal sealed class PacketHandler : IPacketHandler, IDisposable
 {
     public event MessageReceivedHandler? MessageReceivedAsync;
 
@@ -23,16 +23,16 @@ internal sealed class SerialPortMessageHandler : ISerialPortMessageHandler, IDis
     private readonly IPacketFactory _packetFactory;
     private readonly IPacketHeaderFactory _packetHeaderFactory;
     private readonly ICriticalSectionService _criticalSectionService;
-    private readonly ILogger<SerialPortMessageHandler> _logger;
+    private readonly ILogger<PacketHandler> _logger;
 
     private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly CancellationToken _cancellationToken;
 
-    public SerialPortMessageHandler(ISerialPortDataHandler serialPortDataHandler,
+    public PacketHandler(ISerialPortDataHandler serialPortDataHandler,
         IPacketFactory packetFactory,
         IPacketHeaderFactory packetHeaderFactory,
         ICriticalSectionService criticalSectionService,
-        ILogger<SerialPortMessageHandler> logger)
+        ILogger<PacketHandler> logger)
     {
         _serialPortDataHandler = serialPortDataHandler;
         _packetFactory = packetFactory;

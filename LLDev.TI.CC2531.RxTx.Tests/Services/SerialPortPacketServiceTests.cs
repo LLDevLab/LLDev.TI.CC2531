@@ -9,7 +9,7 @@ public class SerialPortPacketServiceTests
 {
     private const int Timeout = 200;
 
-    private readonly Mock<ISerialPortMessageHandler> _serialPortMessageHandlerMock = new();
+    private readonly Mock<IPacketHandler> _serialPortMessageHandlerMock = new();
 
     private readonly IOptions<SerialPortMessageServiceConfig> _options = Options.Create(new SerialPortMessageServiceConfig
     {

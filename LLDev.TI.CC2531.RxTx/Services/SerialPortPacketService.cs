@@ -21,11 +21,11 @@ internal sealed class SerialPortPacketService : ISerialPortPacketService, IDispo
     public event MessageReceivedHandler? MessageReceived;
     private event MessageReceivedHandler? AwaitedMessageReceived;
 
-    private readonly ISerialPortMessageHandler _messageHandler;
+    private readonly IPacketHandler _messageHandler;
     private readonly IAwaitedPacketCacheService _awaitedMessageCacheService;
     private readonly SerialPortMessageServiceConfig _config;
 
-    public SerialPortPacketService(ISerialPortMessageHandler messageHandler,
+    public SerialPortPacketService(IPacketHandler messageHandler,
         IAwaitedPacketCacheService awaitedMessageCacheService,
         IOptions<SerialPortMessageServiceConfig> options)
     {

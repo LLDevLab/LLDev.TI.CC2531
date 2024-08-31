@@ -7,19 +7,19 @@ using LLDev.TI.CC2531.RxTx.Services;
 using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Handlers;
-public class SerialPortMessageHandlerTests
+public class PacketHandlerTests
 {
     private readonly Mock<ISerialPortDataHandler> _serialPortDataHandlerMock = new();
     private readonly Mock<IPacketHeaderFactory> _packetHeaderFactoryMock = new();
     private readonly Mock<IPacketFactory> _packetFactoryMock = new();
     private readonly Mock<ICriticalSectionService> _criticalSectionServiceMock = new();
-    private readonly Mock<ILogger<SerialPortMessageHandler>> _loggerMock = new();
+    private readonly Mock<ILogger<PacketHandler>> _loggerMock = new();
 
     [Fact]
     public void ConstructAndDispose()
     {
         // Act.
-        using (var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        using (var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             null!,
             null!,
             null!,
@@ -37,7 +37,7 @@ public class SerialPortMessageHandlerTests
     public void Send_ArgumentIsNull_ThrowsArgumentNullException()
     {
         // Arrange.
-        using var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        using var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             null!,
             null!,
             null!,
@@ -56,7 +56,7 @@ public class SerialPortMessageHandlerTests
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
         outgoingPacketMock.Setup(m => m.ToByteArray()).Returns(bytesToSend);
 
-        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             null!,
             null!,
             null!,
@@ -77,7 +77,7 @@ public class SerialPortMessageHandlerTests
         // Arrange.
         _criticalSectionServiceMock.Setup(m => m.IsAllowedToEnter()).Returns(false);
 
-        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             null!,
             null!,
             _criticalSectionServiceMock.Object,
@@ -111,7 +111,7 @@ public class SerialPortMessageHandlerTests
 
         _packetHeaderFactoryMock.Setup(m => m.CreatePacketHeader(headerArray)).Throws(exception);
 
-        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             null!,
             _packetHeaderFactoryMock.Object,
             _criticalSectionServiceMock.Object,
@@ -160,7 +160,7 @@ public class SerialPortMessageHandlerTests
 
         _loggerMock.Setup(m => m.IsEnabled(LogLevel.Error)).Returns(true);
 
-        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             null!,
             _packetHeaderFactoryMock.Object,
             _criticalSectionServiceMock.Object,
@@ -234,7 +234,7 @@ public class SerialPortMessageHandlerTests
             a[3] == CheckSum
         ))).Returns((IIncomingPacket?)null);
 
-        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             _packetFactoryMock.Object,
             _packetHeaderFactoryMock.Object,
             _criticalSectionServiceMock.Object,
@@ -313,7 +313,7 @@ public class SerialPortMessageHandlerTests
             a[3] == CheckSum
         ))).Returns(incomingPacketMock.Object);
 
-        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             _packetFactoryMock.Object,
             _packetHeaderFactoryMock.Object,
             _criticalSectionServiceMock.Object,
@@ -393,7 +393,7 @@ public class SerialPortMessageHandlerTests
             a[3] == CheckSum
         ))).Returns(incomingPacketMock.Object);
 
-        var handler = new SerialPortMessageHandler(_serialPortDataHandlerMock.Object,
+        var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
             _packetFactoryMock.Object,
             _packetHeaderFactoryMock.Object,
             _criticalSectionServiceMock.Object,
