@@ -1,6 +1,6 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-internal interface IIncomingPacket
+internal interface IIncomingPacket : IPacket
 {
     bool IsPacketCorrect { get; }
     bool IsCheckSumCorrect { get; }
