@@ -44,7 +44,7 @@ internal sealed class PacketHandler : IPacketHandler, IDisposable
         _cancellationToken = _cancellationTokenSource.Token;
 
         _serialPortDataHandler.Open();
-        _serialPortDataHandler.DataReceived += OnSerialPortDataReceived;
+        _serialPortDataHandler.DataReceived += OnDataReceived;
     }
 
     public void Send(IOutgoingPacket packet)
@@ -54,7 +54,7 @@ internal sealed class PacketHandler : IPacketHandler, IDisposable
         _serialPortDataHandler.Write(packet.ToByteArray());
     }
 
-    private void OnSerialPortDataReceived()
+    private void OnDataReceived()
     {
         if (!_criticalSectionService.IsAllowedToEnter())
             return;
@@ -119,7 +119,7 @@ internal sealed class PacketHandler : IPacketHandler, IDisposable
     public void Dispose()
     {
         _cancellationTokenSource.Cancel();
-        _serialPortDataHandler.DataReceived -= OnSerialPortDataReceived;
+        _serialPortDataHandler.DataReceived -= OnDataReceived;
         _cancellationTokenSource.Dispose();
     }
 }
