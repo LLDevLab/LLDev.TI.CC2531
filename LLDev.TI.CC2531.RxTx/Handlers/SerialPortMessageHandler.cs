@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
+// ISerialPortMessageHandler will be added through DI and should not inherit IDisposable interface
 internal interface ISerialPortMessageHandler
 {
     event MessageReceivedHandler MessageReceivedAsync;
