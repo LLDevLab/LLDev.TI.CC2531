@@ -5,7 +5,7 @@ using LLDev.TI.CC2531.RxTx.Services;
 using Microsoft.Extensions.Options;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Services;
-public class SerialPortPacketServiceTests
+public class PacketReceiverTransmitterServiceTests
 {
     private const int Timeout = 200;
 
@@ -20,7 +20,7 @@ public class SerialPortPacketServiceTests
     public void CondtructAndDispose()
     {
         // Arrange. / Act.
-        using (var service = new SerialPortPacketService(_serialPortMessageHandlerMock.Object,
+        using (var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
             null!,
             _options))
         {
@@ -37,7 +37,7 @@ public class SerialPortPacketServiceTests
         // Arrange.
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
 
-        using var service = new SerialPortPacketService(_serialPortMessageHandlerMock.Object, null!, _options);
+        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object, null!, _options);
 
         // Act.
         service.Send(outgoingPacketMock.Object);
