@@ -3,6 +3,7 @@ using System.IO.Ports;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
+// ISerialPortDataHandler will be added through DI and should not inherit IDisposable interface
 internal interface ISerialPortDataHandler
 {
     event SerialPortDataReceivedEventHandler? DataReceived;
