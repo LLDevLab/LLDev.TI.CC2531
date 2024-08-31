@@ -25,5 +25,11 @@ internal sealed class CriticalSectionService : ICriticalSectionService
         }
     }
 
-    public void Leave() => _isAllowedToEnter = true;
+    public void Leave()
+    {
+        lock (_lock)
+        {
+            _isAllowedToEnter = true;
+        }
+    }
 }
