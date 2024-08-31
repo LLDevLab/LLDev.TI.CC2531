@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace LLDev.TI.CC2531.RxTx.Services;
 
+// ISerialPortMessageService will be added through DI and should not inherit IDisposable interface
 internal interface ISerialPortMessageService
 {
     event MessageReceivedHandler? MessageReceived;
