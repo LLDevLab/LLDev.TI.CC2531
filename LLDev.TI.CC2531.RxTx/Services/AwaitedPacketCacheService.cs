@@ -7,16 +7,22 @@ namespace LLDev.TI.CC2531.RxTx.Services;
 
 internal interface IAwaitedPacketCacheService
 {
-    void Add(ZToolCmdType key, Action<IIncomingPacket?> value);
+    void Add(ZToolCmdType key, Action<IIncomingPacket> value);
     bool ContainsKey(ZToolCmdType key);
     Action<IIncomingPacket> GetAndRemove(ZToolCmdType key);
 }
 
 internal sealed class AwaitedPacketCacheService : IAwaitedPacketCacheService
 {
-    private readonly ConcurrentDictionary<ZToolCmdType, Action<IIncomingPacket?>> _callbackMethods = new();
+    private readonly ConcurrentDictionary<ZToolCmdType, Action<IIncomingPacket>> _callbackMethods = new();
 
-    public void Add(ZToolCmdType key, Action<IIncomingPacket?> value) => _callbackMethods.TryAdd(key, value);
+    public void Add(ZToolCmdType key, Action<IIncomingPacket> value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        _callbackMethods.TryAdd(key, value);
+    }
+
     public bool ContainsKey(ZToolCmdType key) => _callbackMethods.ContainsKey(key);
     public Action<IIncomingPacket> GetAndRemove(ZToolCmdType key)
     {

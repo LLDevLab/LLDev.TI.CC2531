@@ -6,6 +6,18 @@ namespace LLDev.TI.CC2531.RxTx.Tests.Services;
 public class AwaitedPacketCacheServiceTests
 {
     [Fact]
+    public void Add_ActionIsNull_ThrowsArgumentNullException()
+    {
+        // Arrange.
+        const ZToolCmdType CmdType = ZToolCmdType.ZbGetDeviceInfoReq;
+
+        var service = new AwaitedPacketCacheService();
+
+        // Act. / Assert.
+        Assert.Throws<ArgumentNullException>(() => service.Add(CmdType, null!));
+    }
+
+    [Fact]
     public void GetAndRemove_KeyNotFound_ThrowsPacketException()
     {
         // Arrange.
