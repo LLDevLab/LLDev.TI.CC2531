@@ -15,7 +15,7 @@ internal interface ISerialPortMessageService
     T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket;
 }
 
-internal sealed class SerialPortMessageService : ISerialPortMessageService
+internal sealed class SerialPortMessageService : ISerialPortMessageService, IDisposable
 {
     public event MessageReceivedHandler? MessageReceived;
     private event MessageReceivedHandler? AwaitedMessageReceived;
@@ -87,4 +87,7 @@ internal sealed class SerialPortMessageService : ISerialPortMessageService
         else
             MessageReceived?.Invoke(packet);
     }
+
+    // Should not dispose _messageHandler, it is added through DI
+    public void Dispose() => _messageHandler.MessageReceivedAsync -= OnMessageReceivedInternal;
 }
