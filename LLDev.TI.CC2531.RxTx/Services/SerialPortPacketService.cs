@@ -89,6 +89,5 @@ internal sealed class SerialPortPacketService : ISerialPortPacketService, IDispo
             MessageReceived?.Invoke(packet);
     }
 
-    // Should not dispose _messageHandler, it is added through DI
     public void Dispose() => _messageHandler.MessageReceivedAsync -= OnMessageReceivedInternal;
 }
