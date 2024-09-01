@@ -36,7 +36,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         _cmdTypeValidationService = cmdTypeValidationService;
         _config = options.Value;
 
-        _messageHandler.MessageReceivedAsync += OnMessageReceivedInternal;
+        _messageHandler.MessageReceived += OnMessageReceivedInternal;
     }
 
     public void Send(IOutgoingPacket packet) => _messageHandler.Send(packet);
@@ -64,11 +64,8 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         if (!manualResetEvent.Wait(timeout))
             throw new TimeoutException($"Cannot receive response within specified duretion {timeout} ms");
 
-        if (response is null)
-            throw new PacketException("Awaited packet cannot be null");
-
         if (response is not T result)
-            throw new PacketException($"Cannot cast packet of type {response.GetType()} to {nameof(T)}");
+            throw new PacketException($"Cannot cast packet to {nameof(T)}");
 
         AwaitedMessageReceived -= OnAwaitedMessageReceived;
 
@@ -93,5 +90,5 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
             MessageReceived?.Invoke(packet);
     }
 
-    public void Dispose() => _messageHandler.MessageReceivedAsync -= OnMessageReceivedInternal;
+    public void Dispose() => _messageHandler.MessageReceived -= OnMessageReceivedInternal;
 }
