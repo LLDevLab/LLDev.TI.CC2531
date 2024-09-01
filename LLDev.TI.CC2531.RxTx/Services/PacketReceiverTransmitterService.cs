@@ -44,7 +44,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
     public T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket
     {
         if (!_cmdTypeValidationService.IsResponseOrCallback(responseType))
-            throw new ArgumentException($"Awaited response type is not response or callback");
+            throw new ArgumentException("Awaited response type is not response or callback", nameof(responseType));
 
         if (_awaitedMessageCacheService.Contains(responseType))
             throw new PacketException($"Already awaiting packet {responseType}");
