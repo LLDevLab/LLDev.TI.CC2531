@@ -109,5 +109,37 @@ public class PacketReceiverTransmitterServiceTests
     }
 
     [Fact]
+    public void SendAndWaitForResponse_ResponceDoNotReceiver_ThrowsTimeoutException()
+    {
+        // Arrange.
+        const ZToolCmdType CmdType = ZToolCmdType.AfIncomingMsgClbk;
+
+        var outgoingPacketMock = new Mock<IOutgoingPacket>();
+
+        _cmdTypeValidationServiceMock.Setup(m => m.IsResponseOrCallback(CmdType)).Returns(true);
+
+        _awaitedPacketCacheServiceMock.Setup(m => m.Contains(CmdType)).Returns(false);
+
+        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+            _cmdTypeValidationServiceMock.Object,
+            _awaitedPacketCacheServiceMock.Object,
+            _options);
+
+        // Act. / Assert.
+        var exception = Assert.Throws<TimeoutException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
+
+        _serialPortMessageHandlerMock.VerifyAll();
+        _cmdTypeValidationServiceMock.VerifyAll();
+        _awaitedPacketCacheServiceMock.VerifyAll();
+
+        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+
+        _awaitedPacketCacheServiceMock.Verify(m => m.Add(CmdType), Times.Once);
+        _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
+
+        Assert.Equal($"Cannot receive response within specified duretion {Timeout} ms", exception.Message);
+    }
+
+    [Fact]
     public void SendAndWaitForResponse() => Assert.Fail("Implement me");
 }
