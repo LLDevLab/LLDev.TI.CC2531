@@ -57,12 +57,12 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
         AwaitedMessageReceived += OnAwaitedMessageReceived;
 
-        _awaitedMessageCacheService.Add(responseType);
-
-        _messageHandler.Send(packet);
-
         try
         {
+            _awaitedMessageCacheService.Add(responseType);
+
+            _messageHandler.Send(packet);
+
             return !manualResetEvent.Wait(timeout)
                 ? throw new TimeoutException($"Cannot receive response within specified duretion {timeout} ms")
                 : response is null
