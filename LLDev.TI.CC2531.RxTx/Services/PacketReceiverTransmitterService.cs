@@ -57,24 +57,22 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
         AwaitedMessageReceived += OnAwaitedMessageReceived;
 
-        try
-        {
-            _awaitedMessageCacheService.Add(responseType);
+        _awaitedMessageCacheService.Add(responseType);
 
-            _messageHandler.Send(packet);
+        _messageHandler.Send(packet);
 
-            return !manualResetEvent.Wait(timeout)
-                ? throw new TimeoutException($"Cannot receive response within specified duretion {timeout} ms")
-                : response is null
-                ? throw new PacketException("Awaited packet cannot be null")
-                : response is not T result
-                ? throw new PacketException($"Cannot cast packet of type {response.GetType()} to {nameof(T)}")
-                : result;
-        }
-        finally
-        {
-            AwaitedMessageReceived -= OnAwaitedMessageReceived;
-        }
+        if (!manualResetEvent.Wait(timeout))
+            throw new TimeoutException($"Cannot receive response within specified duretion {timeout} ms");
+
+        if (response is null)
+            throw new PacketException("Awaited packet cannot be null");
+
+        if (response is not T result)
+            throw new PacketException($"Cannot cast packet of type {response.GetType()} to {nameof(T)}");
+
+        AwaitedMessageReceived -= OnAwaitedMessageReceived;
+
+        return result;
 
         void OnAwaitedMessageReceived(IIncomingPacket packet)
         {
