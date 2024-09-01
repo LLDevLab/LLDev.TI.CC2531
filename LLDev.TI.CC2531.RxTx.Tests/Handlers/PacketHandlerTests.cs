@@ -117,7 +117,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             null!);
 
-        handler.MessageReceivedAsync += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
 
         // Act. / Assert.
         Assert.Throws<Exception>(() => _serialPortDataHandlerMock.Raise(m => m.DataReceived += null));
@@ -166,7 +166,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceivedAsync += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
@@ -240,7 +240,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceivedAsync += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
@@ -319,7 +319,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceivedAsync += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
@@ -399,7 +399,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceivedAsync += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
