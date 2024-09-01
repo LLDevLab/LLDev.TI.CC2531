@@ -1,5 +1,6 @@
 ﻿using LLDev.TI.CC2531.RxTx.Configs;
 using LLDev.TI.CC2531.RxTx.Enums;
+using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Handlers;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
@@ -13,6 +14,7 @@ public class PacketReceiverTransmitterServiceTests
 
     private readonly Mock<IPacketHandler> _serialPortMessageHandlerMock = new();
     private readonly Mock<ICmdTypeValidationService> _cmdTypeValidationServiceMock = new();
+    private readonly Mock<IAwaitedPacketCacheService> _awaitedPacketCacheServiceMock = new();
 
     private readonly IOptions<SerialPortMessageServiceConfig> _options = Options.Create(new SerialPortMessageServiceConfig
     {
@@ -61,8 +63,8 @@ public class PacketReceiverTransmitterServiceTests
         _cmdTypeValidationServiceMock.Setup(m => m.IsResponseOrCallback(CmdType)).Returns(false);
 
         using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
-            null!,
             _cmdTypeValidationServiceMock.Object,
+            null!,
             _options);
 
         // Act. / Assert.
@@ -72,6 +74,33 @@ public class PacketReceiverTransmitterServiceTests
         _cmdTypeValidationServiceMock.VerifyAll();
 
         Assert.Equal("Awaited response type is not response or callback", exception.Message);
+    }
+
+    [Fact]
+    public void SendAndWaitForResponse_MessageAlreadyAwaiting_ThrowsPacketException()
+    {
+        // Arrange.
+        const ZToolCmdType CmdType = ZToolCmdType.AfIncomingMsgClbk;
+
+        var outgoingPacketMock = new Mock<IOutgoingPacket>();
+
+        _cmdTypeValidationServiceMock.Setup(m => m.IsResponseOrCallback(CmdType)).Returns(true);
+
+        _awaitedPacketCacheServiceMock.Setup(m => m.Contains(CmdType)).Returns(true);
+
+        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+            _cmdTypeValidationServiceMock.Object,
+            _awaitedPacketCacheServiceMock.Object,
+            _options);
+
+        // Act. / Assert.
+        var exception = Assert.Throws<PacketException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
+
+        _serialPortMessageHandlerMock.VerifyAll();
+        _cmdTypeValidationServiceMock.VerifyAll();
+        _awaitedPacketCacheServiceMock.VerifyAll();
+
+        Assert.Equal($"Already awaiting packet {CmdType}", exception.Message);
     }
 
     [Fact]

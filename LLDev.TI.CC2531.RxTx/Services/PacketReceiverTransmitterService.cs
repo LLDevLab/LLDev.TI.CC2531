@@ -22,13 +22,13 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
     private event MessageReceivedHandler? AwaitedMessageReceived;
 
     private readonly IPacketHandler _messageHandler;
-    private readonly IAwaitedPacketCacheService _awaitedMessageCacheService;
     private readonly ICmdTypeValidationService _cmdTypeValidationService;
+    private readonly IAwaitedPacketCacheService _awaitedMessageCacheService;
     private readonly SerialPortMessageServiceConfig _config;
 
     public PacketReceiverTransmitterService(IPacketHandler messageHandler,
-        IAwaitedPacketCacheService awaitedMessageCacheService,
         ICmdTypeValidationService cmdTypeValidationService,
+        IAwaitedPacketCacheService awaitedMessageCacheService,
         IOptions<SerialPortMessageServiceConfig> options)
     {
         _messageHandler = messageHandler;
