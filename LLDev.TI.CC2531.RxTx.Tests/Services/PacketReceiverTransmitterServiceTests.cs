@@ -135,6 +135,7 @@ public class PacketReceiverTransmitterServiceTests
         _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(CmdType), Times.Once);
+        _awaitedPacketCacheServiceMock.Verify(m => m.Remove(It.IsAny<ZToolCmdType>()), Times.Never);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
         Assert.Equal($"Cannot receive response within specified duretion {Timeout} ms", exception.Message);
@@ -180,7 +181,7 @@ public class PacketReceiverTransmitterServiceTests
         _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(ExpectedCmdType), Times.Once);
-        _awaitedPacketCacheServiceMock.Verify(m => m.Remove(ExpectedCmdType), Times.Never);
+        _awaitedPacketCacheServiceMock.Verify(m => m.Remove(It.IsAny<ZToolCmdType>()), Times.Never);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
         Assert.Equal(1, notAwaitedMessageReceivedCount);
@@ -228,7 +229,7 @@ public class PacketReceiverTransmitterServiceTests
         _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(ExpectedCmdType), Times.Once);
-        _awaitedPacketCacheServiceMock.Verify(m => m.Remove(ExpectedCmdType), Times.Never);
+        _awaitedPacketCacheServiceMock.Verify(m => m.Remove(It.IsAny<ZToolCmdType>()), Times.Never);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
         Assert.Equal(0, notAwaitedMessageReceivedCount);
