@@ -73,6 +73,8 @@ public class PacketReceiverTransmitterServiceTests
         _serialPortMessageHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
 
+        _serialPortMessageHandlerMock.VerifyNoOtherCalls();
+
         Assert.Equal("Awaited response type is not response or callback", exception.Message);
     }
 
@@ -99,6 +101,9 @@ public class PacketReceiverTransmitterServiceTests
         _serialPortMessageHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
         _awaitedPacketCacheServiceMock.VerifyAll();
+
+        _serialPortMessageHandlerMock.VerifyNoOtherCalls();
+        _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
         Assert.Equal($"Already awaiting packet {CmdType}", exception.Message);
     }
