@@ -33,8 +33,8 @@ public class PacketReceiverTransmitterServiceTests
         }
 
         // Assert.
-        _serialPortMessageHandlerMock.VerifyAdd(m => m.MessageReceivedAsync += It.IsAny<MessageReceivedHandler>());
-        _serialPortMessageHandlerMock.VerifyRemove(m => m.MessageReceivedAsync -= It.IsAny<MessageReceivedHandler>());
+        _serialPortMessageHandlerMock.VerifyAdd(m => m.MessageReceived += It.IsAny<MessageReceivedHandler>());
+        _serialPortMessageHandlerMock.VerifyRemove(m => m.MessageReceived -= It.IsAny<MessageReceivedHandler>());
     }
 
     [Fact]
@@ -138,6 +138,55 @@ public class PacketReceiverTransmitterServiceTests
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
         Assert.Equal($"Cannot receive response within specified duretion {Timeout} ms", exception.Message);
+    }
+
+    [Fact]
+    public void SendAndWaitForResponse_CannotCastIncomingPacketToAwaitedType_PacketException()
+    {
+        // Arrange.
+        const ZToolCmdType CmdType = ZToolCmdType.AfIncomingMsgClbk;
+
+        var outgoingPacketMock = new Mock<IOutgoingPacket>();
+        var incomingPacketMock = new Mock<IIncomingPacket>();
+
+        var containsCounter = 0;
+
+        incomingPacketMock.SetupGet(m => m.CmdType).Returns(CmdType);
+
+        _cmdTypeValidationServiceMock.Setup(m => m.IsResponseOrCallback(CmdType)).Returns(true);
+
+        _awaitedPacketCacheServiceMock.Setup(m => m.Contains(CmdType)).Returns(() =>
+        {
+            var result = containsCounter != 0;
+
+            containsCounter++;
+
+            return result;
+        });
+
+        _serialPortMessageHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
+            _serialPortMessageHandlerMock.Raise(m => m.MessageReceived += null, incomingPacketMock.Object));
+
+        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+            _cmdTypeValidationServiceMock.Object,
+            _awaitedPacketCacheServiceMock.Object,
+            _options);
+
+        // Act. / Assert.
+        var exception = Assert.Throws<PacketException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
+
+        _serialPortMessageHandlerMock.VerifyAll();
+        _cmdTypeValidationServiceMock.VerifyAll();
+        _awaitedPacketCacheServiceMock.VerifyAll();
+        incomingPacketMock.VerifyAll();
+
+        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+
+        _awaitedPacketCacheServiceMock.Verify(m => m.Add(CmdType), Times.Once);
+        _awaitedPacketCacheServiceMock.Verify(m => m.Remove(CmdType), Times.Once);
+        _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
+
+        Assert.Equal($"Cannot cast packet to {typeof(ZbWriteConfigResponse)}", exception.Message);
     }
 
     [Fact]

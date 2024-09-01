@@ -65,7 +65,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
             throw new TimeoutException($"Cannot receive response within specified duretion {timeout} ms");
 
         if (response is not T result)
-            throw new PacketException($"Cannot cast packet to {nameof(T)}");
+            throw new PacketException($"Cannot cast packet to {typeof(T)}");
 
         AwaitedMessageReceived -= OnAwaitedMessageReceived;
 
