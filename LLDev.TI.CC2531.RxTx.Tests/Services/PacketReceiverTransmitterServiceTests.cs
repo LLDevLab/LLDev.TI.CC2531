@@ -2,6 +2,7 @@
 using LLDev.TI.CC2531.RxTx.Enums;
 using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Handlers;
+using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
 using LLDev.TI.CC2531.RxTx.Services;
@@ -293,5 +294,61 @@ public class PacketReceiverTransmitterServiceTests
     }
 
     [Fact]
-    public void SendAndWaitForResponse() => Assert.Fail("Implement me");
+    public void SendAndWaitForResponse()
+    {
+        // Arrange.
+        const ZToolCmdType CmdType = ZToolCmdType.SysPingRsp;
+
+        var outgoingPacketMock = new Mock<IOutgoingPacket>();
+
+        var containsCounter = 0;
+        var notAwaitedMessageReceivedCount = 0;
+
+        var packetHeaderMock = new Mock<IPacketHeader>();
+
+        var incomingPacket = new SysPingResponse(packetHeaderMock.Object, [1, 2, 3]);
+
+        packetHeaderMock.SetupGet(m => m.CmdType).Returns(CmdType);
+
+        _cmdTypeValidationServiceMock.Setup(m => m.IsResponseOrCallback(CmdType)).Returns(true);
+
+        _awaitedPacketCacheServiceMock.Setup(m => m.Contains(CmdType)).Returns(() =>
+        {
+            var result = containsCounter != 0;
+
+            containsCounter++;
+
+            return result;
+        });
+
+        _serialPortMessageHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
+            _serialPortMessageHandlerMock.Raise(m => m.MessageReceived += null, incomingPacket));
+
+        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+            _cmdTypeValidationServiceMock.Object,
+            _awaitedPacketCacheServiceMock.Object,
+            _options);
+
+        service.MessageReceived += OnMessageReceived;
+
+        // Act.
+        var result = service.SendAndWaitForResponse<SysPingResponse>(outgoingPacketMock.Object, CmdType);
+
+        // Assert.
+        _serialPortMessageHandlerMock.VerifyAll();
+        _cmdTypeValidationServiceMock.VerifyAll();
+        _awaitedPacketCacheServiceMock.VerifyAll();
+        packetHeaderMock.VerifyAll();
+
+        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+
+        _awaitedPacketCacheServiceMock.Verify(m => m.Add(CmdType), Times.Once);
+        _awaitedPacketCacheServiceMock.Verify(m => m.Remove(CmdType), Times.Once);
+        _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
+
+        Assert.Equal(0, notAwaitedMessageReceivedCount);
+        Assert.Equal(incomingPacket, result);
+
+        void OnMessageReceived(IIncomingPacket packet) => notAwaitedMessageReceivedCount++;
+    }
 }
