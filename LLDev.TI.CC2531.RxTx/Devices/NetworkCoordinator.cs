@@ -25,7 +25,7 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
 
     public DeviceInfo GetDeviceInfo()
     {
-        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<UtilGetDeviceInfoResponse>(new UtilGetDeviceInfoRequest(), ZToolCmdType.UtilGetDeviceInfoRsp);
+        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IUtilGetDeviceInfoResponse>(new UtilGetDeviceInfoRequest(), ZToolCmdType.UtilGetDeviceInfoRsp);
 
         return response?.Status != ZToolPacketStatus.Success
             ? throw new NetworkException("Cannot receive network coordinator info")
@@ -40,7 +40,7 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
     {
         var transactionId = _transactionService.GetNextTransactionId();
 
-        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<AfDataResponse>(new AfDataRequest(0,
+        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IAfDataResponse>(new AfDataRequest(0,
             0,
             0,
             ZigBeeClusterId.PermitJoin,
@@ -55,23 +55,23 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
 
     public bool PingDevice()
     {
-        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<SysPingResponse>(new SysPingRequest(), ZToolCmdType.SysPingRsp);
+        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<ISysPingResponse>(new SysPingRequest(), ZToolCmdType.SysPingRsp);
 
         return response is not null;
     }
 
-    public void ResetDevice() => _packetReceiverTransmitterService.SendAndWaitForResponse<SysResetIndCallback>(new SysResetRequest(ZToolSysResetType.SerialBootloader), ZToolCmdType.SysResetIndClbk);
+    public void ResetDevice() => _packetReceiverTransmitterService.SendAndWaitForResponse<ISysResetIndCallback>(new SysResetRequest(ZToolSysResetType.SerialBootloader), ZToolCmdType.SysResetIndClbk);
 
     public bool SetDeviceLedMode(byte ledId, bool isLedOn)
     {
-        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<UtilLedControlResponse>(new UtilLedControlRequest(ledId, isLedOn), ZToolCmdType.UtilLedControlRsp);
+        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IUtilLedControlResponse>(new UtilLedControlRequest(ledId, isLedOn), ZToolCmdType.UtilLedControlRsp);
 
         return response?.Status == ZToolPacketStatus.Success;
     }
 
     public bool StartupNetwork(ushort startupDelay)
     {
-        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<ZdoStartupFromAppResponse>(new ZdoStartupFromAppRequest(startupDelay), ZToolCmdType.ZdoStartupFromAppRsp);
+        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IZdoStartupFromAppResponse>(new ZdoStartupFromAppRequest(startupDelay), ZToolCmdType.ZdoStartupFromAppRsp);
 
         return response?.Status is ZToolZdoStartupFromAppStatus.NewNetworkState or ZToolZdoStartupFromAppStatus.RestoredNwkState;
     }
