@@ -1,7 +1,13 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoStartupFromAppResponse : IncomingPacket, IIncomingPacket
+
+internal interface IZdoStartupFromAppResponse : IIncomingPacket
+{
+    public ZToolZdoStartupFromAppStatus Status { get; }
+}
+
+internal sealed class ZdoStartupFromAppResponse : IncomingPacket, IZdoStartupFromAppResponse
 {
     public ZToolZdoStartupFromAppStatus Status { get; }
     public ZdoStartupFromAppResponse(IPacketHeader header, byte[] packet) :

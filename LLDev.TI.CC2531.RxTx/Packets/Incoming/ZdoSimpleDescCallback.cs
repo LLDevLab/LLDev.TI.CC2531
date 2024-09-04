@@ -1,7 +1,24 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoSimpleDescCallback : IncomingPacket, IIncomingPacket
+
+internal interface IZdoSimpleDescCallback : IIncomingPacket
+{
+    public ushort SrcAddr { get; }
+    public ZToolPacketStatus Status { get; }
+    public ushort NwkAddr { get; }
+    public byte Len { get; }
+    public byte Endpoint { get; }
+    public ushort ProfileId { get; }
+    public ushort DeviceId { get; }
+    public byte DeviceVersion { get; }
+    public byte NumInClusters { get; }
+    public ushort[] InClusters { get; }
+    public byte NumOutClusters { get; }
+    public ushort[] OutClusters { get; }
+}
+
+internal sealed class ZdoSimpleDescCallback : IncomingPacket, IZdoSimpleDescCallback
 {
     /// <summary>
     /// Specifies the message’s source network address.

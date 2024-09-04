@@ -2,7 +2,21 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-internal sealed class SysPingResponse : IncomingPacket, IIncomingPacket
+internal interface ISysPingResponse : IIncomingPacket
+{
+    public bool IsSysCapable { get; }
+    public bool IsMacCapable { get; }
+    public bool IsNwkCapable { get; }
+    public bool IsAfCapable { get; }
+    public bool IsZdoCapable { get; }
+    public bool IsSapiCapable { get; }
+    public bool IsUtilCapable { get; }
+    public bool IsDebugCapable { get; }
+    public bool IsAppCapable { get; }
+    public bool IsZoadCapable { get; }
+}
+
+internal sealed class SysPingResponse : IncomingPacket, ISysPingResponse
 {
     public bool IsSysCapable => _capabilities.HasFlag(ZToolStackCapabilities.MtCapSys);
     public bool IsMacCapable => _capabilities.HasFlag(ZToolStackCapabilities.MtCapMac);

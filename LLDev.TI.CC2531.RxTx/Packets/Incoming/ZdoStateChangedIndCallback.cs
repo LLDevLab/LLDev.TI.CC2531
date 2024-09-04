@@ -1,7 +1,13 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoStateChangedIndCallback : IncomingPacket, IIncomingPacket
+
+internal interface IZdoStateChangedIndCallback : IIncomingPacket
+{
+    public ZToolZdoState State { get; }
+}
+
+internal sealed class ZdoStateChangedIndCallback : IncomingPacket, IZdoStateChangedIndCallback
 {
     public ZToolZdoState State { get; }
     public ZdoStateChangedIndCallback(IPacketHeader header, byte[] packet) :

@@ -1,6 +1,11 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-internal sealed class SysGetExtAddrResponse : IncomingPacket, IIncomingPacket
+internal interface ISysGetExtAddrResponse : IIncomingPacket
+{
+    public ulong ExtAddress { get; }
+}
+
+internal sealed class SysGetExtAddrResponse : IncomingPacket, ISysGetExtAddrResponse
 {
     /// <summary>
     /// The device’s extended address.

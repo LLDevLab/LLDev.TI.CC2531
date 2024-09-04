@@ -1,7 +1,20 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoEndDeviceAnnceIndCallback : IncomingPacket, IIncomingPacket
+
+internal interface IZdoEndDeviceAnnceIndCallback : IIncomingPacket
+{
+    public ushort SrcAddr { get; }
+    public ushort NwkAddr { get; }
+    public ulong IeeeAddr { get; }
+    public bool IsAlternativePanCoordinator { get; }
+    public bool IsZigBeeRouter { get; }
+    public bool IsMainPowered { get; }
+    public bool IsReceiverOnWhenIdle { get; }
+    public bool IsSecure { get; }
+}
+
+internal sealed class ZdoEndDeviceAnnceIndCallback : IncomingPacket, IZdoEndDeviceAnnceIndCallback
 {
     public ushort SrcAddr { get; }
     public ushort NwkAddr { get; }

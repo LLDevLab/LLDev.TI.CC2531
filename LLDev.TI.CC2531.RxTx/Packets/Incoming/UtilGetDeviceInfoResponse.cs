@@ -1,7 +1,21 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class UtilGetDeviceInfoResponse : IncomingPacket, IIncomingPacket
+
+internal interface IUtilGetDeviceInfoResponse : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+    public ulong IeeeAddr { get; }
+    public ushort NwkAddr { get; }
+    public UtilGetDeviceInfoDeviceState State { get; }
+    public byte NumAssocDevices { get; }
+    public ushort[] AssocDevices { get; }
+    public bool IsCoordinatorCapable { get; }
+    public bool IsRouterCapable { get; }
+    public bool IsEndDeviceCapable { get; }
+}
+
+internal sealed class UtilGetDeviceInfoResponse : IncomingPacket, IUtilGetDeviceInfoResponse
 {
     public ZToolPacketStatus Status { get; }
     public ulong IeeeAddr { get; }

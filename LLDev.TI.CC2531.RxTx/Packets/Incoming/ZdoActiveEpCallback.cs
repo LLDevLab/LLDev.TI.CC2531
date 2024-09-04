@@ -1,7 +1,17 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoActiveEpCallback : IncomingPacket, IIncomingPacket
+
+internal interface IZdoActiveEpCallback : IIncomingPacket
+{
+    public ushort SrcAddr { get; }
+    public ZToolPacketStatus Status { get; }
+    public ushort NwkAddr { get; }
+    public byte ActiveEpCount { get; }
+    public byte[] ActiveEps { get; }
+}
+
+internal sealed class ZdoActiveEpCallback : IncomingPacket, IZdoActiveEpCallback
 {
     /// <summary>
     /// The message’s source network address.

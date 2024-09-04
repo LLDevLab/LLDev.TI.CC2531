@@ -1,7 +1,18 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoMsgCbIncomingCallback : IncomingPacket, IIncomingPacket
+
+internal interface IZdoMsgCbIncomingCallback : IIncomingPacket
+{
+    public ushort SrcAddr { get; }
+    public bool IsBroadcast { get; }
+    public ZigBeeClusterId ClusterId { get; }
+    public byte SeqNum { get; }
+    public ushort MacDstAddr { get; }
+    public byte[] MsgData { get; }
+}
+
+internal sealed class ZdoMsgCbIncomingCallback : IncomingPacket, IZdoMsgCbIncomingCallback
 {
     public ushort SrcAddr { get; }
     public bool IsBroadcast { get; }

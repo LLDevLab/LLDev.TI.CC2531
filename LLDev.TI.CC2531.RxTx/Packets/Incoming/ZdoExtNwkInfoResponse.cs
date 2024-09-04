@@ -1,7 +1,19 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoExtNwkInfoResponse : IncomingPacket, IIncomingPacket
+
+internal interface IZdoExtNwkInfoResponse : IIncomingPacket
+{
+    public ushort ShortAddr { get; }
+    public ZToolZdoState DevState { get; }
+    public ushort PanId { get; }
+    public ushort ParentAddr { get; }
+    public ulong ExtendedPanId { get; }
+    public ulong ExtendedParentAddr { get; }
+    public byte Channel { get; }
+}
+
+internal sealed class ZdoExtNwkInfoResponse : IncomingPacket, IZdoExtNwkInfoResponse
 {
     public ushort ShortAddr { get; }
     public ZToolZdoState DevState { get; }

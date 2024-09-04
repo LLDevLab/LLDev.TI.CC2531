@@ -1,7 +1,13 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoActiveEpResponse : IncomingPacket, IIncomingPacket
+
+internal interface IZdoActiveEpResponse : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+}
+
+internal sealed class ZdoActiveEpResponse : IncomingPacket, IZdoActiveEpResponse
 {
     public ZToolPacketStatus Status { get; }
     public ZdoActiveEpResponse(IPacketHeader header, byte[] packet) :

@@ -2,7 +2,17 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-internal sealed class SysResetIndCallback : IncomingPacket, IIncomingPacket
+internal interface ISysResetIndCallback : IIncomingPacket
+{
+    public ZToolDeviceResetReason Reason { get; }
+    public byte TransportRev { get; }
+    public byte ProductId { get; }
+    public byte MajorRel { get; }
+    public byte MinorRel { get; }
+    public byte HwRev { get; }
+}
+
+internal sealed class SysResetIndCallback : IncomingPacket, ISysResetIndCallback
 {
     /// <summary>
     /// Reason for the reset.

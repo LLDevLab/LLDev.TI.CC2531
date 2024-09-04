@@ -1,7 +1,13 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoSimpleDescResponse : IncomingPacket, IIncomingPacket
+
+internal interface IZdoSimpleDescResponse : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+}
+
+internal sealed class ZdoSimpleDescResponse : IncomingPacket, IZdoSimpleDescResponse
 {
     public ZToolPacketStatus Status { get; }
 

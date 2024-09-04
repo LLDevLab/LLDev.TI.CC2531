@@ -1,5 +1,11 @@
 ﻿namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoExtFindGroupResponse : IncomingPacket, IIncomingPacket
+
+internal interface IZdoExtFindGroupResponse : IIncomingPacket
+{
+    public byte[] GroupId { get; }
+}
+
+internal sealed class ZdoExtFindGroupResponse : IncomingPacket, IZdoExtFindGroupResponse
 {
     public byte[] GroupId { get; }
 

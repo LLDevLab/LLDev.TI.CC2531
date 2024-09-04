@@ -1,7 +1,13 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoExtRouteDiscoveryResponse : IncomingPacket, IIncomingPacket
+
+internal interface IZdoExtRouteDiscoveryResponse : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+}
+
+internal sealed class ZdoExtRouteDiscoveryResponse : IncomingPacket, IZdoExtRouteDiscoveryResponse
 {
     public ZToolPacketStatus Status { get; }
 

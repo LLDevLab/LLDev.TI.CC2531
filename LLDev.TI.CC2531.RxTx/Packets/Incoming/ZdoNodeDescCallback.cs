@@ -2,10 +2,30 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
+internal interface IZdoNodeDescCallback : IIncomingPacket
+{
+    public ushort SrcAddr { get; }
+    public ZToolPacketStatus Status { get; }
+    public ushort NwkAddrOfInterest { get; }
+    public ZigBeeDeviceType DeviceType { get; }
+    public bool IsComplexDescriptorAvailable { get; }
+    public bool IsUserDescriptorAvailable { get; }
+    public ushort ManufacturerCode { get; }
+    public byte MaxBufferSize { get; }
+    public ushort MaxTransferSize { get; }
+    public bool IsPrimaryTrustCenter { get; }
+    public bool IsBackupTrustCenter { get; }
+    public bool IsPrimaryBindTableCache { get; }
+    public bool IsBackupBindTableCache { get; }
+    public bool IsPrimaryDiscoveryCache{ get; }
+    public bool IsBackupDiscoveryCache { get; }
+    public ushort MaxOutTransferSize { get; }
+}
+
 /// <summary>
 /// This callback message is in response to the ZDO Node Descriptor Request.
 /// </summary>
-internal sealed class ZdoNodeDescCallback : IncomingPacket, IIncomingPacket
+internal sealed class ZdoNodeDescCallback : IncomingPacket, IZdoNodeDescCallback
 {
     /// <summary>
     /// The message’s source network address.

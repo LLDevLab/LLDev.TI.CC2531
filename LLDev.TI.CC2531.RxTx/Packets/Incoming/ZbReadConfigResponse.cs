@@ -2,7 +2,15 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-internal sealed class ZbReadConfigResponse : IncomingPacket, IIncomingPacket
+internal interface IZbReadConfigResponse : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+    public ZToolZbConfigurationId ConfigId { get; }
+    public byte ConfigValueLen { get; }
+    public byte[] ConfigValue { get; }
+}
+
+internal sealed class ZbReadConfigResponse : IncomingPacket, IZbReadConfigResponse
 {
     public ZToolPacketStatus Status { get; }
     public ZToolZbConfigurationId ConfigId { get; }

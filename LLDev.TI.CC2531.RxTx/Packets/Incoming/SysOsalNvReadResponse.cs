@@ -2,7 +2,14 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-internal sealed class SysOsalNvReadResponse : IncomingPacket, IIncomingPacket
+internal interface ISysOsalNvReadResponse : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+    public byte Len { get; }
+    public byte[] Value { get; }
+}
+
+internal sealed class SysOsalNvReadResponse : IncomingPacket, ISysOsalNvReadResponse
 {
     public ZToolPacketStatus Status { get; }
     public byte Len { get; }

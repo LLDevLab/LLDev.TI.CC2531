@@ -1,7 +1,13 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZbWriteConfigResponse : IncomingPacket, IIncomingPacket
+
+internal interface IZbWriteConfigResponse : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+}
+
+internal sealed class ZbWriteConfigResponse : IncomingPacket, IZbWriteConfigResponse
 {
     public ZToolPacketStatus Status { get; }
     public ZbWriteConfigResponse(IPacketHeader header, byte[] packet) :

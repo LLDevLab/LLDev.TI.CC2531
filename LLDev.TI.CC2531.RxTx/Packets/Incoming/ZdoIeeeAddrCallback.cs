@@ -1,7 +1,18 @@
 ﻿using LLDev.TI.CC2531.RxTx.Enums;
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
-internal sealed class ZdoIeeeAddrCallback : IncomingPacket, IIncomingPacket
+
+internal interface IZdoIeeeAddrCallback : IIncomingPacket
+{
+    public ZToolPacketStatus Status { get; }
+    public ulong IeeeAddr { get; }
+    public ushort NwkAddr { get; }
+    public byte StartIndex { get; }
+    public byte NumAssocDev { get; }
+    public ushort[] AssocDevList { get; }
+}
+
+internal sealed class ZdoIeeeAddrCallback : IncomingPacket, IZdoIeeeAddrCallback
 {
     private const int BytesInUshort = 2;
 

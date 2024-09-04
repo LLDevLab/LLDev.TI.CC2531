@@ -2,7 +2,23 @@
 
 namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
 
-internal sealed class AfIncomingMessageCallback : IncomingPacket, IIncomingPacket
+internal interface IAfIncomingMessageCallback : IIncomingPacket
+{
+    public ushort GroupId { get; }
+    public ZigBeeClusterId ClusterId { get; }
+    public ushort SrcAddr { get; }
+    public byte SrcEndpoint { get; }
+    public byte DstEndpoint { get; }
+    public bool WasBroadcast { get; }
+    public byte LinkQuality { get; }
+    public bool SecurityUse { get; }
+    public uint TimeStamp { get; }
+    public byte TransSeqNumber { get; }
+    public byte Len { get; }
+    public byte[] Message { get; }
+}
+
+internal sealed class AfIncomingMessageCallback : IncomingPacket, IAfIncomingMessageCallback
 {
     /// <summary>
     /// Specifies the group ID of the device
@@ -51,7 +67,7 @@ internal sealed class AfIncomingMessageCallback : IncomingPacket, IIncomingPacke
     /// </summary>
     public byte Len { get; }
 
-    public byte[] Message { get; set; }
+    public byte[] Message { get; }
 
     public AfIncomingMessageCallback(IPacketHeader header, byte[] packet) :
         base(header, packet, 0x11)
