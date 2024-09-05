@@ -83,5 +83,45 @@ public class NetworkCoordinatorTests
     }
 
     [Fact]
+    public void PingCoordinator_ReturnsFalse()
+    {
+        // Arrange.
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<ISysPingResponse>(It.IsAny<SysPingRequest>(), ZToolCmdType.SysPingRsp))
+            .Returns((ISysPingResponse)null!);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        var result = service.PingCoordinator();
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void PingCoordinator_ReturnsTrue()
+    {
+        // Arrange.
+        var responseMock = new Mock<ISysPingResponse>();
+
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<ISysPingResponse>(It.IsAny<SysPingRequest>(), ZToolCmdType.SysPingRsp))
+            .Returns(responseMock.Object);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        var result = service.PingCoordinator();
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+
+        Assert.True(result);
+    }
+
+    [Fact]
     public void Fail() => Assert.Fail("Implement me");
 }
