@@ -27,7 +27,7 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IUtilGetDeviceInfoResponse>(new UtilGetDeviceInfoRequest(), ZToolCmdType.UtilGetDeviceInfoRsp);
 
-        return response?.Status != ZToolPacketStatus.Success
+        return response.Status != ZToolPacketStatus.Success
             ? throw new NetworkException("Cannot receive network coordinator info")
             : new()
             {

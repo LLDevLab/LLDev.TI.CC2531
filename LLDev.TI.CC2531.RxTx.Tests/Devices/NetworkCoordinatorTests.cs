@@ -12,24 +12,6 @@ public class NetworkCoordinatorTests
     private readonly Mock<ITransactionService> _transactionServiceMock = new();
 
     [Fact]
-    public void GetCoordinatorInfo_DeviceNotRespond_ThrowsNetworkException()
-    {
-        // Arrange.
-        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IUtilGetDeviceInfoResponse>(It.IsAny<UtilGetDeviceInfoRequest>(), ZToolCmdType.UtilGetDeviceInfoRsp))
-            .Returns((IUtilGetDeviceInfoResponse)null!);
-
-        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!);
-
-        // Act. / Assert.
-        var result = Assert.Throws<NetworkException>(service.GetCoordinatorInfo);
-
-        _packetReceiverTransmitterServiceMock.VerifyAll();
-
-        Assert.Equal("Cannot receive network coordinator info", result.Message);
-    }
-
-    [Fact]
     public void GetCoordinatorInfo_RespondNotSuccess_ThrowsZigBeeNetworkException()
     {
         // Arrange.
