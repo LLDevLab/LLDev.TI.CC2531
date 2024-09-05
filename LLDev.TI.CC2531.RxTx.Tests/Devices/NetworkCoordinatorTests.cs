@@ -104,5 +104,78 @@ public class NetworkCoordinatorTests
     }
 
     [Fact]
+    public void ResetCoordinatorDevice()
+    {
+        // Arrange.
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        service.ResetCoordinator();
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.Verify(m => m.SendAndWaitForResponse<ISysResetIndCallback>(It.Is<SysResetRequest>(r => r.ResetType == ZToolSysResetType.SerialBootloader),
+            ZToolCmdType.SysResetIndClbk), Times.Once);
+    }
+
+    [Theory]
+    [InlineData(ZToolPacketStatus.Fail)]
+    [InlineData(ZToolPacketStatus.InvalidEventId)]
+    [InlineData(ZToolPacketStatus.InvalidTask)]
+    [InlineData(ZToolPacketStatus.ZdpTableFull)]
+    internal void SetCoordinatorLedMode_ReturnsFalse(ZToolPacketStatus responseStatus)
+    {
+        // Arrange.
+        const int LedId = 123;
+        const bool LedOn = true;
+
+        var responseMock = new Mock<IUtilLedControlResponse>();
+
+        responseMock.SetupGet(m => m.Status).Returns(responseStatus);
+
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IUtilLedControlResponse>(It.Is<UtilLedControlRequest>(r => r.LedId == LedId && r.LedOn == LedOn), ZToolCmdType.UtilLedControlRsp))
+            .Returns(responseMock.Object);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        var result = service.SetCoordinatorLedMode(LedId, LedOn);
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+        responseMock.VerifyAll();
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void SetCoordinatorLedMode_ReturnsTrue()
+    {
+        // Arrange.
+        const int LedId = 123;
+        const bool LedOn = true;
+
+        var responseMock = new Mock<IUtilLedControlResponse>();
+
+        responseMock.SetupGet(m => m.Status).Returns(ZToolPacketStatus.Success);
+
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IUtilLedControlResponse>(It.Is<UtilLedControlRequest>(r => r.LedId == LedId && r.LedOn == LedOn), ZToolCmdType.UtilLedControlRsp))
+            .Returns(responseMock.Object);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        var result = service.SetCoordinatorLedMode(LedId, LedOn);
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+        responseMock.VerifyAll();
+
+        Assert.True(result);
+    }
+
+    [Fact]
     public void Fail() => Assert.Fail("Implement me");
 }

@@ -71,7 +71,7 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IUtilLedControlResponse>(new UtilLedControlRequest(ledId, isLedOn), ZToolCmdType.UtilLedControlRsp);
 
-        return response?.Status == ZToolPacketStatus.Success;
+        return response.Status == ZToolPacketStatus.Success;
     }
 
     public bool StartupNetwork(ushort startupDelay)
