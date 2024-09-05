@@ -12,7 +12,7 @@ public class NetworkCoordinatorTests
     private readonly Mock<ITransactionService> _transactionServiceMock = new();
 
     [Fact]
-    public void GetDeviceInfo_DeviceNotRespond_ThrowsNetworkException()
+    public void GetCoordinatorInfo_DeviceNotRespond_ThrowsNetworkException()
     {
         // Arrange.
         _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IUtilGetDeviceInfoResponse>(It.IsAny<UtilGetDeviceInfoRequest>(), ZToolCmdType.UtilGetDeviceInfoRsp))
@@ -22,7 +22,7 @@ public class NetworkCoordinatorTests
             null!);
 
         // Act. / Assert.
-        var result = Assert.Throws<NetworkException>(service.GetDeviceInfo);
+        var result = Assert.Throws<NetworkException>(service.GetCoordinatorInfo);
 
         _packetReceiverTransmitterServiceMock.VerifyAll();
 
@@ -30,7 +30,7 @@ public class NetworkCoordinatorTests
     }
 
     [Fact]
-    public void GetNetworkCoordinatorInfo_RespondNotSuccess_ThrowsZigBeeNetworkException()
+    public void GetCoordinatorInfo_RespondNotSuccess_ThrowsZigBeeNetworkException()
     {
         // Arrange.
         var responseMock = new Mock<IUtilGetDeviceInfoResponse>();
@@ -44,7 +44,7 @@ public class NetworkCoordinatorTests
             null!);
 
         // Act. / Assert.
-        var result = Assert.Throws<NetworkException>(service.GetDeviceInfo);
+        var result = Assert.Throws<NetworkException>(service.GetCoordinatorInfo);
 
         _packetReceiverTransmitterServiceMock.VerifyAll();
         responseMock.VerifyAll();
@@ -53,7 +53,7 @@ public class NetworkCoordinatorTests
     }
 
     [Fact]
-    public void GetDeviceInfo()
+    public void GetCoordinatorInfo()
     {
         // Arrange.
         const ulong IeeeAddr = 12345;
@@ -72,7 +72,7 @@ public class NetworkCoordinatorTests
             null!);
 
         // Act.
-        var result = service.GetDeviceInfo();
+        var result = service.GetCoordinatorInfo();
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();

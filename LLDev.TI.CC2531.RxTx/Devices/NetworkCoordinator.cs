@@ -9,11 +9,11 @@ namespace LLDev.TI.CC2531.RxTx.Devices;
 
 internal interface INetworkCoordinator
 {
-    bool PingDevice();
-    void ResetDevice();
-    DeviceInfo GetDeviceInfo();
+    bool PingCoordinator();
+    void ResetCoordinator();
+    DeviceInfo GetCoordinatorInfo();
     bool StartupNetwork(ushort startupDelay);
-    bool SetDeviceLedMode(byte ledId, bool isLedOn);
+    bool SetCoordinatorLedMode(byte ledId, bool isLedOn);
     bool PermitNetworkJoin(bool isPermited);
 }
 
@@ -23,7 +23,7 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
     private readonly IPacketReceiverTransmitterService _packetReceiverTransmitterService = packetReceiverTransmitterService;
     private readonly ITransactionService _transactionService = transactionService;
 
-    public DeviceInfo GetDeviceInfo()
+    public DeviceInfo GetCoordinatorInfo()
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IUtilGetDeviceInfoResponse>(new UtilGetDeviceInfoRequest(), ZToolCmdType.UtilGetDeviceInfoRsp);
 
@@ -53,16 +53,16 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
         return response?.Status == ZToolPacketStatus.Success;
     }
 
-    public bool PingDevice()
+    public bool PingCoordinator()
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<ISysPingResponse>(new SysPingRequest(), ZToolCmdType.SysPingRsp);
 
         return response is not null;
     }
 
-    public void ResetDevice() => _packetReceiverTransmitterService.SendAndWaitForResponse<ISysResetIndCallback>(new SysResetRequest(ZToolSysResetType.SerialBootloader), ZToolCmdType.SysResetIndClbk);
+    public void ResetCoordinator() => _packetReceiverTransmitterService.SendAndWaitForResponse<ISysResetIndCallback>(new SysResetRequest(ZToolSysResetType.SerialBootloader), ZToolCmdType.SysResetIndClbk);
 
-    public bool SetDeviceLedMode(byte ledId, bool isLedOn)
+    public bool SetCoordinatorLedMode(byte ledId, bool isLedOn)
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IUtilLedControlResponse>(new UtilLedControlRequest(ledId, isLedOn), ZToolCmdType.UtilLedControlRsp);
 
