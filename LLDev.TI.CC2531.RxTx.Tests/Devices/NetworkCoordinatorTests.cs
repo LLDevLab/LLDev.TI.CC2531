@@ -177,5 +177,59 @@ public class NetworkCoordinatorTests
     }
 
     [Fact]
+    public void StartupNetwork_NetworkNotStarted()
+    {
+        // Arrange.
+        const ushort Delay = 1234;
+
+        var responseMock = new Mock<IZdoStartupFromAppResponse>();
+
+        responseMock.SetupGet(m => m.Status).Returns(ZToolZdoStartupFromAppStatus.NotStarted);
+
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IZdoStartupFromAppResponse>(It.Is<ZdoStartupFromAppRequest>(r => r.StartDelay == Delay), ZToolCmdType.ZdoStartupFromAppRsp))
+            .Returns(responseMock.Object);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        var result = service.StartupNetwork(Delay);
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+        responseMock.VerifyAll();
+
+        Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData(ZToolZdoStartupFromAppStatus.NewNetworkState)]
+    [InlineData(ZToolZdoStartupFromAppStatus.RestoredNwkState)]
+    internal void StartupNetwork_Success(ZToolZdoStartupFromAppStatus expectedStatus)
+    {
+        // Arrange.
+        const ushort Delay = 1234;
+
+        var responseMock = new Mock<IZdoStartupFromAppResponse>();
+
+        responseMock.SetupGet(m => m.Status).Returns(expectedStatus);
+
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IZdoStartupFromAppResponse>(It.Is<ZdoStartupFromAppRequest>(r => r.StartDelay == Delay), ZToolCmdType.ZdoStartupFromAppRsp))
+            .Returns(responseMock.Object);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        var result = service.StartupNetwork(Delay);
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+        responseMock.VerifyAll();
+
+        Assert.True(result);
+    }
+
+    [Fact]
     public void Fail() => Assert.Fail("Implement me");
 }

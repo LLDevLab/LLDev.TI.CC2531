@@ -78,6 +78,6 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IZdoStartupFromAppResponse>(new ZdoStartupFromAppRequest(startupDelay), ZToolCmdType.ZdoStartupFromAppRsp);
 
-        return response?.Status is ZToolZdoStartupFromAppStatus.NewNetworkState or ZToolZdoStartupFromAppStatus.RestoredNwkState;
+        return response.Status is ZToolZdoStartupFromAppStatus.NewNetworkState or ZToolZdoStartupFromAppStatus.RestoredNwkState;
     }
 }
