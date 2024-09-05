@@ -9,7 +9,7 @@ namespace LLDev.TI.CC2531.RxTx.Devices;
 
 internal interface INetworkCoordinator
 {
-    bool PingCoordinator();
+    void PingCoordinatorOrThrow();
     void ResetCoordinator();
     DeviceInfo GetCoordinatorInfo();
     bool StartupNetwork(ushort startupDelay);
@@ -53,11 +53,16 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
         return response?.Status == ZToolPacketStatus.Success;
     }
 
-    public bool PingCoordinator()
+    public void PingCoordinatorOrThrow()
     {
-        var response = _packetReceiverTransmitterService.SendAndWaitForResponse<ISysPingResponse>(new SysPingRequest(), ZToolCmdType.SysPingRsp);
-
-        return response is not null;
+        try
+        {
+            _packetReceiverTransmitterService.SendAndWaitForResponse<ISysPingResponse>(new SysPingRequest(), ZToolCmdType.SysPingRsp);
+        }
+        catch (Exception e)
+        {
+            throw new NetworkException("Cannot ping network coordinator", e);
+        }
     }
 
     public void ResetCoordinator() => _packetReceiverTransmitterService.SendAndWaitForResponse<ISysResetIndCallback>(new SysResetRequest(ZToolSysResetType.SerialBootloader), ZToolCmdType.SysResetIndClbk);

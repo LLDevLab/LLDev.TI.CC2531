@@ -65,26 +65,27 @@ public class NetworkCoordinatorTests
     }
 
     [Fact]
-    public void PingCoordinator_ReturnsFalse()
+    public void PingCoordinatorOrThrow_ThrowsNetworkException()
     {
         // Arrange.
+        var innerException = new Exception();
+
         _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<ISysPingResponse>(It.IsAny<SysPingRequest>(), ZToolCmdType.SysPingRsp))
-            .Returns((ISysPingResponse)null!);
+            .Throws(innerException);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
             null!);
 
-        // Act.
-        var result = service.PingCoordinator();
+        // Act. / Assert.
+        var exception = Assert.Throws<NetworkException>(service.PingCoordinatorOrThrow);
 
-        // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
 
-        Assert.False(result);
+        Assert.Equal("Cannot ping network coordinator", exception.Message);
     }
 
     [Fact]
-    public void PingCoordinator_ReturnsTrue()
+    public void PingCoordinatorOrThrow()
     {
         // Arrange.
         var responseMock = new Mock<ISysPingResponse>();
@@ -96,12 +97,10 @@ public class NetworkCoordinatorTests
             null!);
 
         // Act.
-        var result = service.PingCoordinator();
+        service.PingCoordinatorOrThrow();
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
-
-        Assert.True(result);
     }
 
     [Fact]
