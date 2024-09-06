@@ -230,6 +230,87 @@ public class NetworkCoordinatorTests
         Assert.True(result);
     }
 
-    [Fact]
-    public void Fail() => Assert.Fail("Implement me");
+    [Theory]
+    [InlineData(ZToolPacketStatus.Fail, true)]
+    [InlineData(ZToolPacketStatus.InvalidMemorySize, false)]
+    [InlineData(ZToolPacketStatus.NvOperationFailed, true)]
+    [InlineData(ZToolPacketStatus.ZdpInsufficientSpace, false)]
+    internal void PermitNetworkJoin_RespondNotSuccess_ReturnsFalse(ZToolPacketStatus statusCode, bool isPermitted)
+    {
+        // Arrange.
+        const int TransactionId = 123;
+
+        _transactionServiceMock.Setup(m => m.GetNextTransactionId()).Returns(TransactionId);
+
+        var responseMock = new Mock<IAfDataResponse>();
+
+        responseMock.SetupGet(m => m.Status).Returns(statusCode);
+
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IAfDataResponse>(It.Is<AfDataRequest>(r => r.NwkDstAddr == 0 &&
+            r.DstEndpoint == 0 &&
+            r.SrcEndpoint == 0 &&
+            r.ClusterId == ZigBeeClusterId.PermitJoin &&
+            r.TransactionId == TransactionId &&
+            r.Options == 0x30 &&
+            r.Radius == 31 &&
+            r.RequestDataLen == 3 &&
+            r.RequestData[0] == TransactionId &&
+            r.RequestData[1] == (isPermitted ? 255 : 0) &&
+            r.RequestData[2] == 1), ZToolCmdType.AfDataRsp))
+            .Returns(responseMock.Object);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            _transactionServiceMock.Object);
+
+        // Act.
+        var result = service.PermitNetworkJoin(isPermitted);
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+        _transactionServiceMock.VerifyAll();
+        responseMock.VerifyAll();
+
+        Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void PermitJoin_ReturnsTrue(bool isPermitted)
+    {
+        // Arrange.
+        const int TransactionId = 123;
+
+        _transactionServiceMock.Setup(m => m.GetNextTransactionId()).Returns(TransactionId);
+
+        var responseMock = new Mock<IAfDataResponse>();
+
+        responseMock.SetupGet(m => m.Status).Returns(ZToolPacketStatus.Success);
+
+        _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IAfDataResponse>(It.Is<AfDataRequest>(r => r.NwkDstAddr == 0 &&
+            r.DstEndpoint == 0 &&
+            r.SrcEndpoint == 0 &&
+            r.ClusterId == ZigBeeClusterId.PermitJoin &&
+            r.TransactionId == TransactionId &&
+            r.Options == 0x30 &&
+            r.Radius == 31 &&
+            r.RequestDataLen == 3 &&
+            r.RequestData[0] == TransactionId &&
+            r.RequestData[1] == (isPermitted ? 255 : 0) &&
+            r.RequestData[2] == 1), ZToolCmdType.AfDataRsp))
+            .Returns(responseMock.Object);
+
+        var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            _transactionServiceMock.Object);
+
+        // Act.
+        var result = service.PermitNetworkJoin(isPermitted);
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.VerifyAll();
+        _transactionServiceMock.VerifyAll();
+        responseMock.VerifyAll();
+
+        Assert.True(result);
+    }
 }

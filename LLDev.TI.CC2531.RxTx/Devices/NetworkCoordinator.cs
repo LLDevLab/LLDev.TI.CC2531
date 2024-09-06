@@ -50,7 +50,7 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
             3,
             [transactionId, (byte)(isPermited ? 255 : 0), 1]), ZToolCmdType.AfDataRsp);
 
-        return response?.Status == ZToolPacketStatus.Success;
+        return response.Status == ZToolPacketStatus.Success;
     }
 
     public void PingCoordinatorOrThrow()
