@@ -31,7 +31,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
     {
         switch (packet)
         {
-            case ZdoEndDeviceAnnceIndCallback zdoEndDeviceAnnceInd:
+            case IZdoEndDeviceAnnceIndCallback zdoEndDeviceAnnceInd:
                 ZigBeeDeviceAnnouncedAsync?.Invoke(new(zdoEndDeviceAnnceInd.IeeeAddr,
                     zdoEndDeviceAnnceInd.NwkAddr,
                     zdoEndDeviceAnnceInd.SrcAddr,
@@ -39,7 +39,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
                     zdoEndDeviceAnnceInd.IsReceiverOnWhenIdle,
                     zdoEndDeviceAnnceInd.IsSecure));
                 break;
-            case AfIncomingMessageCallback afIncomingMsg:
+            case IAfIncomingMessageCallback afIncomingMsg:
                 DeviceMessageReceivedAsync?.Invoke(afIncomingMsg.SrcAddr, afIncomingMsg.ClusterId, afIncomingMsg.Message);
                 break;
             default:
