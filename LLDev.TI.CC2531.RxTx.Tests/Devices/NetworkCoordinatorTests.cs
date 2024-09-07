@@ -1,15 +1,18 @@
-﻿using LLDev.TI.CC2531.RxTx.Devices;
+﻿using Castle.Core.Logging;
+using LLDev.TI.CC2531.RxTx.Devices;
 using LLDev.TI.CC2531.RxTx.Enums;
 using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
 using LLDev.TI.CC2531.RxTx.Services;
+using Microsoft.Extensions.Logging;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Devices;
 public class NetworkCoordinatorTests
 {
     private readonly Mock<IPacketReceiverTransmitterService> _packetReceiverTransmitterServiceMock = new();
     private readonly Mock<ITransactionService> _transactionServiceMock = new();
+    private readonly Mock<ILogger<NetworkCoordinator>> _loggerMock = new();
 
     [Fact]
     public void GetCoordinatorInfo_RespondNotSuccess_ThrowsZigBeeNetworkException()
@@ -23,6 +26,7 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!,
             null!);
 
         // Act. / Assert.
@@ -51,6 +55,7 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!,
             null!);
 
         // Act.
@@ -74,6 +79,7 @@ public class NetworkCoordinatorTests
             .Throws(innerException);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!,
             null!);
 
         // Act. / Assert.
@@ -94,6 +100,7 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!,
             null!);
 
         // Act.
@@ -107,15 +114,26 @@ public class NetworkCoordinatorTests
     public void ResetCoordinatorDevice()
     {
         // Arrange.
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
+
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!);
+            null!,
+            _loggerMock.Object);
 
         // Act.
         service.ResetCoordinator();
 
         // Assert.
+        _loggerMock.VerifyAll();
+
         _packetReceiverTransmitterServiceMock.Verify(m => m.SendAndWaitForResponse<ISysResetIndCallback>(It.Is<SysResetRequest>(r => r.ResetType == ZToolSysResetType.SerialBootloader),
             ZToolCmdType.SysResetIndClbk), Times.Once);
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
     }
 
     [Theory]
@@ -131,20 +149,30 @@ public class NetworkCoordinatorTests
 
         var responseMock = new Mock<IUtilLedControlResponse>();
 
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
+
         responseMock.SetupGet(m => m.Status).Returns(responseStatus);
 
         _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IUtilLedControlResponse>(It.Is<UtilLedControlRequest>(r => r.LedId == LedId && r.LedOn == LedOn), ZToolCmdType.UtilLedControlRsp))
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!);
+            null!,
+            _loggerMock.Object);
 
         // Act.
         var result = service.SetCoordinatorLedMode(LedId, LedOn);
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
+        _loggerMock.VerifyAll();
         responseMock.VerifyAll();
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
         Assert.False(result);
     }
@@ -158,20 +186,30 @@ public class NetworkCoordinatorTests
 
         var responseMock = new Mock<IUtilLedControlResponse>();
 
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
+
         responseMock.SetupGet(m => m.Status).Returns(ZToolPacketStatus.Success);
 
         _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IUtilLedControlResponse>(It.Is<UtilLedControlRequest>(r => r.LedId == LedId && r.LedOn == LedOn), ZToolCmdType.UtilLedControlRsp))
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!);
+            null!,
+            _loggerMock.Object);
 
         // Act.
         var result = service.SetCoordinatorLedMode(LedId, LedOn);
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
+        _loggerMock.VerifyAll();
         responseMock.VerifyAll();
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
         Assert.True(result);
     }
@@ -184,20 +222,30 @@ public class NetworkCoordinatorTests
 
         var responseMock = new Mock<IZdoStartupFromAppResponse>();
 
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
+
         responseMock.SetupGet(m => m.Status).Returns(ZToolZdoStartupFromAppStatus.NotStarted);
 
         _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IZdoStartupFromAppResponse>(It.Is<ZdoStartupFromAppRequest>(r => r.StartDelay == Delay), ZToolCmdType.ZdoStartupFromAppRsp))
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!);
+            null!,
+            _loggerMock.Object);
 
         // Act.
         var result = service.StartupNetwork(Delay);
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
+        _loggerMock.VerifyAll();
         responseMock.VerifyAll();
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
         Assert.False(result);
     }
@@ -212,20 +260,30 @@ public class NetworkCoordinatorTests
 
         var responseMock = new Mock<IZdoStartupFromAppResponse>();
 
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
+
         responseMock.SetupGet(m => m.Status).Returns(expectedStatus);
 
         _packetReceiverTransmitterServiceMock.Setup(m => m.SendAndWaitForResponse<IZdoStartupFromAppResponse>(It.Is<ZdoStartupFromAppRequest>(r => r.StartDelay == Delay), ZToolCmdType.ZdoStartupFromAppRsp))
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!);
+            null!,
+            _loggerMock.Object);
 
         // Act.
         var result = service.StartupNetwork(Delay);
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
+        _loggerMock.VerifyAll();
         responseMock.VerifyAll();
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
         Assert.True(result);
     }
@@ -241,6 +299,8 @@ public class NetworkCoordinatorTests
         const int TransactionId = 123;
 
         _transactionServiceMock.Setup(m => m.GetNextTransactionId()).Returns(TransactionId);
+
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
         var responseMock = new Mock<IAfDataResponse>();
 
@@ -260,7 +320,8 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            _transactionServiceMock.Object);
+            _transactionServiceMock.Object,
+            _loggerMock.Object);
 
         // Act.
         var result = service.PermitNetworkJoin(isPermitted);
@@ -268,7 +329,14 @@ public class NetworkCoordinatorTests
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
         _transactionServiceMock.VerifyAll();
+        _loggerMock.VerifyAll();
         responseMock.VerifyAll();
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
         Assert.False(result);
     }
@@ -282,6 +350,8 @@ public class NetworkCoordinatorTests
         const int TransactionId = 123;
 
         _transactionServiceMock.Setup(m => m.GetNextTransactionId()).Returns(TransactionId);
+
+        _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
         var responseMock = new Mock<IAfDataResponse>();
 
@@ -301,7 +371,8 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var service = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            _transactionServiceMock.Object);
+            _transactionServiceMock.Object,
+            _loggerMock.Object);
 
         // Act.
         var result = service.PermitNetworkJoin(isPermitted);
@@ -309,7 +380,14 @@ public class NetworkCoordinatorTests
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
         _transactionServiceMock.VerifyAll();
+        _loggerMock.VerifyAll();
         responseMock.VerifyAll();
+
+        _loggerMock.Verify(x => x.Log(LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
         Assert.True(result);
     }

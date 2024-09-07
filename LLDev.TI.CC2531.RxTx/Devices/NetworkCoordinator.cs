@@ -18,10 +18,12 @@ internal interface INetworkCoordinator
 }
 
 internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packetReceiverTransmitterService,
-    ITransactionService transactionService) : INetworkCoordinator
+    ITransactionService transactionService,
+    ILogger<NetworkCoordinator> logger) : INetworkCoordinator
 {
     private readonly IPacketReceiverTransmitterService _packetReceiverTransmitterService = packetReceiverTransmitterService;
     private readonly ITransactionService _transactionService = transactionService;
+    private readonly ILogger<NetworkCoordinator> _logger = logger;
 
     public DeviceInfo GetCoordinatorInfo()
     {
@@ -50,6 +52,9 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
             3,
             [transactionId, (byte)(isPermited ? 255 : 0), 1]), ZToolCmdType.AfDataRsp);
 
+        if (_logger.IsEnabled(LogLevel.Information))
+            _logger.LogInformation("Trying to set network permit join to {IsPermited}. Response status {Status}.", isPermited, response.Status);
+
         return response.Status == ZToolPacketStatus.Success;
     }
 
@@ -65,11 +70,20 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
         }
     }
 
-    public void ResetCoordinator() => _packetReceiverTransmitterService.SendAndWaitForResponse<ISysResetIndCallback>(new SysResetRequest(ZToolSysResetType.SerialBootloader), ZToolCmdType.SysResetIndClbk);
+    public void ResetCoordinator()
+    {
+        _packetReceiverTransmitterService.SendAndWaitForResponse<ISysResetIndCallback>(new SysResetRequest(ZToolSysResetType.SerialBootloader), ZToolCmdType.SysResetIndClbk);
+
+        if (_logger.IsEnabled(LogLevel.Information))
+            _logger.LogInformation("Coordinator device have been resetted");
+    }
 
     public bool SetCoordinatorLedMode(byte ledId, bool isLedOn)
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IUtilLedControlResponse>(new UtilLedControlRequest(ledId, isLedOn), ZToolCmdType.UtilLedControlRsp);
+
+        if (_logger.IsEnabled(LogLevel.Information))
+            _logger.LogInformation("Trying to set network coordinator led {LedId} to {IsLedOn}. Response status {Status}.", ledId, isLedOn, response.Status);
 
         return response.Status == ZToolPacketStatus.Success;
     }
@@ -77,6 +91,9 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
     public bool StartupNetwork(ushort startupDelay)
     {
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IZdoStartupFromAppResponse>(new ZdoStartupFromAppRequest(startupDelay), ZToolCmdType.ZdoStartupFromAppRsp);
+
+        if (_logger.IsEnabled(LogLevel.Information))
+            _logger.LogInformation("Trying to start up network. Response status {Status}.", response.Status);
 
         return response.Status is ZToolZdoStartupFromAppStatus.NewNetworkState or ZToolZdoStartupFromAppStatus.RestoredNwkState;
     }
