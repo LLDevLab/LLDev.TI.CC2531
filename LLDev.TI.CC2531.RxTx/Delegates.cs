@@ -8,4 +8,4 @@ internal delegate void SerialPortDataReceivedEventHandler();
 internal delegate void PacketReceivedHandler(IIncomingPacket packet);
 
 public delegate Task EndDeviceMessageReceivedHandler(ushort nwkAddr, ZigBeeClusterId clusterId, byte[] message);
-public delegate Task DeviceAnnouncedHandler(DiviceAnnounceInfo diviceAnnounceInfo);
+public delegate Task DeviceAnnouncedHandler(DeviceAnnounceInfo deviceAnnounceInfo);

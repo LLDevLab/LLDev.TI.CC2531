@@ -6,7 +6,7 @@ namespace LLDev.TI.CC2531.RxTx.Devices;
 
 internal interface INetworkDevice
 {
-    event DeviceAnnouncedHandler? ZigBeeDeviceAnnouncedAsync;
+    event DeviceAnnouncedHandler? DeviceAnnouncedAsync;
     event EndDeviceMessageReceivedHandler? DeviceMessageReceivedAsync;
 }
 
@@ -15,7 +15,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
     private readonly IPacketReceiverTransmitterService _packetReceiverTransmitterService;
     private readonly ILogger<NetworkDevice> _logger;
 
-    public event DeviceAnnouncedHandler? ZigBeeDeviceAnnouncedAsync;
+    public event DeviceAnnouncedHandler? DeviceAnnouncedAsync;
     public event EndDeviceMessageReceivedHandler? DeviceMessageReceivedAsync;
 
     public NetworkDevice(IPacketReceiverTransmitterService packetReceiverTransmitterService,
@@ -32,7 +32,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
         switch (packet)
         {
             case IZdoEndDeviceAnnceIndCallback zdoEndDeviceAnnceInd:
-                ZigBeeDeviceAnnouncedAsync?.Invoke(new(zdoEndDeviceAnnceInd.IeeeAddr,
+                DeviceAnnouncedAsync?.Invoke(new(zdoEndDeviceAnnceInd.IeeeAddr,
                     zdoEndDeviceAnnceInd.NwkAddr,
                     zdoEndDeviceAnnceInd.SrcAddr,
                     zdoEndDeviceAnnceInd.IsMainPowered,
