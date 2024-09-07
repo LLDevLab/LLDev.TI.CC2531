@@ -6,8 +6,8 @@ namespace LLDev.TI.CC2531.RxTx.Devices;
 
 internal interface INetworkDevice
 {
-    event DeviceAnnouncedHandler? ZigBeeDeviceAnnounced;
-    event EndDeviceMessageReceivedHandler? DeviceMessageReceived;
+    event DeviceAnnouncedHandler? ZigBeeDeviceAnnouncedAsync;
+    event EndDeviceMessageReceivedHandler? DeviceMessageReceivedAsync;
 }
 
 internal sealed class NetworkDevice : INetworkDevice, IDisposable
@@ -15,8 +15,8 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
     private readonly IPacketReceiverTransmitterService _packetReceiverTransmitterService;
     private readonly ILogger<NetworkDevice> _logger;
 
-    public event DeviceAnnouncedHandler? ZigBeeDeviceAnnounced;
-    public event EndDeviceMessageReceivedHandler? DeviceMessageReceived;
+    public event DeviceAnnouncedHandler? ZigBeeDeviceAnnouncedAsync;
+    public event EndDeviceMessageReceivedHandler? DeviceMessageReceivedAsync;
 
     public NetworkDevice(IPacketReceiverTransmitterService packetReceiverTransmitterService,
         ILogger<NetworkDevice> logger)
@@ -32,7 +32,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
         switch (packet)
         {
             case ZdoEndDeviceAnnceIndCallback zdoEndDeviceAnnceInd:
-                ZigBeeDeviceAnnounced?.Invoke(new(zdoEndDeviceAnnceInd.IeeeAddr,
+                ZigBeeDeviceAnnouncedAsync?.Invoke(new(zdoEndDeviceAnnceInd.IeeeAddr,
                     zdoEndDeviceAnnceInd.NwkAddr,
                     zdoEndDeviceAnnceInd.SrcAddr,
                     zdoEndDeviceAnnceInd.IsMainPowered,
@@ -40,7 +40,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
                     zdoEndDeviceAnnceInd.IsSecure));
                 break;
             case AfIncomingMessageCallback afIncomingMsg:
-                DeviceMessageReceived?.Invoke(afIncomingMsg.SrcAddr, afIncomingMsg.ClusterId, afIncomingMsg.Message);
+                DeviceMessageReceivedAsync?.Invoke(afIncomingMsg.SrcAddr, afIncomingMsg.ClusterId, afIncomingMsg.Message);
                 break;
             default:
                 if (_logger.IsEnabled(LogLevel.Information))
