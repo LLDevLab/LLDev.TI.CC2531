@@ -7,7 +7,7 @@ namespace LLDev.TI.CC2531.RxTx.Devices;
 internal interface INetworkDevice
 {
     event DeviceAnnouncedHandler? ZigBeeDeviceAnnounced;
-    event EndDeviceDataReceivedHandler? DeviceDataReceived;
+    event EndDeviceMessageReceivedHandler? DeviceMessageReceived;
 }
 
 internal sealed class NetworkDevice : INetworkDevice, IDisposable
@@ -16,7 +16,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
     private readonly ILogger<NetworkDevice> _logger;
 
     public event DeviceAnnouncedHandler? ZigBeeDeviceAnnounced;
-    public event EndDeviceDataReceivedHandler? DeviceDataReceived;
+    public event EndDeviceMessageReceivedHandler? DeviceMessageReceived;
 
     public NetworkDevice(IPacketReceiverTransmitterService packetReceiverTransmitterService,
         ILogger<NetworkDevice> logger)
@@ -40,7 +40,7 @@ internal sealed class NetworkDevice : INetworkDevice, IDisposable
                     zdoEndDeviceAnnceInd.IsSecure));
                 break;
             case AfIncomingMessageCallback afIncomingMsg:
-                DeviceDataReceived?.Invoke(afIncomingMsg.SrcAddr, afIncomingMsg.ClusterId, afIncomingMsg.Message);
+                DeviceMessageReceived?.Invoke(afIncomingMsg.SrcAddr, afIncomingMsg.ClusterId, afIncomingMsg.Message);
                 break;
             default:
                 if (_logger.IsEnabled(LogLevel.Information))
