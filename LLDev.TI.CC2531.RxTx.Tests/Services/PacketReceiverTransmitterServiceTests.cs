@@ -13,7 +13,7 @@ public class PacketReceiverTransmitterServiceTests
 {
     private const int Timeout = 200;
 
-    private readonly Mock<IPacketHandler> _serialPortMessageHandlerMock = new();
+    private readonly Mock<IPacketHandler> _packetHandlerMock = new();
     private readonly Mock<ICmdTypeValidationService> _cmdTypeValidationServiceMock = new();
     private readonly Mock<IAwaitedPacketCacheService> _awaitedPacketCacheServiceMock = new();
 
@@ -26,7 +26,7 @@ public class PacketReceiverTransmitterServiceTests
     public void CondtructAndDispose()
     {
         // Arrange. / Act.
-        using (var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using (var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             null!,
             null!,
             _options))
@@ -34,8 +34,8 @@ public class PacketReceiverTransmitterServiceTests
         }
 
         // Assert.
-        _serialPortMessageHandlerMock.VerifyAdd(m => m.MessageReceived += It.IsAny<MessageReceivedHandler>());
-        _serialPortMessageHandlerMock.VerifyRemove(m => m.MessageReceived -= It.IsAny<MessageReceivedHandler>());
+        _packetHandlerMock.VerifyAdd(m => m.PacketReceived += It.IsAny<PacketReceivedHandler>());
+        _packetHandlerMock.VerifyRemove(m => m.PacketReceived -= It.IsAny<PacketReceivedHandler>());
     }
 
     [Fact]
@@ -44,13 +44,13 @@ public class PacketReceiverTransmitterServiceTests
         // Arrange.
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object, null!, null!, _options);
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object, null!, null!, _options);
 
         // Act.
         service.Send(outgoingPacketMock.Object);
 
         // Assert.
-        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+        _packetHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class PacketReceiverTransmitterServiceTests
 
         _cmdTypeValidationServiceMock.Setup(m => m.IsResponseOrCallback(CmdType)).Returns(false);
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
             null!,
             _options);
@@ -71,10 +71,10 @@ public class PacketReceiverTransmitterServiceTests
         // Act. / Assert.
         var exception = Assert.Throws<ArgumentException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
 
-        _serialPortMessageHandlerMock.VerifyAll();
+        _packetHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
 
-        _serialPortMessageHandlerMock.Verify(m => m.Send(It.IsAny<IOutgoingPacket>()), Times.Never);
+        _packetHandlerMock.Verify(m => m.Send(It.IsAny<IOutgoingPacket>()), Times.Never);
 
         Assert.Equal("Awaited response type is not response or callback (Parameter 'responseType')", exception.Message);
     }
@@ -91,7 +91,7 @@ public class PacketReceiverTransmitterServiceTests
 
         _awaitedPacketCacheServiceMock.Setup(m => m.Contains(CmdType)).Returns(true);
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
             _awaitedPacketCacheServiceMock.Object,
             _options);
@@ -99,11 +99,11 @@ public class PacketReceiverTransmitterServiceTests
         // Act. / Assert.
         var exception = Assert.Throws<PacketException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
 
-        _serialPortMessageHandlerMock.VerifyAll();
+        _packetHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
         _awaitedPacketCacheServiceMock.VerifyAll();
 
-        _serialPortMessageHandlerMock.Verify(m => m.Send(It.IsAny<IOutgoingPacket>()), Times.Never);
+        _packetHandlerMock.Verify(m => m.Send(It.IsAny<IOutgoingPacket>()), Times.Never);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
         Assert.Equal($"Already awaiting packet {CmdType}", exception.Message);
@@ -121,7 +121,7 @@ public class PacketReceiverTransmitterServiceTests
 
         _awaitedPacketCacheServiceMock.Setup(m => m.Contains(CmdType)).Returns(false);
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
             _awaitedPacketCacheServiceMock.Object,
             _options);
@@ -129,11 +129,11 @@ public class PacketReceiverTransmitterServiceTests
         // Act. / Assert.
         var exception = Assert.Throws<TimeoutException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
 
-        _serialPortMessageHandlerMock.VerifyAll();
+        _packetHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
         _awaitedPacketCacheServiceMock.VerifyAll();
 
-        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+        _packetHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(CmdType), Times.Once);
         _awaitedPacketCacheServiceMock.Verify(m => m.Remove(It.IsAny<ZToolCmdType>()), Times.Never);
@@ -152,7 +152,7 @@ public class PacketReceiverTransmitterServiceTests
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
         var incomingPacketMock = new Mock<IIncomingPacket>();
 
-        var notAwaitedMessageReceivedCount = 0;
+        var notAwaitedPacketReceivedCount = 0;
 
         incomingPacketMock.SetupGet(m => m.CmdType).Returns(IncomingCmdType);
 
@@ -161,33 +161,33 @@ public class PacketReceiverTransmitterServiceTests
         _awaitedPacketCacheServiceMock.Setup(m => m.Contains(ExpectedCmdType)).Returns(false);
         _awaitedPacketCacheServiceMock.Setup(m => m.Contains(IncomingCmdType)).Returns(false);
 
-        _serialPortMessageHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
-            _serialPortMessageHandlerMock.Raise(m => m.MessageReceived += null, incomingPacketMock.Object));
+        _packetHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
+            _packetHandlerMock.Raise(m => m.PacketReceived += null, incomingPacketMock.Object));
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
             _awaitedPacketCacheServiceMock.Object,
             _options);
 
-        service.MessageReceived += OnMessageReceived;
+        service.PacketReceived += OnPacketReceived;
 
         // Act. / Assert.
         Assert.Throws<TimeoutException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, ExpectedCmdType));
 
-        _serialPortMessageHandlerMock.VerifyAll();
+        _packetHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
         _awaitedPacketCacheServiceMock.VerifyAll();
         incomingPacketMock.VerifyAll();
 
-        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+        _packetHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(ExpectedCmdType), Times.Once);
         _awaitedPacketCacheServiceMock.Verify(m => m.Remove(It.IsAny<ZToolCmdType>()), Times.Never);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
-        Assert.Equal(1, notAwaitedMessageReceivedCount);
+        Assert.Equal(1, notAwaitedPacketReceivedCount);
 
-        void OnMessageReceived(IIncomingPacket packet) => notAwaitedMessageReceivedCount++;
+        void OnPacketReceived(IIncomingPacket packet) => notAwaitedPacketReceivedCount++;
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public class PacketReceiverTransmitterServiceTests
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
         var incomingPacketMock = new Mock<IIncomingPacket>();
 
-        var notAwaitedMessageReceivedCount = 0;
+        var notAwaitedPacketReceivedCount = 0;
 
         incomingPacketMock.SetupGet(m => m.CmdType).Returns(IncomingCmdType);
 
@@ -209,33 +209,33 @@ public class PacketReceiverTransmitterServiceTests
         _awaitedPacketCacheServiceMock.Setup(m => m.Contains(ExpectedCmdType)).Returns(false);
         _awaitedPacketCacheServiceMock.Setup(m => m.Contains(IncomingCmdType)).Returns(true);
 
-        _serialPortMessageHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
-            _serialPortMessageHandlerMock.Raise(m => m.MessageReceived += null, incomingPacketMock.Object));
+        _packetHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
+            _packetHandlerMock.Raise(m => m.PacketReceived += null, incomingPacketMock.Object));
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
             _awaitedPacketCacheServiceMock.Object,
             _options);
 
-        service.MessageReceived += OnMessageReceived;
+        service.PacketReceived += OnPacketReceived;
 
         // Act. / Assert.
         Assert.Throws<TimeoutException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, ExpectedCmdType));
 
-        _serialPortMessageHandlerMock.VerifyAll();
+        _packetHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
         _awaitedPacketCacheServiceMock.VerifyAll();
         incomingPacketMock.VerifyAll();
 
-        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+        _packetHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(ExpectedCmdType), Times.Once);
         _awaitedPacketCacheServiceMock.Verify(m => m.Remove(It.IsAny<ZToolCmdType>()), Times.Never);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
-        Assert.Equal(0, notAwaitedMessageReceivedCount);
+        Assert.Equal(0, notAwaitedPacketReceivedCount);
 
-        void OnMessageReceived(IIncomingPacket packet) => notAwaitedMessageReceivedCount++;
+        void OnPacketReceived(IIncomingPacket packet) => notAwaitedPacketReceivedCount++;
     }
 
     [Fact]
@@ -248,7 +248,7 @@ public class PacketReceiverTransmitterServiceTests
         var incomingPacketMock = new Mock<IIncomingPacket>();
 
         var containsCounter = 0;
-        var notAwaitedMessageReceivedCount = 0;
+        var notAwaitedPacketReceivedCount = 0;
 
         incomingPacketMock.SetupGet(m => m.CmdType).Returns(CmdType);
 
@@ -263,34 +263,34 @@ public class PacketReceiverTransmitterServiceTests
             return result;
         });
 
-        _serialPortMessageHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
-            _serialPortMessageHandlerMock.Raise(m => m.MessageReceived += null, incomingPacketMock.Object));
+        _packetHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
+            _packetHandlerMock.Raise(m => m.PacketReceived += null, incomingPacketMock.Object));
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
             _awaitedPacketCacheServiceMock.Object,
             _options);
 
-        service.MessageReceived += OnMessageReceived;
+        service.PacketReceived += OnPacketReceived;
 
         // Act. / Assert.
         var exception = Assert.Throws<PacketException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
 
-        _serialPortMessageHandlerMock.VerifyAll();
+        _packetHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
         _awaitedPacketCacheServiceMock.VerifyAll();
         incomingPacketMock.VerifyAll();
 
-        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+        _packetHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(CmdType), Times.Once);
         _awaitedPacketCacheServiceMock.Verify(m => m.Remove(CmdType), Times.Once);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
         Assert.Equal($"Cannot cast packet to {typeof(ZbWriteConfigResponse)}", exception.Message);
-        Assert.Equal(0, notAwaitedMessageReceivedCount);
+        Assert.Equal(0, notAwaitedPacketReceivedCount);
 
-        void OnMessageReceived(IIncomingPacket packet) => notAwaitedMessageReceivedCount++;
+        void OnPacketReceived(IIncomingPacket packet) => notAwaitedPacketReceivedCount++;
     }
 
     [Fact]
@@ -302,7 +302,7 @@ public class PacketReceiverTransmitterServiceTests
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
 
         var containsCounter = 0;
-        var notAwaitedMessageReceivedCount = 0;
+        var notAwaitedPacketReceivedCount = 0;
 
         var packetHeaderMock = new Mock<IPacketHeader>();
 
@@ -321,34 +321,34 @@ public class PacketReceiverTransmitterServiceTests
             return result;
         });
 
-        _serialPortMessageHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
-            _serialPortMessageHandlerMock.Raise(m => m.MessageReceived += null, incomingPacket));
+        _packetHandlerMock.Setup(m => m.Send(outgoingPacketMock.Object)).Callback((IOutgoingPacket _) =>
+            _packetHandlerMock.Raise(m => m.PacketReceived += null, incomingPacket));
 
-        using var service = new PacketReceiverTransmitterService(_serialPortMessageHandlerMock.Object,
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
             _awaitedPacketCacheServiceMock.Object,
             _options);
 
-        service.MessageReceived += OnMessageReceived;
+        service.PacketReceived += OnPacketReceived;
 
         // Act.
         var result = service.SendAndWaitForResponse<SysPingResponse>(outgoingPacketMock.Object, CmdType);
 
         // Assert.
-        _serialPortMessageHandlerMock.VerifyAll();
+        _packetHandlerMock.VerifyAll();
         _cmdTypeValidationServiceMock.VerifyAll();
         _awaitedPacketCacheServiceMock.VerifyAll();
         packetHeaderMock.VerifyAll();
 
-        _serialPortMessageHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
+        _packetHandlerMock.Verify(m => m.Send(outgoingPacketMock.Object), Times.Once);
 
         _awaitedPacketCacheServiceMock.Verify(m => m.Add(CmdType), Times.Once);
         _awaitedPacketCacheServiceMock.Verify(m => m.Remove(CmdType), Times.Once);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
-        Assert.Equal(0, notAwaitedMessageReceivedCount);
+        Assert.Equal(0, notAwaitedPacketReceivedCount);
         Assert.Equal(incomingPacket, result);
 
-        void OnMessageReceived(IIncomingPacket packet) => notAwaitedMessageReceivedCount++;
+        void OnPacketReceived(IIncomingPacket packet) => notAwaitedPacketReceivedCount++;
     }
 }

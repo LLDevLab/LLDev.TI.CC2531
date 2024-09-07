@@ -11,13 +11,13 @@ namespace LLDev.TI.CC2531.RxTx.Handlers;
 // IPacketHandler will be added through DI and should not inherit IDisposable interface
 internal interface IPacketHandler
 {
-    event MessageReceivedHandler MessageReceived;
+    event PacketReceivedHandler PacketReceived;
     void Send(IOutgoingPacket packet);
 }
 
 internal sealed class PacketHandler : IPacketHandler, IDisposable
 {
-    public event MessageReceivedHandler? MessageReceived;
+    public event PacketReceivedHandler? PacketReceived;
 
     private readonly ISerialPortDataHandler _serialPortDataHandler;
     private readonly IPacketFactory _packetFactory;
@@ -76,7 +76,7 @@ internal sealed class PacketHandler : IPacketHandler, IDisposable
                     if (packet is null)
                         continue;
 
-                    MessageReceived?.Invoke(packet);
+                    PacketReceived?.Invoke(packet);
                 }
                 catch (PacketHeaderException ex)
                 {

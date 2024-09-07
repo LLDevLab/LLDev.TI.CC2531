@@ -97,7 +97,7 @@ public class PacketHandlerTests
     public void SerialPortDataReceived_CreatePacketHeaderThrowsRandomException()
     {
         // Arrange.
-        var messageReceivedEventInvokeCount = 0;
+        var packetReceivedEventInvokeCount = 0;
 
         var headerArray = new byte[] { 1, 2, 3 };
 
@@ -117,7 +117,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             null!);
 
-        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.PacketReceived += incomintPacket => packetReceivedEventInvokeCount++;
 
         // Act. / Assert.
         Assert.Throws<Exception>(() => _serialPortDataHandlerMock.Raise(m => m.DataReceived += null));
@@ -138,7 +138,7 @@ public class PacketHandlerTests
     {
         // Arrange.
         var dataToReadCount = 0;
-        var messageReceivedEventInvokeCount = 0;
+        var packetReceivedEventInvokeCount = 0;
 
         var headerArray = new byte[] { 1, 2, 3 };
 
@@ -166,7 +166,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.PacketReceived += incomintPacket => packetReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
@@ -189,7 +189,7 @@ public class PacketHandlerTests
 
         _criticalSectionServiceMock.Verify(m => m.Leave(), Times.Once);
 
-        Assert.Equal(0, messageReceivedEventInvokeCount);
+        Assert.Equal(0, packetReceivedEventInvokeCount);
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public class PacketHandlerTests
         const int CheckSum = 100;
 
         var dataToReadCount = 0;
-        var messageReceivedEventInvokeCount = 0;
+        var packetReceivedEventInvokeCount = 0;
 
         var headerArray = new byte[] { 1, 2, 3 };
         var packetArray = new byte[] { 5, 6, 7 };
@@ -240,7 +240,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.PacketReceived += incomintPacket => packetReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
@@ -265,7 +265,7 @@ public class PacketHandlerTests
 
         _criticalSectionServiceMock.Verify(m => m.Leave(), Times.Once);
 
-        Assert.Equal(0, messageReceivedEventInvokeCount);
+        Assert.Equal(0, packetReceivedEventInvokeCount);
     }
 
     [Fact]
@@ -276,7 +276,7 @@ public class PacketHandlerTests
         const int CheckSum = 100;
 
         var dataToReadCount = 0;
-        var messageReceivedEventInvokeCount = 0;
+        var packetReceivedEventInvokeCount = 0;
 
         var headerArray = new byte[] { 1, 2, 3 };
         var packetArray = new byte[] { 5, 6, 7 };
@@ -319,7 +319,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.PacketReceived += incomintPacket => packetReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
@@ -345,7 +345,7 @@ public class PacketHandlerTests
 
         _criticalSectionServiceMock.Verify(m => m.Leave(), Times.Once);
 
-        Assert.Equal(0, messageReceivedEventInvokeCount);
+        Assert.Equal(0, packetReceivedEventInvokeCount);
     }
 
     [Fact]
@@ -356,7 +356,7 @@ public class PacketHandlerTests
         const int CheckSum = 100;
 
         var dataToReadCount = 0;
-        var messageReceivedEventInvokeCount = 0;
+        var packetReceivedEventInvokeCount = 0;
 
         var headerArray = new byte[] { 1, 2, 3 };
         var packetArray = new byte[] { 5, 6, 7 };
@@ -399,7 +399,7 @@ public class PacketHandlerTests
             _criticalSectionServiceMock.Object,
             _loggerMock.Object);
 
-        handler.MessageReceived += incomintPacket => messageReceivedEventInvokeCount++;
+        handler.PacketReceived += incomintPacket => packetReceivedEventInvokeCount++;
 
         // Act.
         _serialPortDataHandlerMock.Raise(m => m.DataReceived += null);
@@ -425,6 +425,6 @@ public class PacketHandlerTests
 
         _criticalSectionServiceMock.Verify(m => m.Leave(), Times.Once);
 
-        Assert.Equal(1, messageReceivedEventInvokeCount);
+        Assert.Equal(1, packetReceivedEventInvokeCount);
     }
 }

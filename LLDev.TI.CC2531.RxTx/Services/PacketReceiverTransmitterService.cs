@@ -11,15 +11,15 @@ namespace LLDev.TI.CC2531.RxTx.Services;
 // IPacketReceiverTransmitterService will be added through DI and should not inherit IDisposable interface
 internal interface IPacketReceiverTransmitterService
 {
-    event MessageReceivedHandler? MessageReceived;
+    event PacketReceivedHandler? PacketReceived;
     void Send(IOutgoingPacket packet);
     T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket;
 }
 
 internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmitterService, IDisposable
 {
-    public event MessageReceivedHandler? MessageReceived;
-    private event MessageReceivedHandler? AwaitedMessageReceived;
+    public event PacketReceivedHandler? PacketReceived;
+    private event PacketReceivedHandler? PacketMessageReceived;
 
     private readonly IPacketHandler _messageHandler;
     private readonly ICmdTypeValidationService _cmdTypeValidationService;
@@ -36,7 +36,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         _cmdTypeValidationService = cmdTypeValidationService;
         _config = options.Value;
 
-        _messageHandler.MessageReceived += OnMessageReceivedInternal;
+        _messageHandler.PacketReceived += OnPacketReceivedInternal;
     }
 
     public void Send(IOutgoingPacket packet) => _messageHandler.Send(packet);
@@ -55,7 +55,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
         using var manualResetEvent = new ManualResetEventSlim(false);
 
-        AwaitedMessageReceived += OnAwaitedMessageReceived;
+        PacketMessageReceived += OnAwaitedPacketReceived;
 
         _awaitedMessageCacheService.Add(responseType);
 
@@ -67,11 +67,11 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         if (response is not T result)
             throw new PacketException($"Cannot cast packet to {typeof(T)}");
 
-        AwaitedMessageReceived -= OnAwaitedMessageReceived;
+        PacketMessageReceived -= OnAwaitedPacketReceived;
 
         return result;
 
-        void OnAwaitedMessageReceived(IIncomingPacket packet)
+        void OnAwaitedPacketReceived(IIncomingPacket packet)
         {
             if (packet.CmdType != responseType)
                 return;
@@ -82,13 +82,13 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         }
     }
 
-    private void OnMessageReceivedInternal(IIncomingPacket packet)
+    private void OnPacketReceivedInternal(IIncomingPacket packet)
     {
         if (_awaitedMessageCacheService.Contains(packet.CmdType))
-            AwaitedMessageReceived?.Invoke(packet);
+            PacketMessageReceived?.Invoke(packet);
         else
-            MessageReceived?.Invoke(packet);
+            PacketReceived?.Invoke(packet);
     }
 
-    public void Dispose() => _messageHandler.MessageReceived -= OnMessageReceivedInternal;
+    public void Dispose() => _messageHandler.PacketReceived -= OnPacketReceivedInternal;
 }
