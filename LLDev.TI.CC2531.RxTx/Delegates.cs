@@ -6,6 +6,6 @@ namespace LLDev.TI.CC2531.RxTx;
 
 internal delegate void SerialPortDataReceivedEventHandler();
 internal delegate void PacketReceivedHandler(IIncomingPacket packet);
-internal delegate Task EndDeviceDataReceivedHandler(ushort nwkAddr, ZigBeeClusterId clusterId, byte[] message);
 
+public delegate Task EndDeviceMessageReceivedHandler(ushort nwkAddr, ZigBeeClusterId clusterId, byte[] message);
 public delegate Task DeviceAnnouncedHandler(DiviceAnnounceInfo diviceAnnounceInfo);
