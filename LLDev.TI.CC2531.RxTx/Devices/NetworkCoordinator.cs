@@ -15,7 +15,7 @@ internal interface INetworkCoordinator
     DeviceInfo GetCoordinatorInfo();
     bool StartupNetwork(ushort startupDelay);
     bool SetCoordinatorLedMode(byte ledId, bool isLedOn);
-    bool PermitNetworkJoin(bool isPermited);
+    bool PermitNetworkJoin(byte transactionId, bool isPermited);
     List<NetworkEndpoint> GetSupportedEndpoints();
     byte[] GetActiveEndpointIds();
     void ValidateRegisteredEndpoints(IEnumerable<byte> endpointIds);
@@ -23,11 +23,9 @@ internal interface INetworkCoordinator
 }
 
 internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packetReceiverTransmitterService,
-    ITransactionService transactionService,
     ILogger<NetworkCoordinator> logger) : INetworkCoordinator
 {
     private readonly IPacketReceiverTransmitterService _packetReceiverTransmitterService = packetReceiverTransmitterService;
-    private readonly ITransactionService _transactionService = transactionService;
     private readonly ILogger<NetworkCoordinator> _logger = logger;
 
     public DeviceInfo GetCoordinatorInfo()
@@ -39,10 +37,8 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
             : new(response.IeeeAddr, response.NwkAddr);
     }
 
-    public bool PermitNetworkJoin(bool isPermited)
+    public bool PermitNetworkJoin(byte transactionId, bool isPermited)
     {
-        var transactionId = _transactionService.GetNextTransactionId();
-
         var response = _packetReceiverTransmitterService.SendAndWaitForResponse<IAfDataResponse>(new AfDataRequest(0,
             0,
             0,

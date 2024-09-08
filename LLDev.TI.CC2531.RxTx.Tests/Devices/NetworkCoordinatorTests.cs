@@ -11,7 +11,6 @@ namespace LLDev.TI.CC2531.RxTx.Tests.Devices;
 public class NetworkCoordinatorTests
 {
     private readonly Mock<IPacketReceiverTransmitterService> _packetReceiverTransmitterServiceMock = new();
-    private readonly Mock<ITransactionService> _transactionServiceMock = new();
     private readonly Mock<ILogger<NetworkCoordinator>> _loggerMock = new();
 
     [Fact]
@@ -26,7 +25,6 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act. / Assert.
@@ -55,7 +53,6 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act.
@@ -79,7 +76,6 @@ public class NetworkCoordinatorTests
             .Throws(innerException);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act. / Assert.
@@ -100,7 +96,6 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act.
@@ -117,7 +112,6 @@ public class NetworkCoordinatorTests
         _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act.
@@ -157,7 +151,6 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act.
@@ -194,7 +187,6 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act.
@@ -230,7 +222,6 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act.
@@ -268,7 +259,6 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act.
@@ -298,8 +288,6 @@ public class NetworkCoordinatorTests
         // Arrange.
         const int TransactionId = 123;
 
-        _transactionServiceMock.Setup(m => m.GetNextTransactionId()).Returns(TransactionId);
-
         _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
         var responseMock = new Mock<IAfDataResponse>();
@@ -320,15 +308,13 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            _transactionServiceMock.Object,
             _loggerMock.Object);
 
         // Act.
-        var result = coordinator.PermitNetworkJoin(isPermitted);
+        var result = coordinator.PermitNetworkJoin(TransactionId, isPermitted);
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
-        _transactionServiceMock.VerifyAll();
         _loggerMock.VerifyAll();
         responseMock.VerifyAll();
 
@@ -348,8 +334,6 @@ public class NetworkCoordinatorTests
     {
         // Arrange.
         const int TransactionId = 123;
-
-        _transactionServiceMock.Setup(m => m.GetNextTransactionId()).Returns(TransactionId);
 
         _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
@@ -371,15 +355,13 @@ public class NetworkCoordinatorTests
             .Returns(responseMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            _transactionServiceMock.Object,
             _loggerMock.Object);
 
         // Act.
-        var result = coordinator.PermitNetworkJoin(isPermitted);
+        var result = coordinator.PermitNetworkJoin(TransactionId, isPermitted);
 
         // Assert.
         _packetReceiverTransmitterServiceMock.VerifyAll();
-        _transactionServiceMock.VerifyAll();
         _loggerMock.VerifyAll();
         responseMock.VerifyAll();
 
@@ -399,7 +381,7 @@ public class NetworkCoordinatorTests
         // Arrange.
         var endpointIds = new byte[] { 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 47, 110, 242 };
 
-        var coordinator = new NetworkCoordinator(null!, null!, null!);
+        var coordinator = new NetworkCoordinator(null!, null!);
 
         // Act.
         var result = coordinator.GetSupportedEndpoints();
@@ -434,7 +416,6 @@ public class NetworkCoordinatorTests
             .Returns(callbackMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act. / Assert.
@@ -460,7 +441,6 @@ public class NetworkCoordinatorTests
             .Returns(callbackMock.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act.
@@ -498,7 +478,6 @@ public class NetworkCoordinatorTests
             .Throws(internalException);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act. / Assert.
@@ -536,7 +515,6 @@ public class NetworkCoordinatorTests
             .Returns(callbackMock2.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act. / Assert.
@@ -574,7 +552,6 @@ public class NetworkCoordinatorTests
             .Returns(incomingMessageMock2.Object);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             null!);
 
         // Act. 
@@ -651,7 +628,6 @@ public class NetworkCoordinatorTests
         _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act. / Assert.
@@ -736,7 +712,6 @@ public class NetworkCoordinatorTests
         _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act. / Assert.
@@ -822,7 +797,6 @@ public class NetworkCoordinatorTests
         _loggerMock.Setup(m => m.IsEnabled(LogLevel.Information)).Returns(true);
 
         var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
-            null!,
             _loggerMock.Object);
 
         // Act.
