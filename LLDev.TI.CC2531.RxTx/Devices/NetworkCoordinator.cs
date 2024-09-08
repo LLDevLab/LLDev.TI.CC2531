@@ -36,11 +36,7 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
 
         return response.Status != ZToolPacketStatus.Success
             ? throw new NetworkException("Cannot receive network coordinator info")
-            : new()
-            {
-                IeeeAddr = response.IeeeAddr,
-                NwkAddr = response.NwkAddr
-            };
+            : new(response.IeeeAddr, response.NwkAddr);
     }
 
     public bool PermitNetworkJoin(bool isPermited)
