@@ -2,11 +2,6 @@
 using LLDev.TI.CC2531.RxTx.Models;
 using LLDev.TI.CC2531.RxTx.Services;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LLDev.TI.CC2531.RxTx.Handlers;
 
@@ -18,12 +13,15 @@ public interface INetworkHandler
     DeviceInfo? NetworkCoordinatorInfo { get; }
 
     void StartZigBeeNetwork();
+    void PermitNetworkJoin(bool isJoinPermitted);
 }
 
-public sealed class NetworkHandler(INetworkCoordinatorService networkCoordinatorService,
-        INetworkDevice networkDevice,
-        ILogger<NetworkHandler> logger) : INetworkHandler
+public sealed class NetworkHandler : INetworkHandler
 {
+    private readonly INetworkCoordinatorService _networkCoordinatorService;
+    private readonly INetworkDevice _networkDevice;
+    private readonly ILogger<NetworkHandler> _logger;
+
     public event DeviceAnnouncedHandler? DeviceAnnouncedAsync
     {
         add => _networkDevice.DeviceAnnouncedAsync += value;
@@ -36,13 +34,32 @@ public sealed class NetworkHandler(INetworkCoordinatorService networkCoordinator
         remove => _networkDevice.DeviceMessageReceivedAsync -= value;
     }
 
-    private readonly INetworkCoordinatorService _networkCoordinatorService = networkCoordinatorService;
-    private readonly INetworkDevice _networkDevice = networkDevice;
-    private readonly ILogger<NetworkHandler> _logger = logger;
+    public DeviceInfo? NetworkCoordinatorInfo { get; private set; } = null;
+
+    internal NetworkHandler(INetworkCoordinatorService networkCoordinatorService,
+        INetworkDevice networkDevice,
+        ILogger<NetworkHandler> logger)
+    {
+        _networkCoordinatorService = networkCoordinatorService;
+        _networkDevice = networkDevice;
+        _logger = logger;
+    }
 
     public void StartZigBeeNetwork()
     {
         if (_logger.IsEnabled(LogLevel.Information))
             _logger.LogInformation("Starting ZigBee network.");
+
+        NetworkCoordinatorInfo = _networkCoordinatorService.StartupCoordinator();
+        _networkCoordinatorService.RegisterNetworkEndpoints();
+
+        if (_logger.IsEnabled(LogLevel.Information))
+            _logger.LogInformation("ZigBee network successfully started.");
+    }
+
+    public void PermitNetworkJoin(bool isJoinPermitted)
+    {
+        _networkCoordinatorService.SetStatusLedMode(isJoinPermitted);
+        _networkCoordinatorService.PermitNetworkJoin(isJoinPermitted);
     }
 }
