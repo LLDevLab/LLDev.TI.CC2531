@@ -16,11 +16,13 @@ public interface INetworkHandler
     void PermitNetworkJoin(bool isJoinPermitted);
 }
 
-internal sealed class NetworkHandler : INetworkHandler
+internal sealed class NetworkHandler(INetworkCoordinatorService networkCoordinatorService,
+    INetworkDevice networkDevice,
+    ILogger<NetworkHandler> logger) : INetworkHandler
 {
-    private readonly INetworkCoordinatorService _networkCoordinatorService;
-    private readonly INetworkDevice _networkDevice;
-    private readonly ILogger<NetworkHandler> _logger;
+    private readonly INetworkCoordinatorService _networkCoordinatorService = networkCoordinatorService;
+    private readonly INetworkDevice _networkDevice = networkDevice;
+    private readonly ILogger<NetworkHandler> _logger = logger;
 
     public event DeviceAnnouncedHandler? DeviceAnnouncedAsync
     {
@@ -35,15 +37,6 @@ internal sealed class NetworkHandler : INetworkHandler
     }
 
     public DeviceInfo? NetworkCoordinatorInfo { get; private set; } = null;
-
-    internal NetworkHandler(INetworkCoordinatorService networkCoordinatorService,
-        INetworkDevice networkDevice,
-        ILogger<NetworkHandler> logger)
-    {
-        _networkCoordinatorService = networkCoordinatorService;
-        _networkDevice = networkDevice;
-        _logger = logger;
-    }
 
     public void StartZigBeeNetwork()
     {
