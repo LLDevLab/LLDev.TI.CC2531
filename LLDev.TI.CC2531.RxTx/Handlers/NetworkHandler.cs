@@ -16,7 +16,7 @@ public interface INetworkHandler
     void PermitNetworkJoin(bool isJoinPermitted);
 }
 
-public sealed class NetworkHandler : INetworkHandler
+internal sealed class NetworkHandler : INetworkHandler
 {
     private readonly INetworkCoordinatorService _networkCoordinatorService;
     private readonly INetworkDevice _networkDevice;
