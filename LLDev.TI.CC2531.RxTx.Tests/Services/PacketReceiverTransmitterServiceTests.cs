@@ -1,26 +1,19 @@
-﻿using LLDev.TI.CC2531.RxTx.Configs;
-using LLDev.TI.CC2531.RxTx.Enums;
+﻿using LLDev.TI.CC2531.RxTx.Enums;
 using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Handlers;
 using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
 using LLDev.TI.CC2531.RxTx.Services;
-using Microsoft.Extensions.Options;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Services;
 public class PacketReceiverTransmitterServiceTests
 {
-    private const int Timeout = 200;
+    private const int Timeout = 100;
 
     private readonly Mock<IPacketHandler> _packetHandlerMock = new();
     private readonly Mock<ICmdTypeValidationService> _cmdTypeValidationServiceMock = new();
     private readonly Mock<IAwaitedPacketCacheService> _awaitedPacketCacheServiceMock = new();
-
-    private readonly IOptions<SerialPortMessageServiceConfig> _options = Options.Create(new SerialPortMessageServiceConfig
-    {
-        ResponseWaitTimeoutMs = Timeout,
-    });
 
     [Fact]
     public void CondtructAndDispose()
@@ -28,8 +21,7 @@ public class PacketReceiverTransmitterServiceTests
         // Arrange. / Act.
         using (var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             null!,
-            null!,
-            _options))
+            null!))
         {
         }
 
@@ -44,8 +36,7 @@ public class PacketReceiverTransmitterServiceTests
         // Arrange.
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             null!,
-            null!,
-            _options);
+            null!);
 
         // Act.
         service.Initialize();
@@ -60,7 +51,7 @@ public class PacketReceiverTransmitterServiceTests
         // Arrange.
         var outgoingPacketMock = new Mock<IOutgoingPacket>();
 
-        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object, null!, null!, _options);
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object, null!, null!);
 
         // Act.
         service.Send(outgoingPacketMock.Object);
@@ -81,8 +72,7 @@ public class PacketReceiverTransmitterServiceTests
 
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
-            null!,
-            _options);
+            null!);
 
         // Act. / Assert.
         var exception = Assert.Throws<ArgumentException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
@@ -109,8 +99,7 @@ public class PacketReceiverTransmitterServiceTests
 
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
-            _awaitedPacketCacheServiceMock.Object,
-            _options);
+            _awaitedPacketCacheServiceMock.Object);
 
         // Act. / Assert.
         var exception = Assert.Throws<PacketException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
@@ -139,8 +128,7 @@ public class PacketReceiverTransmitterServiceTests
 
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
-            _awaitedPacketCacheServiceMock.Object,
-            _options);
+            _awaitedPacketCacheServiceMock.Object);
 
         // Act. / Assert.
         var exception = Assert.Throws<TimeoutException>(() => service.SendAndWaitForResponse<ZbWriteConfigResponse>(outgoingPacketMock.Object, CmdType));
@@ -182,8 +170,7 @@ public class PacketReceiverTransmitterServiceTests
 
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
-            _awaitedPacketCacheServiceMock.Object,
-            _options);
+            _awaitedPacketCacheServiceMock.Object);
 
         service.PacketReceived += OnPacketReceived;
 
@@ -230,8 +217,7 @@ public class PacketReceiverTransmitterServiceTests
 
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
-            _awaitedPacketCacheServiceMock.Object,
-            _options);
+            _awaitedPacketCacheServiceMock.Object);
 
         service.PacketReceived += OnPacketReceived;
 
@@ -284,8 +270,7 @@ public class PacketReceiverTransmitterServiceTests
 
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
-            _awaitedPacketCacheServiceMock.Object,
-            _options);
+            _awaitedPacketCacheServiceMock.Object);
 
         service.PacketReceived += OnPacketReceived;
 
@@ -342,8 +327,7 @@ public class PacketReceiverTransmitterServiceTests
 
         using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
             _cmdTypeValidationServiceMock.Object,
-            _awaitedPacketCacheServiceMock.Object,
-            _options);
+            _awaitedPacketCacheServiceMock.Object);
 
         service.PacketReceived += OnPacketReceived;
 

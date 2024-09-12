@@ -1,10 +1,8 @@
-﻿using LLDev.TI.CC2531.RxTx.Configs;
-using LLDev.TI.CC2531.RxTx.Enums;
+﻿using LLDev.TI.CC2531.RxTx.Enums;
 using LLDev.TI.CC2531.RxTx.Exceptions;
 using LLDev.TI.CC2531.RxTx.Handlers;
 using LLDev.TI.CC2531.RxTx.Packets.Incoming;
 using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-using Microsoft.Extensions.Options;
 
 namespace LLDev.TI.CC2531.RxTx.Services;
 
@@ -25,17 +23,14 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
     private readonly IPacketHandler _messageHandler;
     private readonly ICmdTypeValidationService _cmdTypeValidationService;
     private readonly IAwaitedPacketCacheService _awaitedMessageCacheService;
-    private readonly SerialPortMessageServiceConfig _config;
 
     public PacketReceiverTransmitterService(IPacketHandler messageHandler,
         ICmdTypeValidationService cmdTypeValidationService,
-        IAwaitedPacketCacheService awaitedMessageCacheService,
-        IOptions<SerialPortMessageServiceConfig> options)
+        IAwaitedPacketCacheService awaitedMessageCacheService)
     {
         _messageHandler = messageHandler;
         _awaitedMessageCacheService = awaitedMessageCacheService;
         _cmdTypeValidationService = cmdTypeValidationService;
-        _config = options.Value;
 
         _messageHandler.PacketReceived += OnPacketReceivedInternal;
     }
@@ -46,13 +41,13 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
     public T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket
     {
+        const int ResponseWaitTimeoutMs = 100;
+
         if (!_cmdTypeValidationService.IsResponseOrCallback(responseType))
             throw new ArgumentException("Awaited response type is not response or callback", nameof(responseType));
 
         if (_awaitedMessageCacheService.Contains(responseType))
             throw new PacketException($"Already awaiting packet {responseType}");
-
-        var timeout = _config.ResponseWaitTimeoutMs;
 
         IIncomingPacket? response = null;
 
@@ -64,8 +59,8 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
         _messageHandler.Send(packet);
 
-        if (!manualResetEvent.Wait(timeout))
-            throw new TimeoutException($"Cannot receive response within specified duretion {timeout} ms");
+        if (!manualResetEvent.Wait(ResponseWaitTimeoutMs))
+            throw new TimeoutException($"Cannot receive response within specified duretion {ResponseWaitTimeoutMs} ms");
 
         if (response is not T result)
             throw new PacketException($"Cannot cast packet to {typeof(T)}");
