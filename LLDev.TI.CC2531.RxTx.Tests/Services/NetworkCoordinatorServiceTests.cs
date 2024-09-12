@@ -33,6 +33,7 @@ public class NetworkCoordinatorServiceTests
         _loggerMock.VerifyAll();
         _networkCoordinatorMock.VerifyAll();
 
+        _networkCoordinatorMock.Verify(m => m.Initialize(), Times.Once);
         _networkCoordinatorMock.Verify(m => m.PingCoordinatorOrThrow(), Times.Once);
         _networkCoordinatorMock.Verify(m => m.ResetCoordinator(), Times.Once);
         _networkCoordinatorMock.Verify(m => m.GetCoordinatorInfo(), Times.Never);
@@ -68,6 +69,7 @@ public class NetworkCoordinatorServiceTests
         _loggerMock.VerifyAll();
         _networkCoordinatorMock.VerifyAll();
 
+        _networkCoordinatorMock.Verify(m => m.Initialize(), Times.Once);
         _networkCoordinatorMock.Verify(m => m.PingCoordinatorOrThrow(), Times.Once);
         _networkCoordinatorMock.Verify(m => m.ResetCoordinator(), Times.Once);
 

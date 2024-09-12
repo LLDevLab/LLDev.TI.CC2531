@@ -28,6 +28,8 @@ internal sealed class NetworkCoordinatorService(INetworkCoordinator networkCoord
         if (_logger.IsEnabled(LogLevel.Information))
             _logger.LogInformation("Starting up network coordinator.");
 
+        _networkCoordinator.Initialize();
+
         _networkCoordinator.PingCoordinatorOrThrow();
         _networkCoordinator.ResetCoordinator();
 
