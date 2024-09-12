@@ -34,7 +34,10 @@ public class ServiceCollectionExtensionsTests
             })
             .Build();
 
-        // Should not throw any exception
-        var services = host.Services.GetService(typeof(INetworkHandler));
+        // Act.
+        var service = host.Services.GetService(typeof(INetworkHandler));
+
+        // Assert.
+        Assert.NotNull(service);
     }
 }
