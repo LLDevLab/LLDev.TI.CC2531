@@ -52,7 +52,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         if (_awaitedMessageCacheService.Contains(responseType))
             throw new PacketException($"Already awaiting packet {responseType}");
 
-        var timeout = _config.MessageWaitTimeoutMs;
+        var timeout = _config.ResponseWaitTimeoutMs;
 
         IIncomingPacket? response = null;
 

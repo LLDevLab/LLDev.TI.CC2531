@@ -19,7 +19,7 @@ public class PacketReceiverTransmitterServiceTests
 
     private readonly IOptions<SerialPortMessageServiceConfig> _options = Options.Create(new SerialPortMessageServiceConfig
     {
-        MessageWaitTimeoutMs = Timeout,
+        ResponseWaitTimeoutMs = Timeout,
     });
 
     [Fact]
