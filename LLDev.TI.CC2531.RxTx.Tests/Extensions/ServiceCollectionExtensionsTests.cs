@@ -1,8 +1,6 @@
-﻿using LLDev.TI.CC2531.RxTx.Configs;
-using LLDev.TI.CC2531.RxTx.Extensions;
+﻿using LLDev.TI.CC2531.RxTx.Extensions;
 using LLDev.TI.CC2531.RxTx.Handlers;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace LLDev.TI.CC2531.RxTx.Tests.Extensions;
@@ -12,12 +10,14 @@ public class ServiceCollectionExtensionsTests
     public void AddZigBeeServices()
     {
         // Arrange.
+        const string SectionName = "SerialPortHandler";
+
         using var host = Host.CreateDefaultBuilder()
             .ConfigureHostConfiguration(c =>
             {
                 var settings = new Dictionary<string, string?>
                 {
-                    { "SerialPortHandler:PortName", "COM0" }
+                    { $"{SectionName}:PortName", "SomeRandomPort" }
                 };
 
                 var builder = new ConfigurationBuilder();
@@ -28,9 +28,7 @@ public class ServiceCollectionExtensionsTests
             {
                 var configuration = context.Configuration;
 
-                services.Configure<SerialPortHandlerConfig>(configuration.GetSection("SerialPortHandler"));
-
-                services.AddZigBeeServices();
+                services.AddZigBeeServices(configuration.GetSection(SectionName));
             })
             .Build();
 

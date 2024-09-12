@@ -1,14 +1,18 @@
-﻿using LLDev.TI.CC2531.RxTx.Devices;
+﻿using LLDev.TI.CC2531.RxTx.Configs;
+using LLDev.TI.CC2531.RxTx.Devices;
 using LLDev.TI.CC2531.RxTx.Handlers;
 using LLDev.TI.CC2531.RxTx.Packets;
 using LLDev.TI.CC2531.RxTx.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LLDev.TI.CC2531.RxTx.Extensions;
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddZigBeeServices(this IServiceCollection services)
+    public static IServiceCollection AddZigBeeServices(this IServiceCollection services, IConfiguration options)
     {
+        OptionsConfigurationServiceCollectionExtensions.Configure<SerialPortHandlerConfig>(services, options);
+
         services.AddSingleton<ISerialPortHandler, SerialPortHandler>();
         services.AddSingleton<ISerialPortDataHandler, SerialPortDataHandler>();
         services.AddSingleton<IPacketHeaderFactory, PacketHeaderFactory>();
