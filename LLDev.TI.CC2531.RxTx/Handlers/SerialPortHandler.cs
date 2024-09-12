@@ -21,6 +21,9 @@ internal interface ISerialPortHandler
 
 internal sealed class SerialPortHandler : ISerialPortHandler, IDisposable
 {
+    private const int BaudRate = 115200;
+    private const int ReadWriteTimeoutMs = 3000;
+
     public event SerialDataReceivedEventHandler SerialDataReceived
     {
         add => _serialPort.DataReceived += value;
@@ -39,12 +42,10 @@ internal sealed class SerialPortHandler : ISerialPortHandler, IDisposable
         if (string.IsNullOrWhiteSpace(config.PortName))
             throw new SerialPortException("Cannot initialize SerialPort instance. Port name is null or empty");
 
-        var readWriteTimeout = config.ReadWriteTimeoutMs;
-
-        _serialPort = new SerialPort(config.PortName, config.BaudRate)
+        _serialPort = new SerialPort(config.PortName, BaudRate)
         {
-            WriteTimeout = readWriteTimeout,
-            ReadTimeout = readWriteTimeout
+            WriteTimeout = ReadWriteTimeoutMs,
+            ReadTimeout = ReadWriteTimeoutMs
         };
     }
 
