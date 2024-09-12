@@ -28,9 +28,26 @@ public class PacketHandlerTests
         }
 
         // Assert.
-        _serialPortDataHandlerMock.Verify(m => m.Open());
+        _serialPortDataHandlerMock.Verify(m => m.Open(), Times.Never);
         _serialPortDataHandlerMock.VerifyAdd(m => m.DataReceived += It.IsAny<SerialPortDataReceivedEventHandler>());
         _serialPortDataHandlerMock.VerifyRemove(m => m.DataReceived -= It.IsAny<SerialPortDataReceivedEventHandler>());
+    }
+
+    [Fact]
+    public void Initialize()
+    {
+        // Arrange.
+        using var handler = new PacketHandler(_serialPortDataHandlerMock.Object,
+            null!,
+            null!,
+            null!,
+            null!);
+
+        // Act.
+        handler.Initialize();
+
+        // Assert.
+        _serialPortDataHandlerMock.Verify(m => m.Open(), Times.Once);
     }
 
     [Fact]

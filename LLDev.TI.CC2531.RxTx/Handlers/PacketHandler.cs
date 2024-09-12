@@ -13,6 +13,7 @@ internal interface IPacketHandler
 {
     event PacketReceivedHandler PacketReceived;
     void Send(IOutgoingPacket packet);
+    void Initialize();
 }
 
 internal sealed class PacketHandler : IPacketHandler, IDisposable
@@ -43,9 +44,10 @@ internal sealed class PacketHandler : IPacketHandler, IDisposable
         _cancellationTokenSource = new();
         _cancellationToken = _cancellationTokenSource.Token;
 
-        _serialPortDataHandler.Open();
         _serialPortDataHandler.DataReceived += OnDataReceived;
     }
+
+    public void Initialize() => _serialPortDataHandler.Open();
 
     public void Send(IOutgoingPacket packet)
     {
