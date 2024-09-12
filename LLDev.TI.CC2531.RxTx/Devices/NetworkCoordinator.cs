@@ -20,6 +20,7 @@ internal interface INetworkCoordinator
     byte[] GetActiveEndpointIds();
     void ValidateRegisteredEndpoints(IEnumerable<byte> endpointIds);
     void RegisterEndpoints(IEnumerable<NetworkEndpoint> endpoints);
+    void Initialize();
 }
 
 internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packetReceiverTransmitterService,
@@ -27,6 +28,8 @@ internal sealed class NetworkCoordinator(IPacketReceiverTransmitterService packe
 {
     private readonly IPacketReceiverTransmitterService _packetReceiverTransmitterService = packetReceiverTransmitterService;
     private readonly ILogger<NetworkCoordinator> _logger = logger;
+
+    public void Initialize() => _packetReceiverTransmitterService.Initialize();
 
     public DeviceInfo GetCoordinatorInfo()
     {

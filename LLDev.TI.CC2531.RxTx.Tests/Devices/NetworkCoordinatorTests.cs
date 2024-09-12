@@ -14,6 +14,20 @@ public class NetworkCoordinatorTests
     private readonly Mock<ILogger<NetworkCoordinator>> _loggerMock = new();
 
     [Fact]
+    public void Initialize()
+    {
+        // Arrange.
+        var coordinator = new NetworkCoordinator(_packetReceiverTransmitterServiceMock.Object,
+            null!);
+
+        // Act.
+        coordinator.Initialize();
+
+        // Assert.
+        _packetReceiverTransmitterServiceMock.Verify(m => m.Initialize(), Times.Once);
+    }
+
+    [Fact]
     public void GetCoordinatorInfo_RespondNotSuccess_ThrowsZigBeeNetworkException()
     {
         // Arrange.
