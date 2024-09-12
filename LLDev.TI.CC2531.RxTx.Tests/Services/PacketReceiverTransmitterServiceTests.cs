@@ -39,6 +39,22 @@ public class PacketReceiverTransmitterServiceTests
     }
 
     [Fact]
+    public void Initialize()
+    {
+        // Arrange.
+        using var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
+            null!,
+            null!,
+            _options);
+
+        // Act.
+        service.Initialize();
+
+        // Assert.
+        _packetHandlerMock.Verify(m => m.Initialize(), Times.Once);
+    }
+
+    [Fact]
     public void Send()
     {
         // Arrange.

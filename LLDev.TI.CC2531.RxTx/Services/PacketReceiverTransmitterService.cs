@@ -13,6 +13,7 @@ internal interface IPacketReceiverTransmitterService
 {
     event PacketReceivedHandler? PacketReceived;
     void Send(IOutgoingPacket packet);
+    void Initialize();
     T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket;
 }
 
@@ -38,6 +39,8 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
         _messageHandler.PacketReceived += OnPacketReceivedInternal;
     }
+
+    public void Initialize() => _messageHandler.Initialize();
 
     public void Send(IOutgoingPacket packet) => _messageHandler.Send(packet);
 
