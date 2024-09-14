@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LLDev.TI.CC2531.RxTx\LLDev.TI.CC2531.csproj" />
+    <ProjectReference Include="..\LLDev.TI.CC2531\LLDev.TI.CC2531.csproj" />
   </ItemGroup>
 
   <ItemGroup>
