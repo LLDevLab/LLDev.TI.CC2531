@@ -39,7 +39,7 @@ public class CriticalSectionServiceTests
         });
 
         // Act.
-        await Task.Delay(1000);
+        await Task.Delay(1500);
 
         manualResetEvent.Set();
 
