@@ -1,1 +1,1 @@
-# LLDev.TI.CC2531.RxTx
+# LLDev.TI.CC2531
