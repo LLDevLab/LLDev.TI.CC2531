@@ -9,7 +9,7 @@ CC2531 should have ZStack firmware. Internet have many instructions how to flash
 ZStack firmware could be found [here](https://github.com/Koenkk/Z-Stack-firmware).
 
 ## Using the package
-To use the package first of all it should be added to .NET dependency injection system. To to it, first of all you need to define port that package should use. It can be done by adding port to appsettings.json file:
+To use the package, first of all it should be added to .NET dependency injection system. To to it, you need to define port that package should use. It can be done by adding port to appsettings.json file:
 
 ```
 "MyJsonSection": {
@@ -49,8 +49,8 @@ event DeviceAnnouncedHandler? DeviceAnnouncedAsync;
 event EndDeviceMessageReceivedHandler? DeviceMessageReceivedAsync;
 ```
 
-DeviceAnnouncedAsync event will be called when device is connecting to the network.
+*DeviceAnnouncedAsync* event will be called when device is connecting to the network.
 
-DeviceMessageReceivedAsync event will be called when device message is received.
+*DeviceMessageReceivedAsync* event will be called when device message received.
 
-NB! Currently this package is only allowing to receive device messages, and do not allow to send messages to ZigBee device.
+**NB! Currently this package is allowing to receive device messages, and do not allow to send messages to ZigBee device.**
