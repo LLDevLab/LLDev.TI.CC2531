@@ -1,8 +1,8 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Packets;
-using LLDev.TI.CC2531.RxTx.Packets.Incoming;
+﻿using LLDev.TI.CC2531.Enums;
+using LLDev.TI.CC2531.Packets;
+using LLDev.TI.CC2531.Packets.Incoming;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Packets;
+namespace LLDev.TI.CC2531.Tests.Packets;
 public class IncomingPacketTests
 {
     private const int StartByte = 0xfe;

@@ -1,9 +1,9 @@
-﻿using LLDev.TI.CC2531.RxTx.Exceptions;
-using LLDev.TI.CC2531.RxTx.Handlers;
+﻿using LLDev.TI.CC2531.Exceptions;
+using LLDev.TI.CC2531.Handlers;
 using System.IO.Ports;
 using System.Reflection;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Handlers;
+namespace LLDev.TI.CC2531.Tests.Handlers;
 public class SerialPortDataHandlerTests
 {
     private readonly Mock<ISerialPortHandler> _serialPortHandlerMock = new();

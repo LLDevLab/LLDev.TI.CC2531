@@ -1,4 +1,4 @@
-﻿using LLDev.TI.CC2531.RxTx.Services;
+﻿using LLDev.TI.CC2531.Services;
 
 namespace LLDev.TI.CC2531.Tests.Services;
 

@@ -1,11 +1,11 @@
-﻿using LLDev.TI.CC2531.RxTx.Devices;
-using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Exceptions;
-using LLDev.TI.CC2531.RxTx.Models;
-using LLDev.TI.CC2531.RxTx.Services;
+﻿using LLDev.TI.CC2531.Devices;
+using LLDev.TI.CC2531.Enums;
+using LLDev.TI.CC2531.Exceptions;
+using LLDev.TI.CC2531.Models;
+using LLDev.TI.CC2531.Services;
 using Microsoft.Extensions.Logging;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Services;
+namespace LLDev.TI.CC2531.Tests.Services;
 
 public class NetworkCoordinatorServiceTests
 {

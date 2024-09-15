@@ -1,6 +1,6 @@
-﻿using LLDev.TI.CC2531.RxTx.Extensions;
+﻿using LLDev.TI.CC2531.Extensions;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Extensions;
+namespace LLDev.TI.CC2531.Tests.Extensions;
 public class ByteArrayExtensionTests
 {
     [Fact]

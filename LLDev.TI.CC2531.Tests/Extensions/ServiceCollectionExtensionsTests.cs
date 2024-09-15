@@ -1,9 +1,9 @@
-﻿using LLDev.TI.CC2531.RxTx.Extensions;
-using LLDev.TI.CC2531.RxTx.Handlers;
+﻿using LLDev.TI.CC2531.Extensions;
+using LLDev.TI.CC2531.Handlers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Extensions;
+namespace LLDev.TI.CC2531.Tests.Extensions;
 public class ServiceCollectionExtensionsTests
 {
     [Fact]
