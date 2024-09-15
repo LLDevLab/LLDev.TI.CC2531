@@ -1,6 +1,6 @@
-﻿using LLDev.TI.CC2531.RxTx.Exceptions;
+﻿using LLDev.TI.CC2531.Exceptions;
 
-namespace LLDev.TI.CC2531.RxTx.Packets;
+namespace LLDev.TI.CC2531.Packets;
 
 internal interface IPacketHeaderFactory
 {

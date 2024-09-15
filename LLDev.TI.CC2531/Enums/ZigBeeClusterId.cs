@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Enums;
+﻿namespace LLDev.TI.CC2531.Enums;
 public enum ZigBeeClusterId : ushort
 {
     PermitJoin = 0x0036,

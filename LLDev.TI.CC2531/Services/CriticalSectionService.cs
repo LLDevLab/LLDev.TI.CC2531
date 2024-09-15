@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Services;
+﻿namespace LLDev.TI.CC2531.Services;
 
 internal interface ICriticalSectionService
 {

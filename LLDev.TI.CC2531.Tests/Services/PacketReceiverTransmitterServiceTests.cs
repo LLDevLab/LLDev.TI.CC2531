@@ -1,12 +1,12 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Exceptions;
-using LLDev.TI.CC2531.RxTx.Handlers;
-using LLDev.TI.CC2531.RxTx.Packets;
-using LLDev.TI.CC2531.RxTx.Packets.Incoming;
-using LLDev.TI.CC2531.RxTx.Packets.Outgoing;
-using LLDev.TI.CC2531.RxTx.Services;
+﻿using LLDev.TI.CC2531.Enums;
+using LLDev.TI.CC2531.Exceptions;
+using LLDev.TI.CC2531.Handlers;
+using LLDev.TI.CC2531.Packets;
+using LLDev.TI.CC2531.Packets.Incoming;
+using LLDev.TI.CC2531.Packets.Outgoing;
+using LLDev.TI.CC2531.Services;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Services;
+namespace LLDev.TI.CC2531.Tests.Services;
 public class PacketReceiverTransmitterServiceTests
 {
     private const int Timeout = 100;

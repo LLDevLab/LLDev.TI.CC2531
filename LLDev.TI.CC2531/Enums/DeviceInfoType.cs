@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Enums;
+﻿namespace LLDev.TI.CC2531.Enums;
 internal enum DeviceInfoType : byte
 {
     State = 0x00,

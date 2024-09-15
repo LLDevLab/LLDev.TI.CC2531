@@ -1,6 +1,6 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
+﻿using LLDev.TI.CC2531.Enums;
 
-namespace LLDev.TI.CC2531.RxTx.Services;
+namespace LLDev.TI.CC2531.Services;
 
 internal interface IAwaitedPacketCacheService
 {

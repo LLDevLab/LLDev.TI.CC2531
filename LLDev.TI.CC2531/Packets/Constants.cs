@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Packets;
+﻿namespace LLDev.TI.CC2531.Packets;
 internal static class Constants
 {
     public const int HeaderLength = 4;

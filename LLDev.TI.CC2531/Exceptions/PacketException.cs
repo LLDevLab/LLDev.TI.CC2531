@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Exceptions;
+﻿namespace LLDev.TI.CC2531.Exceptions;
 public sealed class PacketException : ExceptionBase
 {
     public PacketException()

@@ -1,12 +1,12 @@
-﻿using LLDev.TI.CC2531.RxTx.Configs;
-using LLDev.TI.CC2531.RxTx.Devices;
-using LLDev.TI.CC2531.RxTx.Handlers;
-using LLDev.TI.CC2531.RxTx.Packets;
-using LLDev.TI.CC2531.RxTx.Services;
+﻿using LLDev.TI.CC2531.Configs;
+using LLDev.TI.CC2531.Devices;
+using LLDev.TI.CC2531.Handlers;
+using LLDev.TI.CC2531.Packets;
+using LLDev.TI.CC2531.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LLDev.TI.CC2531.RxTx.Extensions;
+namespace LLDev.TI.CC2531.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddZigBeeServices(this IServiceCollection services, IConfiguration options)

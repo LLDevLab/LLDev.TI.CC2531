@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Configs;
+﻿namespace LLDev.TI.CC2531.Configs;
 
 internal sealed class SerialPortHandlerConfig
 {

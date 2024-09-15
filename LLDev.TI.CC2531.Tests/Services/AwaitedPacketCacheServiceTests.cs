@@ -1,7 +1,7 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Services;
+﻿using LLDev.TI.CC2531.Enums;
+using LLDev.TI.CC2531.Services;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Services;
+namespace LLDev.TI.CC2531.Tests.Services;
 public class AwaitedPacketCacheServiceTests
 {
     private const int DelayMs = 1000;

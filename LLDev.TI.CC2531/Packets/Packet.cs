@@ -1,7 +1,7 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Extensions;
+﻿using LLDev.TI.CC2531.Enums;
+using LLDev.TI.CC2531.Extensions;
 
-namespace LLDev.TI.CC2531.RxTx.Packets;
+namespace LLDev.TI.CC2531.Packets;
 
 internal interface IPacket
 {
