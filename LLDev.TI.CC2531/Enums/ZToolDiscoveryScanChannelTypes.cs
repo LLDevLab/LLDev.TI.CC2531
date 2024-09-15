@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Enums;
+﻿namespace LLDev.TI.CC2531.Enums;
 /// <summary>
 /// Bit mask for channels to scan.
 /// </summary>

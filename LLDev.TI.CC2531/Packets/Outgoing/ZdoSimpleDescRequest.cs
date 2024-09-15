@@ -1,6 +1,6 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
+﻿using LLDev.TI.CC2531.Enums;
 
-namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
+namespace LLDev.TI.CC2531.Packets.Outgoing;
 internal sealed class ZdoSimpleDescRequest(ushort destAddr, ushort nwkAddrOfInterest, byte endpoint) :
     OutgoingPacket(ZToolCmdType.ZdoSimpleDescReq, 5), IOutgoingPacket
 {

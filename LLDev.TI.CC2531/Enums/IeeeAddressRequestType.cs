@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Enums;
+﻿namespace LLDev.TI.CC2531.Enums;
 internal enum IeeeAddressRequestType : byte
 {
     SingleDeviceResponse = 0x00,

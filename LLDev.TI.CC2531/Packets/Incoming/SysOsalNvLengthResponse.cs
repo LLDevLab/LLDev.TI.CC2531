@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Packets.Incoming;
+﻿namespace LLDev.TI.CC2531.Packets.Incoming;
 
 internal interface ISysOsalNvLengthResponse : IIncomingPacket
 {

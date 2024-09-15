@@ -1,8 +1,8 @@
-﻿using LLDev.TI.CC2531.RxTx.Packets.Incoming;
-using LLDev.TI.CC2531.RxTx.Services;
+﻿using LLDev.TI.CC2531.Packets.Incoming;
+using LLDev.TI.CC2531.Services;
 using Microsoft.Extensions.Logging;
 
-namespace LLDev.TI.CC2531.RxTx.Devices;
+namespace LLDev.TI.CC2531.Devices;
 
 internal interface INetworkDevice
 {

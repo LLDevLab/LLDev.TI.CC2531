@@ -1,9 +1,9 @@
-﻿using LLDev.TI.CC2531.RxTx.Configs;
-using LLDev.TI.CC2531.RxTx.Exceptions;
+﻿using LLDev.TI.CC2531.Configs;
+using LLDev.TI.CC2531.Exceptions;
 using Microsoft.Extensions.Options;
 using System.IO.Ports;
 
-namespace LLDev.TI.CC2531.RxTx.Handlers;
+namespace LLDev.TI.CC2531.Handlers;
 
 // ISerialPortHandler will be added through DI and should not inherit IDisposable interface
 internal interface ISerialPortHandler

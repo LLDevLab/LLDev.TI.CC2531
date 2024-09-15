@@ -1,9 +1,9 @@
-﻿using LLDev.TI.CC2531.RxTx.Devices;
-using LLDev.TI.CC2531.RxTx.Exceptions;
-using LLDev.TI.CC2531.RxTx.Models;
+﻿using LLDev.TI.CC2531.Devices;
+using LLDev.TI.CC2531.Exceptions;
+using LLDev.TI.CC2531.Models;
 using Microsoft.Extensions.Logging;
 
-namespace LLDev.TI.CC2531.RxTx.Services;
+namespace LLDev.TI.CC2531.Services;
 
 internal interface INetworkCoordinatorService
 {

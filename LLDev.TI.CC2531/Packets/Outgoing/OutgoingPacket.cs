@@ -1,7 +1,7 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
+﻿using LLDev.TI.CC2531.Enums;
 using System.Buffers.Binary;
 
-namespace LLDev.TI.CC2531.RxTx.Packets.Outgoing;
+namespace LLDev.TI.CC2531.Packets.Outgoing;
 
 internal interface IOutgoingPacket : IPacket
 {

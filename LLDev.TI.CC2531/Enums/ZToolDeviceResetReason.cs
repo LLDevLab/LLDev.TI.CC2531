@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Enums;
+﻿namespace LLDev.TI.CC2531.Enums;
 internal enum ZToolDeviceResetReason : byte
 {
     PowerUp = 0,

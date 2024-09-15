@@ -1,6 +1,6 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
+﻿using LLDev.TI.CC2531.Enums;
 
-namespace LLDev.TI.CC2531.RxTx.Models;
+namespace LLDev.TI.CC2531.Models;
 internal record NetworkEndpoint(byte EndpointId,
     ushort AppProfId,
     ushort AppDeviceId,

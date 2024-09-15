@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Enums;
+﻿namespace LLDev.TI.CC2531.Enums;
 internal enum ZToolSysResetType : byte
 {
     TargetDevice = 0,

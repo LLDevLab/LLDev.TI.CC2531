@@ -1,8 +1,8 @@
-﻿using LLDev.TI.CC2531.RxTx.Enums;
-using LLDev.TI.CC2531.RxTx.Models;
-using LLDev.TI.CC2531.RxTx.Packets.Incoming;
+﻿using LLDev.TI.CC2531.Enums;
+using LLDev.TI.CC2531.Models;
+using LLDev.TI.CC2531.Packets.Incoming;
 
-namespace LLDev.TI.CC2531.RxTx;
+namespace LLDev.TI.CC2531;
 
 internal delegate void SerialPortDataReceivedEventHandler();
 internal delegate void PacketReceivedHandler(IIncomingPacket packet);

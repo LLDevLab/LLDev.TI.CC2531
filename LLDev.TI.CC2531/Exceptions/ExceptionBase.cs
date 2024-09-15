@@ -1,4 +1,4 @@
-﻿namespace LLDev.TI.CC2531.RxTx.Exceptions;
+﻿namespace LLDev.TI.CC2531.Exceptions;
 public class ExceptionBase : Exception
 {
     protected ExceptionBase()
