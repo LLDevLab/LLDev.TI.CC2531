@@ -1,6 +1,6 @@
 ﻿using LLDev.TI.CC2531.RxTx.Services;
 
-namespace LLDev.TI.CC2531.RxTx.Tests.Services;
+namespace LLDev.TI.CC2531.Tests.Services;
 
 public class CriticalSectionServiceTests
 {
@@ -19,11 +19,7 @@ public class CriticalSectionServiceTests
             manualResetEvent.Wait();
 
             if (service.IsAllowedToEnter())
-            {
                 counter++;
-
-                service.Leave();
-            }
         });
 
         var task2 = Task.Run(() =>
@@ -31,15 +27,11 @@ public class CriticalSectionServiceTests
             manualResetEvent.Wait();
 
             if (service.IsAllowedToEnter())
-            {
                 counter++;
-
-                service.Leave();
-            }
         });
 
         // Act.
-        await Task.Delay(2000);
+        await Task.Delay(1000);
 
         manualResetEvent.Set();
 
