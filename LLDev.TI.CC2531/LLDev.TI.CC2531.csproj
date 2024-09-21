@@ -10,6 +10,14 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Title>LLDev.TI.CC2531</Title>
+    <Company>LLDevLab</Company>
+    <Description>This package allow to communicate with ZigBee devices using Texas Instruments CC2531 as a ZigBee network controller in .NET projects.</Description>
+    <RepositoryUrl>https://github.com/LLDevLab/LLDev.TI.CC2531</RepositoryUrl>
+    <PackageTags>ZigBee, CC2531</PackageTags>
+    <AssemblyVersion></AssemblyVersion>
+    <FileVersion></FileVersion>
+    <Version>8.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
