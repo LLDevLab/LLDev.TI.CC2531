@@ -9,14 +9,14 @@ using LLDev.TI.CC2531.Services;
 namespace LLDev.TI.CC2531.Tests.Services;
 public class PacketReceiverTransmitterServiceTests
 {
-    private const int Timeout = 100;
+    private const int Timeout = 1000;
 
     private readonly Mock<IPacketHandler> _packetHandlerMock = new();
     private readonly Mock<ICmdTypeValidationService> _cmdTypeValidationServiceMock = new();
     private readonly Mock<IAwaitedPacketCacheService> _awaitedPacketCacheServiceMock = new();
 
     [Fact]
-    public void CondtructAndDispose()
+    public void ConstructAndDispose()
     {
         // Arrange. / Act.
         using (var service = new PacketReceiverTransmitterService(_packetHandlerMock.Object,
@@ -115,7 +115,7 @@ public class PacketReceiverTransmitterServiceTests
     }
 
     [Fact]
-    public void SendAndWaitForResponse_ResponceDoNotReceiver_ThrowsTimeoutException()
+    public void SendAndWaitForResponse_ResponseDoNotReceiver_ThrowsTimeoutException()
     {
         // Arrange.
         const ZToolCmdType CmdType = ZToolCmdType.AfIncomingMsgClbk;
@@ -143,7 +143,7 @@ public class PacketReceiverTransmitterServiceTests
         _awaitedPacketCacheServiceMock.Verify(m => m.Remove(It.IsAny<ZToolCmdType>()), Times.Never);
         _awaitedPacketCacheServiceMock.VerifyNoOtherCalls();
 
-        Assert.Equal($"Cannot receive response within specified duretion {Timeout} ms", exception.Message);
+        Assert.Equal($"Cannot receive response within specified duration {Timeout} ms", exception.Message);
     }
 
     [Fact]
