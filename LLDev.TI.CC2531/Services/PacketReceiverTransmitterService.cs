@@ -41,7 +41,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
     public T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket
     {
-        const int ResponseWaitTimeoutMs = 100;
+        const int ResponseWaitTimeoutMs = 500;
 
         if (!_cmdTypeValidationService.IsResponseOrCallback(responseType))
             throw new ArgumentException("Awaited response type is not response or callback", nameof(responseType));
