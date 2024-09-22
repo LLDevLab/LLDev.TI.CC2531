@@ -60,7 +60,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         _messageHandler.Send(packet);
 
         if (!manualResetEvent.Wait(ResponseWaitTimeoutMs))
-            throw new TimeoutException($"Cannot receive response within specified duretion {ResponseWaitTimeoutMs} ms");
+            throw new TimeoutException($"Cannot receive response within specified duration {ResponseWaitTimeoutMs} ms");
 
         if (response is not T result)
             throw new PacketException($"Cannot cast packet to {typeof(T)}");
