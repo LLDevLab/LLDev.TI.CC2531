@@ -41,7 +41,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
     public T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket
     {
-        const int ResponseWaitTimeoutMs = 100;
+        const int ResponseWaitTimeoutMs = 1000;
 
         if (!_cmdTypeValidationService.IsResponseOrCallback(responseType))
             throw new ArgumentException("Awaited response type is not response or callback", nameof(responseType));
@@ -60,7 +60,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
         _messageHandler.Send(packet);
 
         if (!manualResetEvent.Wait(ResponseWaitTimeoutMs))
-            throw new TimeoutException($"Cannot receive response within specified duretion {ResponseWaitTimeoutMs} ms");
+            throw new TimeoutException($"Cannot receive response within specified duration {ResponseWaitTimeoutMs} ms");
 
         if (response is not T result)
             throw new PacketException($"Cannot cast packet to {typeof(T)}");
