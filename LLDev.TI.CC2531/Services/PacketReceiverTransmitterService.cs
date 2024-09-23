@@ -1,8 +1,10 @@
-﻿using LLDev.TI.CC2531.Enums;
+﻿using LLDev.TI.CC2531.Configs;
+using LLDev.TI.CC2531.Enums;
 using LLDev.TI.CC2531.Exceptions;
 using LLDev.TI.CC2531.Handlers;
 using LLDev.TI.CC2531.Packets.Incoming;
 using LLDev.TI.CC2531.Packets.Outgoing;
+using Microsoft.Extensions.Options;
 
 namespace LLDev.TI.CC2531.Services;
 
@@ -23,14 +25,18 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
     private readonly IPacketHandler _messageHandler;
     private readonly ICmdTypeValidationService _cmdTypeValidationService;
     private readonly IAwaitedPacketCacheService _awaitedMessageCacheService;
+    private readonly PacketReceiverTransmitterServiceConfig _config;
 
     public PacketReceiverTransmitterService(IPacketHandler messageHandler,
         ICmdTypeValidationService cmdTypeValidationService,
-        IAwaitedPacketCacheService awaitedMessageCacheService)
+        IAwaitedPacketCacheService awaitedMessageCacheService,
+        IOptions<PacketReceiverTransmitterServiceConfig> options)
     {
         _messageHandler = messageHandler;
         _awaitedMessageCacheService = awaitedMessageCacheService;
         _cmdTypeValidationService = cmdTypeValidationService;
+
+        _config = options.Value;
 
         _messageHandler.PacketReceived += OnPacketReceivedInternal;
     }
@@ -41,7 +47,7 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
     public T SendAndWaitForResponse<T>(IOutgoingPacket packet, ZToolCmdType responseType) where T : IIncomingPacket
     {
-        const int ResponseWaitTimeoutMs = 1000;
+        var responseWaitTimeout = _config.WaitResponseTimeoutMs;
 
         if (!_cmdTypeValidationService.IsResponseOrCallback(responseType))
             throw new ArgumentException("Awaited response type is not response or callback", nameof(responseType));
@@ -59,8 +65,8 @@ internal sealed class PacketReceiverTransmitterService : IPacketReceiverTransmit
 
         _messageHandler.Send(packet);
 
-        if (!manualResetEvent.Wait(ResponseWaitTimeoutMs))
-            throw new TimeoutException($"Cannot receive response within specified duration {ResponseWaitTimeoutMs} ms");
+        if (!manualResetEvent.Wait(responseWaitTimeout))
+            throw new TimeoutException($"Cannot receive response within specified duration {responseWaitTimeout} ms");
 
         if (response is not T result)
             throw new PacketException($"Cannot cast packet to {typeof(T)}");
