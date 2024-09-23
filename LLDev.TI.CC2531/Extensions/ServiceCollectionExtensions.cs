@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddZigBeeServices(this IServiceCollection services, IConfiguration options)
     {
         OptionsConfigurationServiceCollectionExtensions.Configure<SerialPortHandlerConfig>(services, options);
+        OptionsConfigurationServiceCollectionExtensions.Configure<PacketReceiverTransmitterServiceConfig>(services, options);
 
         services.AddSingleton<ISerialPortHandler, SerialPortHandler>();
         services.AddSingleton<ISerialPortDataHandler, SerialPortDataHandler>();

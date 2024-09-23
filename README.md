@@ -13,8 +13,17 @@ To use the package, first of all it should be added to .NET dependency injection
 
 ```
 "MyJsonSection": {
-  "PortName": "COM0" // in windows
+  "PortName": "COM0" // in windows,
   //"PortName": "/dev/ttyACM0" // in linux
+},
+```
+
+If you are catching "Cannot receive response within specified duration X ms" exception, you could also increase wait duration from appsettings:
+
+```
+"MyJsonSection": {
+  "PortName": "..."
+  "WaitResponseTimeoutMs": 9999
 },
 ```
 
