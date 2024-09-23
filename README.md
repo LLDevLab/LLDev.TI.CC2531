@@ -27,6 +27,8 @@ If you are catching "Cannot receive response within specified duration X ms" exc
 },
 ```
 
+*Default wait duration is 2 seconds.*
+
 Then you need to call AddZigBeeServices method:
 
 ```
