@@ -17,7 +17,7 @@
     <PackageTags>ZigBee, CC2531</PackageTags>
     <AssemblyVersion></AssemblyVersion>
     <FileVersion></FileVersion>
-    <Version>9.0.10</Version>
+    <Version>10.0.1</Version>
     <Authors>Maksim Aleksejev</Authors>
     <Copyright>LLDevLab</Copyright>
   </PropertyGroup>
