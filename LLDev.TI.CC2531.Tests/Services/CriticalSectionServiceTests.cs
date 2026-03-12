@@ -20,7 +20,7 @@ public class CriticalSectionServiceTests
 
             if (service.IsAllowedToEnter())
                 counter++;
-        }, TestContext.Current.CancellationToken);
+        });
 
         var task2 = Task.Run(() =>
         {
@@ -28,10 +28,10 @@ public class CriticalSectionServiceTests
 
             if (service.IsAllowedToEnter())
                 counter++;
-        }, TestContext.Current.CancellationToken);
+        });
 
         // Act.
-        await Task.Delay(1000, TestContext.Current.CancellationToken);
+        await Task.Delay(1000);
 
         manualResetEvent.Set();
 

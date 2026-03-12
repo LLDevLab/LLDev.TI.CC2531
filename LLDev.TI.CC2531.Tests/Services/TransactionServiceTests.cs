@@ -19,17 +19,17 @@ public class TransactionServiceTests
             manualResetEvent.Wait();
 
             transactionId1 = service.GetNextTransactionId();
-        }, TestContext.Current.CancellationToken);
+        });
 
         var task2 = Task.Run(() =>
         {
             manualResetEvent.Wait();
 
             transactionId2 = service.GetNextTransactionId();
-        }, TestContext.Current.CancellationToken);
+        });
 
         // Act.
-        await Task.Delay(1000, TestContext.Current.CancellationToken);
+        await Task.Delay(1000);
 
         manualResetEvent.Set();
 

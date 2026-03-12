@@ -39,7 +39,7 @@ public class AwaitedPacketCacheServiceTests
             service.Add(CmdType);
 
             counter++;
-        }, TestContext.Current.CancellationToken);
+        });
 
         var task2 = Task.Run(() =>
         {
@@ -48,10 +48,10 @@ public class AwaitedPacketCacheServiceTests
             service.Add(CmdType);
 
             counter++;
-        }, TestContext.Current.CancellationToken);
+        });
 
         // Act. / Assert
-        await Task.Delay(DelayMs, TestContext.Current.CancellationToken);
+        await Task.Delay(DelayMs);
 
         manualResetEvent.Set();
 
@@ -150,17 +150,17 @@ public class AwaitedPacketCacheServiceTests
             manualResetEvent.Wait();
 
             service.Remove(CmdType);
-        }, TestContext.Current.CancellationToken);
+        });
 
         var task2 = Task.Run(() =>
         {
             manualResetEvent.Wait();
 
             service.Remove(CmdType);
-        }, TestContext.Current.CancellationToken);
+        });
 
         // Act. / Assert
-        await Task.Delay(DelayMs, TestContext.Current.CancellationToken);
+        await Task.Delay(DelayMs);
 
         manualResetEvent.Set();
 
