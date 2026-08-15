@@ -8,8 +8,8 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <IsTestProject>true</IsTestProject>
-    <UseMicrosoftTestingPlatform>true</UseMicrosoftTestingPlatform>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
