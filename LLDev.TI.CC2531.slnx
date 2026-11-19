@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="LLDev.TI.CC2531/LLDev.TI.CC2531.csproj" />
+  <Project Path="LLDev.TI.CC2531.Tests/LLDev.TI.CC2531.Tests.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/UnitTests.yml" />
+  </Folder>
+</Solution>
